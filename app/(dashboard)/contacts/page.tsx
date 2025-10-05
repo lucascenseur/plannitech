@@ -284,11 +284,42 @@ export default function ContactsPage() {
     }
   };
 
+  // Fonction pour convertir ContactListView en Contact
+  const convertContactListViewToContact = (contactView: ContactListView): Contact => {
+    return {
+      id: contactView.id,
+      name: contactView.name,
+      email: contactView.email,
+      phone: contactView.phone || "",
+      type: contactView.type as "ARTIST" | "TECHNICIAN" | "VENUE" | "SUPPLIER" | "OTHER",
+      status: contactView.status as "ACTIVE" | "INACTIVE" | "BLOCKED",
+      isIntermittent: contactView.isIntermittent || false,
+      isFavorite: contactView.isFavorite || false,
+      skills: contactView.skills || [],
+      tags: contactView.tags || [],
+      groups: contactView.groups || [],
+      lastCollaboration: contactView.lastCollaboration,
+      rating: contactView.rating,
+      createdAt: contactView.createdAt,
+      updatedAt: contactView.updatedAt,
+      organizationId: contactView.organizationId,
+      createdById: contactView.createdById,
+      createdBy: contactView.createdBy,
+      organization: contactView.organization,
+      collaborations: [],
+      documents: [],
+      metadata: {}
+    };
+  };
+
   // Wrapper pour les appels avec des IDs
   const handleContactExportByIds = async (ids: string[]) => {
+    const selectedContacts = contacts.filter(c => ids.includes(c.id));
+    const convertedContacts = selectedContacts.map(convertContactListViewToContact);
+    
     const exportData: ContactExport = {
       format: "CSV",
-      contacts: contacts.filter(c => ids.includes(c.id)),
+      contacts: convertedContacts,
       fields: ["name", "email", "phone", "type", "status"],
       includeSkills: true,
       includeRates: false,
