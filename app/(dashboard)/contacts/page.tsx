@@ -286,7 +286,7 @@ export default function ContactsPage() {
 
   // Fonction pour convertir ContactListView en Contact
   const convertContactListViewToContact = (contactView: ContactListView): Contact => {
-    return {
+    const contact: Contact = {
       id: contactView.id,
       name: contactView.name,
       email: contactView.email || "",
@@ -298,8 +298,6 @@ export default function ContactsPage() {
       skills: contactView.skills || [],
       tags: contactView.tags || [],
       groups: contactView.groups || [],
-      lastCollaboration: contactView.lastCollaboration || undefined,
-      rating: contactView.rating || undefined,
       createdAt: contactView.createdAt,
       updatedAt: contactView.updatedAt,
       organizationId: contactView.organizationId,
@@ -310,6 +308,16 @@ export default function ContactsPage() {
       documents: [],
       metadata: {}
     };
+
+    // Ajouter les propriétés optionnelles seulement si elles existent
+    if (contactView.lastCollaboration !== undefined) {
+      contact.lastCollaboration = contactView.lastCollaboration;
+    }
+    if (contactView.rating !== undefined) {
+      contact.rating = contactView.rating;
+    }
+
+    return contact;
   };
 
   // Wrapper pour les appels avec des IDs
