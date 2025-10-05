@@ -52,7 +52,7 @@ export function LoginForm({ translations }: LoginFormProps) {
       if (result?.error) {
         setError("Email ou mot de passe incorrect");
       } else {
-        router.push("/dashboard");
+        router.push("/fr/dashboard");
         router.refresh();
       }
     } catch (error) {
@@ -133,7 +133,7 @@ export function LoginForm({ translations }: LoginFormProps) {
               </Label>
             </div>
             <Link 
-              href="#" 
+              href="/fr/auth/forgot-password" 
               className="text-sm text-blue-600 hover:text-blue-500"
             >
               {translations?.forgot || 'Mot de passe oublié ?'}
@@ -202,7 +202,7 @@ export function LoginForm({ translations }: LoginFormProps) {
               {translations?.noAccount || 'Pas encore de compte ?'}{' '}
             </span>
             <Link 
-              href="#" 
+              href="/fr/auth/signup" 
               className="text-blue-600 hover:text-blue-500 font-medium"
             >
               {translations?.signup || 'Créer un compte'}

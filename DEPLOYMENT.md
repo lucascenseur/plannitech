@@ -165,7 +165,7 @@ sudo nano /etc/nginx/sites-available/plannitech
 ```nginx
 server {
     listen 80;
-    server_name votre-domaine.com www.votre-domaine.com;
+    server_name plannitech.com;
 
     # Redirection vers HTTPS
     return 301 https://$server_name$request_uri;
@@ -247,7 +247,7 @@ sudo systemctl restart nginx
 ### 1. Obtenir le certificat SSL
 ```bash
 # Obtenir le certificat SSL
-sudo certbot --nginx -d votre-domaine.com -d www.votre-domaine.com
+sudo certbot --nginx -d plannitech.com -d www.plannitech.com
 
 # Suivre les instructions à l'écran
 ```

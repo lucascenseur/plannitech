@@ -75,7 +75,7 @@ export function RegisterForm({ translations }: RegisterFormProps) {
       if (result?.error) {
         setError("Erreur lors de la création du compte");
       } else {
-        router.push("/onboarding");
+        router.push("/fr/onboarding");
         router.refresh();
       }
     } catch (error) {
@@ -230,7 +230,7 @@ export function RegisterForm({ translations }: RegisterFormProps) {
             <Checkbox id="terms" required disabled={isLoading} />
             <Label htmlFor="terms" className="text-sm">
               {translations?.terms || 'J\'accepte les conditions d\'utilisation'}{' '}
-              <Link href="#" className="text-blue-600 hover:text-blue-500">
+              <Link href="/fr/privacy" className="text-blue-600 hover:text-blue-500">
                 {translations?.privacy || 'et la politique de confidentialité'}
               </Link>
             </Label>
@@ -298,7 +298,7 @@ export function RegisterForm({ translations }: RegisterFormProps) {
               {translations?.hasAccount || 'Déjà un compte ?'}{' '}
             </span>
             <Link 
-              href="#" 
+              href="/fr/auth/signin" 
               className="text-blue-600 hover:text-blue-500 font-medium"
             >
               {translations?.signin || 'Se connecter'}
