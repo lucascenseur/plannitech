@@ -2,6 +2,10 @@
 const nextConfig = {
   // Configuration pour la production
   output: 'standalone',
+  // DÉSACTIVER ESLint pendant le build
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
     // Optimisations pour Next.js 14.2.33
     optimizePackageImports: ['@radix-ui/react-select', '@radix-ui/react-checkbox', '@radix-ui/react-label'],

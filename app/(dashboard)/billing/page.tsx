@@ -427,7 +427,7 @@ export default function BillingPage() {
                         <div
                           className="bg-blue-500 h-2 rounded-full"
                           style={{ 
-                            width: `${currentPlan?.limits.projects === 0 ? 0 : (usageStats.totalProjects / currentPlan.limits.projects) * 100}%` 
+                            width: `${currentPlan?.limits.projects === 0 ? 0 : (usageStats.totalProjects / (currentPlan?.limits.projects || 1)) * 100}%` 
                           }}
                         />
                       </div>
