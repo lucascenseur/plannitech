@@ -8,7 +8,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   
-  // Configuration TypeScript
+  // Configuration TypeScript plus souple
   typescript: {
     ignoreBuildErrors: false,
   },
