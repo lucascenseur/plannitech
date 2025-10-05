@@ -41,7 +41,7 @@ interface TechnicalSheetListProps {
   onDuplicate: (id: string) => void;
   onArchive: (ids: string[]) => void;
   onVersion: (id: string) => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function TechnicalSheetList({

@@ -10,19 +10,19 @@ export enum UserRole {
 export interface Organization {
   id: string;
   name: string;
-  legalName?: string;
-  description?: string;
-  address?: string;
-  city?: string;
-  postalCode?: string;
-  country?: string;
-  phone?: string;
-  email?: string;
-  website?: string;
-  logo?: string;
-  siret?: string;
-  apeCode?: string;
-  vatNumber?: string;
+  legalName?: string | undefined;
+  description?: string | undefined;
+  address?: string | undefined;
+  city?: string | undefined;
+  postalCode?: string | undefined;
+  country?: string | undefined;
+  phone?: string | undefined;
+  email?: string | undefined;
+  website?: string | undefined;
+  logo?: string | undefined;
+  siret?: string | undefined;
+  apeCode?: string | undefined;
+  vatNumber?: string | undefined;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -32,7 +32,7 @@ export interface OrganizationUser {
   organizationId: string;
   userId: string;
   role: UserRole;
-  permissions?: Record<string, boolean>;
+  permissions?: Record<string, boolean> | undefined;
   createdAt: Date;
   updatedAt: Date;
   organization: Organization;
@@ -40,26 +40,26 @@ export interface OrganizationUser {
 
 export interface User {
   id: string;
-  name?: string;
+  name?: string | undefined;
   email: string;
-  emailVerified?: Date;
-  image?: string;
-  phone?: string;
-  address?: string;
-  city?: string;
-  postalCode?: string;
-  country?: string;
-  siret?: string;
-  apeCode?: string;
+  emailVerified?: Date | undefined;
+  image?: string | undefined;
+  phone?: string | undefined;
+  address?: string | undefined;
+  city?: string | undefined;
+  postalCode?: string | undefined;
+  country?: string | undefined;
+  siret?: string | undefined;
+  apeCode?: string | undefined;
   isIntermittent: boolean;
   createdAt: Date;
   updatedAt: Date;
-  organizations?: OrganizationUser[];
+  organizations?: OrganizationUser[] | undefined;
 }
 
 export interface AuthUser extends User {
   organizations: OrganizationUser[];
-  currentOrganization?: Organization;
+  currentOrganization?: Organization | undefined;
 }
 
 export interface AuthSession {

@@ -6,10 +6,10 @@ interface SEOHeadProps {
   description: string;
   keywords: string;
   canonicalUrl: string;
-  ogTitle?: string;
-  ogDescription?: string;
-  ogImage?: string;
-  twitterTitle?: string;
+  ogTitle?: string | undefined;
+  ogDescription?: string | undefined;
+  ogImage?: string | undefined;
+  twitterTitle?: string | undefined;
   twitterDescription?: string;
   twitterImage?: string;
   structuredData?: any;

@@ -118,8 +118,8 @@ export type SubscriptionPlan = z.infer<typeof subscriptionPlanSchema> & {
     name: string;
     email: string;
   };
-  subscriptions?: Subscription[];
-  usage?: Usage[];
+  subscriptions?: Subscription[] | undefined;
+  usage?: Usage[] | undefined;
 };
 
 export type Subscription = z.infer<typeof subscriptionSchema> & {
@@ -133,9 +133,9 @@ export type Subscription = z.infer<typeof subscriptionSchema> & {
     email: string;
   };
   plan: SubscriptionPlan;
-  invoices?: Invoice[];
-  paymentMethods?: PaymentMethod[];
-  usage?: Usage[];
+  invoices?: Invoice[] | undefined;
+  paymentMethods?: PaymentMethod[] | undefined;
+  usage?: Usage[] | undefined;
 };
 
 export type Invoice = z.infer<typeof invoiceSchema> & {

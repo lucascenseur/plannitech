@@ -50,7 +50,7 @@ interface EquipmentInventoryProps {
   onDuplicate: (id: string) => void;
   onMaintenance: (id: string) => void;
   onAvailability: (id: string) => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function EquipmentInventory({

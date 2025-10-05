@@ -47,7 +47,7 @@ interface IntermittentManagerProps {
   onReject: (ids: string[]) => void;
   onPay: (ids: string[]) => void;
   onDuplicate: (id: string) => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function IntermittentManager({
