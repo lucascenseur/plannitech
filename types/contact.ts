@@ -164,7 +164,7 @@ export interface ContactListView {
   isFavorite: boolean;
   skills: string[];
   tags: string[];
-  groups: string[];
+  groups: ContactGroup[];
   lastCollaboration?: Date;
   rating?: number;
   createdAt: Date;
@@ -290,7 +290,7 @@ export interface ContactSearchResult {
   status: string;
   skills: string[];
   tags: string[];
-  groups: string[];
+  groups: ContactGroup[];
   score: number;
   highlights: string[];
 }
