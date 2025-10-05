@@ -79,7 +79,12 @@ export default function PlanningPage() {
         name: event.project.name,
         type: "PROJECT" // Valeur par défaut
       } : undefined,
-      contacts: event.contacts,
+      contacts: event.contacts ? event.contacts.map(contact => ({
+        id: contact.id,
+        name: contact.name,
+        email: "", // Valeur par défaut
+        role: "PARTICIPANT" // Valeur par défaut
+      })) : undefined,
       team: [],
       conflicts: [],
       createdAt: new Date(),
