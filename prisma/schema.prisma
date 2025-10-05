@@ -199,7 +199,6 @@ model Project {
   contracts        Contract[]
   documents        Document[]
   venue            Venue?           @relation(fields: [venueId], references: [id])
-  venueId          String?
   budgetItems      BudgetItem[]
   technicalSheets  TechnicalSheet[]
   planningItems    PlanningItem[]
