@@ -1,18 +1,50 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Configuration pour la production
+  // Configuration pour la production (Next.js 16)
   output: 'standalone',
+  
   // DÉSACTIVER ESLint pendant le build
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: {
-    // Optimisations pour Next.js 14.2.33
-    optimizePackageImports: ['@radix-ui/react-select', '@radix-ui/react-checkbox', '@radix-ui/react-label'],
+  
+  // Configuration TypeScript
+  typescript: {
+    ignoreBuildErrors: false,
   },
+  
+  // Optimisations pour Next.js 16
+  experimental: {
+    // Optimisations des imports de packages
+    optimizePackageImports: [
+      '@radix-ui/react-select', 
+      '@radix-ui/react-checkbox', 
+      '@radix-ui/react-label',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      'lucide-react',
+      'framer-motion'
+    ],
+    // Nouvelles fonctionnalités Next.js 16
+    serverComponentsExternalPackages: ['@prisma/client'],
+    // Optimisation des images
+    optimizeCss: true,
+    // Support des Web Workers
+    webVitalsAttribution: ['CLS', 'LCP'],
+  },
+  
+  // Configuration des images
+  images: {
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
+  
+  // Variables d'environnement
   env: {
     NEXTAUTH_SECRET: 'test-secret-key-for-development'
   },
+  
   // Redirection automatique vers la langue par défaut
   async redirects() {
     return [
@@ -23,7 +55,8 @@ const nextConfig = {
       },
     ];
   },
-  // Configuration des headers pour le SEO multilingue
+  
+  // Configuration des headers pour le SEO multilingue et la sécurité
   async headers() {
     return [
       {
@@ -41,9 +74,32 @@ const nextConfig = {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
           },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          },
         ],
       },
     ];
+  },
+  
+  // Configuration du compilateur
+  compiler: {
+    // Supprimer les console.log en production
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  
+  // Configuration de la compression
+  compress: true,
+  
+  // Configuration du cache
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
   },
 };
 
