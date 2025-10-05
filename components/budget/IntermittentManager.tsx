@@ -27,7 +27,6 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  Clock,
   TrendingUp,
   TrendingDown,
   BarChart3,
