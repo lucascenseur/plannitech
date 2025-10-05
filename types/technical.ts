@@ -479,8 +479,8 @@ export interface TechnicalExport {
   includeVersions: boolean;
   includeEquipment: boolean;
   includeDiagrams: boolean;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | undefined;
+  endDate?: Date | undefined;
 }
 
 export interface EquipmentExport {
@@ -489,18 +489,18 @@ export interface EquipmentExport {
   includeAvailability: boolean;
   includeMaintenance: boolean;
   includeSpecifications: boolean;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | undefined;
+  endDate?: Date | undefined;
 }
 
 // Types pour les filtres
 export interface TechnicalSheetFilters {
-  search?: string;
-  projectId?: string;
-  type?: string;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
+  search?: string | undefined;
+  projectId?: string | undefined;
+  type?: string | undefined;
+  status?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
 }
 
 export interface FirePlanFilters {

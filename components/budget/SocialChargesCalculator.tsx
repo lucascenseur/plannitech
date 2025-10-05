@@ -46,7 +46,7 @@ interface SocialChargesCalculatorProps {
   onCreate: () => void;
   onCalculate: (projectId: string, period: string) => void;
   onDuplicate: (id: string) => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function SocialChargesCalculator({

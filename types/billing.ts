@@ -327,39 +327,39 @@ export interface UsageStats {
 export interface BillingExport {
   format: "CSV" | "PDF" | "EXCEL";
   data: {
-    subscriptions?: Subscription[];
-    invoices?: Invoice[];
-    usage?: Usage[];
+    subscriptions?: Subscription[] | undefined;
+    invoices?: Invoice[] | undefined;
+    usage?: Usage[] | undefined;
   };
   includeDetails: boolean;
   includeMetadata: boolean;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | undefined;
+  endDate?: Date | undefined;
 }
 
 // Types pour les filtres
 export interface SubscriptionFilters {
-  search?: string;
-  planId?: string;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
+  search?: string | undefined;
+  planId?: string | undefined;
+  status?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
 }
 
 export interface InvoiceFilters {
-  search?: string;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
-  minAmount?: number;
-  maxAmount?: number;
+  search?: string | undefined;
+  status?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
+  minAmount?: number | undefined;
+  maxAmount?: number | undefined;
 }
 
 export interface UsageFilters {
-  search?: string;
-  planId?: string;
-  startDate?: string;
-  endDate?: string;
+  search?: string | undefined;
+  planId?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
 }
 
 // Types pour les limitations

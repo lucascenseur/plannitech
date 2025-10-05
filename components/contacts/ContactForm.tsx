@@ -32,12 +32,12 @@ import {
 import { contactSchema, ContactFormData, Contact } from "@/types/contact";
 
 interface ContactFormProps {
-  initialData?: Partial<ContactFormData>;
+  initialData?: Partial<ContactFormData> | undefined;
   onSubmit: (data: ContactFormData) => void;
   onCancel: () => void;
-  loading?: boolean;
-  title?: string;
-  description?: string;
+  loading?: boolean | undefined;
+  title?: string | undefined;
+  description?: string | undefined;
 }
 
 export function ContactForm({
