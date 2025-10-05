@@ -5,9 +5,9 @@ import { AlertTriangle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 interface ErrorPageProps {
-  searchParams: {
+  searchParams: Promise<{
     error?: string;
-  };
+  }>;
 }
 
 const errorMessages: Record<string, string> = {
@@ -17,8 +17,9 @@ const errorMessages: Record<string, string> = {
   Default: "Une erreur inattendue s'est produite.",
 };
 
-export default function AuthErrorPage({ searchParams }: ErrorPageProps) {
-  const error = searchParams.error || "Default";
+export default async function AuthErrorPage({ searchParams }: ErrorPageProps) {
+  const params = await searchParams;
+  const error = params.error || "Default";
   const message = errorMessages[error] || errorMessages.Default;
 
   return (

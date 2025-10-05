@@ -157,6 +157,20 @@ export interface CalendarExport {
   endDate: Date;
 }
 
+// Schéma de validation pour les filtres
+export const eventFiltersSchema = z.object({
+  search: z.string().optional(),
+  type: z.string().optional(),
+  status: z.string().optional(),
+  priority: z.string().optional(),
+  projectId: z.string().optional(),
+  contactIds: z.array(z.string()).optional(),
+  teamIds: z.array(z.string()).optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  isRecurring: z.boolean().optional(),
+});
+
 // Types pour les filtres
 export interface PlanningFilters {
   search?: string;
