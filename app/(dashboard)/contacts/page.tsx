@@ -64,7 +64,18 @@ export default function ContactsPage() {
           isFavorite: false,
           skills: ["danse", "chorégraphie", "direction artistique"],
           tags: ["danse", "contemporain", "professionnel"],
-          groups: ["artistes"],
+          groups: [{
+            id: "1",
+            name: "Artistes",
+            description: "Groupe des artistes",
+            color: "#3B82F6",
+            contactCount: 1,
+            createdAt: new Date("2024-01-01"),
+            createdBy: {
+              id: "1",
+              name: "Admin"
+            }
+          }],
           lastCollaboration: new Date("2024-01-15"),
           rating: 4.8,
           createdAt: new Date("2024-01-01")
@@ -80,7 +91,18 @@ export default function ContactsPage() {
           isFavorite: true,
           skills: ["son", "éclairage", "vidéo"],
           tags: ["technique", "son", "événementiel"],
-          groups: ["techniciens"],
+          groups: [{
+            id: "2",
+            name: "Techniciens",
+            description: "Groupe des techniciens",
+            color: "#10B981",
+            contactCount: 1,
+            createdAt: new Date("2024-01-01"),
+            createdBy: {
+              id: "1",
+              name: "Admin"
+            }
+          }],
           lastCollaboration: new Date("2024-02-10"),
           rating: 4.5,
           createdAt: new Date("2024-01-15")
@@ -96,7 +118,18 @@ export default function ContactsPage() {
           isFavorite: false,
           skills: ["gestion", "administration", "programmation"],
           tags: ["lieu", "théâtre", "culture"],
-          groups: ["lieux"],
+          groups: [{
+            id: "3",
+            name: "Lieux",
+            description: "Groupe des lieux",
+            color: "#F59E0B",
+            contactCount: 1,
+            createdAt: new Date("2024-01-01"),
+            createdBy: {
+              id: "1",
+              name: "Admin"
+            }
+          }],
           lastCollaboration: new Date("2024-01-20"),
           rating: 4.2,
           createdAt: new Date("2024-01-10")
@@ -126,7 +159,18 @@ export default function ContactsPage() {
           isFavorite: true,
           skills: ["danse", "chorégraphie", "direction artistique"],
           tags: ["danse", "contemporain", "professionnel"],
-          groups: ["artistes"],
+          groups: [{
+            id: "1",
+            name: "Artistes",
+            description: "Groupe des artistes",
+            color: "#3B82F6",
+            contactCount: 1,
+            createdAt: new Date("2024-01-01"),
+            createdBy: {
+              id: "1",
+              name: "Admin"
+            }
+          }],
           lastCollaboration: new Date("2024-01-15"),
           rating: 4.8,
           createdAt: new Date("2024-01-01"),
