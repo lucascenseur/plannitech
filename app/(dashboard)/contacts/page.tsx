@@ -55,82 +55,51 @@ export default function ContactsPage() {
       const mockContacts: ContactListView[] = [
         {
           id: "1",
-          firstName: "Marie",
-          lastName: "Dubois",
+          name: "Marie Dubois",
           email: "marie.dubois@email.com",
           phone: "+33123456789",
           type: "ARTIST",
-          company: "Compagnie de Danse",
-          position: "Chorégraphe",
+          status: "ACTIVE",
           isIntermittent: true,
-          intermittentNumber: "123456789",
+          isFavorite: false,
           skills: ["danse", "chorégraphie", "direction artistique"],
-          rates: { hourly: 50, daily: 400 },
-          availability: [
-            {
-              startDate: new Date("2024-01-01"),
-              endDate: new Date("2024-12-31"),
-              status: "AVAILABLE",
-              reason: ""
-            }
-          ],
           tags: ["danse", "contemporain", "professionnel"],
-          notes: "Artiste expérimentée avec 10 ans d'expérience",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          organizationId: "1"
+          groups: ["artistes"],
+          lastCollaboration: new Date("2024-01-15"),
+          rating: 4.8,
+          createdAt: new Date("2024-01-01")
         },
         {
           id: "2",
-          firstName: "Jean",
-          lastName: "Martin",
+          name: "Jean Martin",
           email: "jean.martin@tech.com",
           phone: "+33987654321",
           type: "TECHNICIAN",
-          company: "Tech Events",
-          position: "Ingénieur Son",
+          status: "ACTIVE",
           isIntermittent: false,
+          isFavorite: true,
           skills: ["son", "éclairage", "vidéo"],
-          rates: { hourly: 35, daily: 280 },
-          availability: [
-            {
-              startDate: new Date("2024-01-01"),
-              endDate: new Date("2024-03-31"),
-              status: "BUSY",
-              reason: "Projet en cours"
-            }
-          ],
           tags: ["technique", "son", "événementiel"],
-          notes: "Spécialiste en sonorisation de grandes salles",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          organizationId: "1"
+          groups: ["techniciens"],
+          lastCollaboration: new Date("2024-02-10"),
+          rating: 4.5,
+          createdAt: new Date("2024-01-15")
         },
         {
           id: "3",
-          firstName: "Sophie",
-          lastName: "Leroy",
+          name: "Sophie Leroy",
           email: "sophie.leroy@venue.com",
           phone: "+33555666777",
           type: "VENUE",
-          company: "Théâtre Municipal",
-          position: "Directrice",
+          status: "ACTIVE",
           isIntermittent: false,
+          isFavorite: false,
           skills: ["gestion", "administration", "programmation"],
-          rates: { hourly: 0, daily: 0 },
-          availability: [
-            {
-              startDate: new Date("2024-01-01"),
-              endDate: new Date("2024-12-31"),
-              status: "AVAILABLE",
-              reason: ""
-            }
-          ],
           tags: ["lieu", "théâtre", "culture"],
-          notes: "Directrice du théâtre municipal depuis 5 ans",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          organizationId: "1"
+          groups: ["lieux"],
+          lastCollaboration: new Date("2024-01-20"),
+          rating: 4.2,
+          createdAt: new Date("2024-01-10")
         }
       ];
       
@@ -145,33 +114,22 @@ export default function ContactsPage() {
   const loadFavorites = async () => {
     try {
       // En mode test, on utilise des données simulées
-      const mockFavorites: Contact[] = [
+      const mockFavorites: ContactListView[] = [
         {
           id: "1",
-          firstName: "Marie",
-          lastName: "Dubois",
+          name: "Marie Dubois",
           email: "marie.dubois@email.com",
           phone: "+33123456789",
           type: "ARTIST",
-          company: "Compagnie de Danse",
-          position: "Chorégraphe",
+          status: "ACTIVE",
           isIntermittent: true,
-          intermittentNumber: "123456789",
+          isFavorite: true,
           skills: ["danse", "chorégraphie", "direction artistique"],
-          rates: { hourly: 50, daily: 400 },
-          availability: [
-            {
-              startDate: new Date("2024-01-01"),
-              endDate: new Date("2024-12-31"),
-              status: "AVAILABLE",
-              reason: ""
-            }
-          ],
           tags: ["danse", "contemporain", "professionnel"],
-          notes: "Artiste expérimentée avec 10 ans d'expérience",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          organizationId: "1"
+          groups: ["artistes"],
+          lastCollaboration: new Date("2024-01-15"),
+          rating: 4.8,
+          createdAt: new Date("2024-01-01")
         }
       ];
       
