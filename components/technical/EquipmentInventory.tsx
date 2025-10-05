@@ -21,7 +21,7 @@ import {
   Lightbulb,
   Volume2,
   Video,
-  Stage,
+  Theater,
   Shield,
   Settings,
   MapPin,
@@ -170,7 +170,7 @@ export function EquipmentInventory({
           LIGHTING: Lightbulb,
           SOUND: Volume2,
           VIDEO: Video,
-          STAGE: Stage,
+          STAGE: Theater,
           SAFETY: Shield,
           OTHER: Settings,
         };

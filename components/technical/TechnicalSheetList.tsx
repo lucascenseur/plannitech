@@ -21,7 +21,7 @@ import {
   Lightbulb,
   Volume2,
   Video,
-  Stage,
+  Theater,
   Shield,
   Settings,
   Copy,
@@ -155,7 +155,7 @@ export function TechnicalSheetList({
           LIGHTING: Lightbulb,
           SOUND: Volume2,
           VIDEO: Video,
-          STAGE: Stage,
+          STAGE: Theater,
           SAFETY: Shield,
           OTHER: Settings,
         };

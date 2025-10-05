@@ -12,9 +12,9 @@ import { CalendarExport, Event } from "@/types/planning";
 import { 
   Download, 
   Calendar, 
-  Google, 
+  Globe, 
   Apple, 
-  Outlook,
+  Mail,
   Share,
   Copy,
   Check
@@ -132,7 +132,7 @@ export function CalendarExport({ events, onExport, onShare }: CalendarExportProp
       case "ICAL":
         return <Calendar className="h-4 w-4" />;
       case "GOOGLE":
-        return <Google className="h-4 w-4" />;
+        return <Globe className="h-4 w-4" />;
       default:
         return <Calendar className="h-4 w-4" />;
     }
@@ -365,7 +365,7 @@ export function CalendarExport({ events, onExport, onShare }: CalendarExportProp
             
             <div className="p-4 border rounded-lg">
               <div className="flex items-center space-x-2 mb-2">
-                <Google className="h-5 w-5 text-red-600" />
+                <Globe className="h-5 w-5 text-red-600" />
                 <span className="font-medium">Google Calendar</span>
               </div>
               <p className="text-sm text-gray-600">

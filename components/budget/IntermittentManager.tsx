@@ -27,7 +27,7 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  Pending,
+  Clock,
   TrendingUp,
   TrendingDown,
   BarChart3,
@@ -213,7 +213,7 @@ export function IntermittentManager({
       sortable: true,
       render: (value: string) => {
         const statusConfig = {
-          PENDING: { variant: "secondary" as const, label: "En attente", icon: Pending },
+          PENDING: { variant: "secondary" as const, label: "En attente", icon: Clock },
           APPROVED: { variant: "default" as const, label: "Approuvé", icon: CheckCircle },
           PAID: { variant: "default" as const, label: "Payé", icon: CheckCircle },
           CANCELLED: { variant: "destructive" as const, label: "Annulé", icon: XCircle },
@@ -377,7 +377,7 @@ export function IntermittentManager({
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center space-x-2">
-              <Pending className="h-8 w-8 text-yellow-600" />
+              <Clock className="h-8 w-8 text-yellow-600" />
               <div>
                 <p className="text-sm font-medium text-gray-600">En attente</p>
                 <p className="text-2xl font-bold">{pendingIntermittents}</p>

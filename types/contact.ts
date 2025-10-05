@@ -88,7 +88,7 @@ export type Contact = z.infer<typeof contactSchema> & {
   collaborations?: Collaboration[];
   documents?: Document[];
   groups?: ContactGroup[];
-  tags?: ContactTag[];
+  tags?: string[];
 };
 
 export type ContactFormData = z.infer<typeof contactSchema>;
