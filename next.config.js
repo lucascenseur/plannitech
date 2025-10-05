@@ -26,12 +26,15 @@ const nextConfig = {
       'framer-motion'
     ],
     // Nouvelles fonctionnalités Next.js 16
-    serverComponentsExternalPackages: ['@prisma/client'],
+    // serverComponentsExternalPackages déplacé vers serverExternalPackages
     // Optimisation des images
     optimizeCss: true,
     // Support des Web Workers
     webVitalsAttribution: ['CLS', 'LCP'],
   },
+  
+  // Configuration pour les packages externes (Next.js 15+)
+  serverExternalPackages: ['@prisma/client'],
   
   // Configuration des images
   images: {

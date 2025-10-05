@@ -359,7 +359,7 @@ export function CalendarExport({ events, onExport, onShare }: CalendarExportProp
                 <span className="font-medium">Microsoft Outlook</span>
               </div>
               <p className="text-sm text-gray-600">
-                Importez le fichier .ics via Fichier > Ouvrir et exporter > Importer/Exporter.
+                Importez le fichier .ics via Fichier &gt; Ouvrir et exporter &gt; Importer/Exporter.
               </p>
             </div>
             
