@@ -33,13 +33,13 @@ import { useState } from "react";
 import { blogArticles, blogCategories, blogSEO } from "./data";
 
 interface BlogPageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
-export default function BlogPage({ params }: BlogPageProps) {
-  const { locale } = params;
+export default async function BlogPage({ params }: BlogPageProps) {
+  const { locale } = await params;
 
   // Vérifier que la locale est supportée
   const supportedLocales = ['fr', 'en', 'es'];

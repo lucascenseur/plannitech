@@ -39,16 +39,16 @@ import {
 import Link from "next/link";
 
 interface ContactPageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
 // Note: generateMetadata ne peut pas être utilisé avec des composants client
 // Les métadonnées SEO sont gérées au niveau du layout
 
 export default async function ContactPage({ params }: ContactPageProps) {
-  const { locale } = params;
+  const { locale } = await params;
 
   // Vérifier que la locale est supportée
   const supportedLocales = ['fr', 'en', 'es'];

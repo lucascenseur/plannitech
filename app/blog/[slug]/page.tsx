@@ -7,13 +7,14 @@ import fs from 'fs';
 import path from 'path';
 
 interface BlogPostPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const article = blogArticles.find(article => article.slug === params.slug);
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { slug } = await params;
+  const article = blogArticles.find(article => article.slug === slug);
   
   if (!article) {
     notFound();

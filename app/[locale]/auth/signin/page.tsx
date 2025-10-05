@@ -6,9 +6,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 interface SignInPageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 }
 
 export default async function SignInPage({ params }: SignInPageProps) {
-  const { locale } = params;
+  const { locale } = await params;
 
   // Vérifier que la locale est supportée
   const supportedLocales = ['fr', 'en', 'es'];

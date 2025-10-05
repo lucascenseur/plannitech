@@ -35,13 +35,13 @@ import {
 import Link from "next/link";
 
 interface LandingPageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: LandingPageProps): Promise<Metadata> {
-  const { locale } = params;
+  const { locale } = await params;
   const seoConfig = pageSEOConfig.landing[locale as keyof typeof pageSEOConfig.landing];
 
   return generateSEOMetadata({
@@ -86,7 +86,7 @@ export async function generateMetadata({ params }: LandingPageProps): Promise<Me
 }
 
 export default async function LandingPage({ params }: LandingPageProps) {
-  const { locale } = params;
+  const { locale } = await params;
 
   // Vérifier que la locale est supportée
   const supportedLocales = ['fr', 'en', 'es'];

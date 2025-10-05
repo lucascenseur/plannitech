@@ -8,14 +8,14 @@ import { CheckCircle, XCircle, User, LogOut } from "lucide-react";
 import Link from "next/link";
 
 interface TestAuthPageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
-export default function TestAuthPage({ params }: TestAuthPageProps) {
+export default async function TestAuthPage({ params }: TestAuthPageProps) {
   const { data: session, status } = useSession();
-  const { locale } = params;
+  const { locale } = await params;
 
   const handleSignIn = () => {
     signIn("credentials", {

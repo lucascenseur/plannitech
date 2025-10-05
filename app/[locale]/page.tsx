@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 
 interface HomePageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -14,8 +14,8 @@ export async function generateStaticParams() {
   ];
 }
 
-export default function HomePage({ params }: HomePageProps) {
-  const { locale } = params;
+export default async function HomePage({ params }: HomePageProps) {
+  const { locale } = await params;
 
   // Rediriger vers la page landing
   redirect(`/${locale}/landing`);

@@ -8,9 +8,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 interface DashboardPageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 }
 
 export default async function DashboardPage({ params }: DashboardPageProps) {
-  const { locale } = params;
+  const { locale } = await params;
 
   // Vérifier que la locale est supportée
   const supportedLocales = ['fr', 'en', 'es'];

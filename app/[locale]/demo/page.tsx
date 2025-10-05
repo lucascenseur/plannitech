@@ -42,16 +42,16 @@ import {
 import Link from "next/link";
 
 interface DemoPageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
 // Note: generateMetadata ne peut pas être utilisé avec des composants client
 // Les métadonnées SEO sont gérées au niveau du layout
 
 export default async function DemoPage({ params }: DemoPageProps) {
-  const { locale } = params;
+  const { locale } = await params;
 
   // Vérifier que la locale est supportée
   const supportedLocales = ['fr', 'en', 'es'];
