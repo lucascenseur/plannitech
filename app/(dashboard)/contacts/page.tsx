@@ -262,15 +262,12 @@ export default function ContactsPage() {
     }
   };
 
-  const handleContactExport = async (ids: string[]) => {
+  const handleContactExport = async (exportData: ContactExport) => {
     try {
       const response = await fetch("/api/contacts/export", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contactIds: ids,
-          format: "CSV",
-        }),
+        body: JSON.stringify(exportData),
       });
 
       if (response.ok) {
@@ -285,6 +282,20 @@ export default function ContactsPage() {
     } catch (error) {
       console.error("Erreur lors de l'export:", error);
     }
+  };
+
+  // Wrapper pour les appels avec des IDs
+  const handleContactExportByIds = async (ids: string[]) => {
+    const exportData: ContactExport = {
+      format: "CSV",
+      contacts: contacts.filter(c => ids.includes(c.id)),
+      fields: ["name", "email", "phone", "type", "status"],
+      includeSkills: true,
+      includeRates: false,
+      includeAvailability: false,
+      includeCollaborations: false,
+    };
+    await handleContactExport(exportData);
   };
 
   const handleContactImport = async (data: any[]): Promise<ContactImportResult> => {
@@ -442,7 +453,7 @@ export default function ContactsPage() {
           onView={handleContactView}
           onDelete={handleContactDelete}
           onToggleFavorite={handleToggleFavorite}
-          onExport={handleContactExport}
+          onExport={handleContactExportByIds}
           onImport={handleContactImportClick}
           onCreate={handleContactCreate}
           loading={loading}
@@ -611,7 +622,7 @@ export default function ContactsPage() {
               onAddCollaboration={() => {}}
               onAddRate={() => {}}
               onAddAvailability={() => {}}
-              onExport={() => handleContactExport([selectedContact.id])}
+              onExport={() => handleContactExportByIds([selectedContact.id])}
               onShare={() => {}}
             />
           </div>
