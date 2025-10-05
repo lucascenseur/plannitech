@@ -188,6 +188,7 @@ model Project {
   currency       String        @default("EUR")
   organizationId String
   createdById    String
+  venueId        String?
   metadata       Json?         // Données spécifiques au type de projet
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
@@ -197,6 +198,8 @@ model Project {
   contacts         ProjectContact[]
   contracts        Contract[]
   documents        Document[]
+  venue            Venue?           @relation(fields: [venueId], references: [id])
+  venueId          String?
   budgetItems      BudgetItem[]
   technicalSheets  TechnicalSheet[]
   planningItems    PlanningItem[]
@@ -245,6 +248,7 @@ model Contact {
   documents        Document[]
   technicalSheets  TechnicalSheet[]
   planningItems    PlanningItem[]
+  budgetItems      BudgetItem[]
 
   @@index([organizationId])
   @@index([createdById])
