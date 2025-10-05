@@ -1,13 +1,13 @@
 import Link from "next/link";
 
 interface AuthTestPageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
+  }>;
 }
 
-export default function AuthTestPage({ params }: AuthTestPageProps) {
-  const { locale } = params;
+export default async function AuthTestPage({ params }: AuthTestPageProps) {
+  const { locale } = await params;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
