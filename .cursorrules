@@ -1,0 +1,89 @@
+# .cursorrules - Configuration Cursor pour SaaS gestion spectacle vivant
+
+# Langage de programmation principal
+language: typescript, javascript
+
+# Frameworks et bibliothèques cibles
+frameworks:
+  - nextjs@14
+  - react@18
+  - tailwindcss@3
+  - prisma@4
+  - nextauth
+  - stripe
+
+# Style de code
+style:
+  indent: 2
+  quotes: double
+  semi: true
+  maxLineLength: 100
+  lineBreakStyle: unix
+
+# Type de projet
+projectType: SaaS, webapp, admin panel, api
+
+# Structuration des fichiers générés
+directoryStructure:
+  - app/
+  - components/
+  - prisma/
+  - lib/
+  - pages/api/
+
+# Format attendu pour la documentation intégrée (JSdoc)
+documentation:
+  enabled: true
+  style: jsdoc
+
+# Instructions sur le découpage des fichiers
+fileSplitting:
+  maxFileSize: 300
+  maxFunctionLength: 50
+
+# Prompt personnalisé pour chaque requête
+promptTemplate: |
+  Tu es un assistant expert React/Next.js/TypeScript. Tu produis un code clair, performant, et commenté. 
+  Respecte la structure modulaire du SaaS gestion spectacle vivant, utilise Tailwind CSS pour le style. 
+  Priorise la maintenabilité et la clarté du code.
+
+# Analyse des erreurs et suggestions
+errorHandling:
+  provideFixes: true
+  explainSolutions: true
+
+# Approche IA pour tâches complexes (ex : IA intégrée dans le SaaS)
+complexTasks:
+  promptLengthLimit: 2000
+  iterativeImprovement: true
+
+# Paramètres pour l'autocomplétion et corrections contextuelles
+completion:
+  provideVariants: 2
+  temperature: 0.2
+  maxTokens: 1000
+
+# Priorisation des tests unitaires et d'intégration
+testing:
+  generateTests: true
+  testFramework: jest, react-testing-library
+
+# Intégration continue
+ciCdSupport: true
+
+# Autorisation pour générer les fichiers de configuration et scripts d'installation
+allowConfigGeneration: true
+
+# Précisions spécifiques au domaine spectacle vivant
+domainKnowledge:
+  keywords:
+    - spectacle vivant
+    - intermittents
+    - régie technique
+    - plan de feu
+    - planning événementiel
+  focus:
+    - modularité
+    - scalabilité
+    - sécurité utilisateur
+    - UX simple & intuitive

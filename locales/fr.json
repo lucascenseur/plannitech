@@ -1,0 +1,388 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "export": "Exporter",
+    "import": "Importer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "close": "Fermer",
+    "open": "Ouvrir",
+    "view": "Voir",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "share": "Partager",
+    "copy": "Copier",
+    "print": "Imprimer",
+    "email": "Email",
+    "phone": "Téléphone",
+    "address": "Adresse",
+    "website": "Site web",
+    "date": "Date",
+    "time": "Heure",
+    "location": "Lieu",
+    "description": "Description",
+    "name": "Nom",
+    "title": "Titre",
+    "status": "Statut",
+    "type": "Type",
+    "category": "Catégorie",
+    "tags": "Tags",
+    "author": "Auteur",
+    "published": "Publié",
+    "updated": "Mis à jour",
+    "created": "Créé",
+    "language": "Langue"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "features": "Fonctionnalités",
+    "pricing": "Tarifs",
+    "demo": "Démo",
+    "blog": "Blog",
+    "contact": "Contact",
+    "dashboard": "Tableau de bord",
+    "projects": "Projets",
+    "planning": "Planning",
+    "contacts": "Contacts",
+    "budget": "Budget",
+    "technical": "Technique",
+    "settings": "Paramètres",
+    "billing": "Facturation",
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Déconnexion",
+    "profile": "Profil",
+    "account": "Compte"
+  },
+  "seo": {
+    "title": "Plannitech - Gestion du spectacle vivant",
+    "description": "Plateforme SaaS complète pour la gestion du spectacle vivant. Planning, budget, contacts, outils techniques et plus encore.",
+    "keywords": "spectacle vivant, gestion événementielle, planning, budget, contacts, outils techniques, SaaS, culture, art",
+    "ogTitle": "Plannitech - La solution complète pour le spectacle vivant",
+    "ogDescription": "Optimisez la gestion de vos événements culturels avec Plannitech. Planning intelligent, gestion financière, contacts et outils techniques.",
+    "twitterTitle": "Plannitech - Gestion du spectacle vivant",
+    "twitterDescription": "La plateforme SaaS pour professionnels du spectacle vivant. Planning, budget, contacts et outils techniques."
+  },
+  "home": {
+    "hero": {
+      "title": "La solution complète pour la gestion du spectacle vivant",
+      "subtitle": "Optimisez vos événements culturels avec notre plateforme SaaS. Planning intelligent, gestion financière, contacts et outils techniques.",
+      "cta": "Essai gratuit",
+      "ctaSecondary": "Voir la démo"
+    },
+    "features": {
+      "title": "Fonctionnalités puissantes",
+      "subtitle": "Tout ce dont vous avez besoin pour gérer vos événements culturels",
+      "planning": {
+        "title": "Planning intelligent",
+        "description": "Gérez vos événements avec un calendrier intuitif et des outils de planification avancés."
+      },
+      "budget": {
+        "title": "Gestion financière",
+        "description": "Suivez vos budgets, générez des devis et factures, gérez les cachets intermittents."
+      },
+      "contacts": {
+        "title": "Base de contacts",
+        "description": "Organisez vos contacts artistes, techniciens, lieux et partenaires."
+      },
+      "technical": {
+        "title": "Outils techniques",
+        "description": "Fiches techniques, plans de feu, inventaire matériel et checklists."
+      }
+    },
+    "pricing": {
+      "title": "Tarifs transparents",
+      "subtitle": "Choisissez le plan qui correspond à vos besoins",
+      "freeTrial": "Essai gratuit 14 jours",
+      "noCreditCard": "Aucune carte de crédit requise"
+    },
+    "testimonials": {
+      "title": "Ils nous font confiance",
+      "subtitle": "Découvrez ce que disent nos clients"
+    },
+    "cta": {
+      "title": "Prêt à optimiser vos événements ?",
+      "subtitle": "Rejoignez des centaines de professionnels du spectacle vivant",
+      "button": "Commencer maintenant"
+    }
+  },
+  "blog": {
+    "title": "Blog Plannitech",
+    "subtitle": "Actualités et conseils pour le spectacle vivant",
+    "readMore": "Lire la suite",
+    "readTime": "min de lecture",
+    "publishedOn": "Publié le",
+    "by": "par",
+    "categories": "Catégories",
+    "tags": "Tags",
+    "search": "Rechercher dans le blog",
+    "related": "Articles similaires",
+    "newsletter": {
+      "title": "Restez informé",
+      "subtitle": "Recevez nos derniers articles et conseils directement dans votre boîte mail.",
+      "placeholder": "Votre adresse email",
+      "button": "S'abonner",
+      "disclaimer": "Pas de spam, désabonnement possible à tout moment."
+    }
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Nous sommes là pour vous aider",
+    "form": {
+      "name": "Nom complet",
+      "email": "Email",
+      "company": "Entreprise",
+      "subject": "Sujet",
+      "message": "Message",
+      "send": "Envoyer le message",
+      "sending": "Envoi en cours...",
+      "success": "Message envoyé avec succès !",
+      "error": "Erreur lors de l'envoi du message."
+    },
+    "info": {
+      "title": "Informations de contact",
+      "email": "contact@plannitech.com",
+      "phone": "+33 1 23 45 67 89",
+      "address": "123 Rue de la Culture, 75001 Paris, France"
+    }
+  },
+  "pricing": {
+    "title": "Tarifs",
+    "subtitle": "Choisissez le plan qui vous convient",
+    "monthly": "Mensuel",
+    "yearly": "Annuel",
+    "save": "Économisez",
+    "popular": "Populaire",
+    "freeTrial": "Essai gratuit 14 jours",
+    "features": {
+      "projects": "Projets",
+      "users": "Utilisateurs",
+      "storage": "Stockage",
+      "support": "Support",
+      "api": "API",
+      "integrations": "Intégrations"
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "questions": [
+        {
+          "question": "Puis-je changer de plan à tout moment ?",
+          "answer": "Oui, vous pouvez upgrader ou downgrader votre plan à tout moment depuis votre tableau de bord."
+        },
+        {
+          "question": "Y a-t-il des frais de configuration ?",
+          "answer": "Non, il n'y a aucun frais de configuration. Vous payez uniquement votre abonnement mensuel ou annuel."
+        },
+        {
+          "question": "Puis-je annuler mon abonnement ?",
+          "answer": "Oui, vous pouvez annuler votre abonnement à tout moment depuis votre tableau de bord."
+        }
+      ]
+    }
+  },
+  "auth": {
+    "signin": {
+      "title": "Connexion à votre compte",
+      "subtitle": "Gérez vos spectacles et événements avec simplicité",
+      "email": "Adresse email",
+      "password": "Mot de passe",
+      "remember": "Se souvenir de moi",
+      "forgot": "Mot de passe oublié ?",
+      "signin": "Se connecter",
+      "noAccount": "Pas encore de compte ?",
+      "signup": "Créer un compte",
+      "or": "ou",
+      "google": "Continuer avec Google",
+      "github": "Continuer avec GitHub"
+    },
+    "signup": {
+      "title": "Créer votre compte",
+      "subtitle": "Rejoignez la communauté des professionnels du spectacle vivant",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Adresse email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "company": "Entreprise (optionnel)",
+      "terms": "J'accepte les conditions d'utilisation",
+      "privacy": "et la politique de confidentialité",
+      "signup": "Créer mon compte",
+      "hasAccount": "Déjà un compte ?",
+      "signin": "Se connecter",
+      "or": "ou",
+      "google": "Continuer avec Google",
+      "github": "Continuer avec GitHub"
+    },
+    "error": {
+      "title": "Erreur d'authentification",
+      "subtitle": "Un problème est survenu lors de votre connexion",
+      "messages": {
+        "Configuration": "Il y a un problème avec la configuration du serveur.",
+        "AccessDenied": "Vous n'avez pas l'autorisation de vous connecter.",
+        "Verification": "Le lien de vérification a expiré ou a déjà été utilisé.",
+        "Default": "Une erreur inattendue s'est produite."
+      },
+      "retry": "Réessayer",
+      "home": "Retour à l'accueil"
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome": "Bienvenue",
+    "overview": "Vue d'ensemble",
+    "recentActivity": "Activité récente",
+    "quickActions": "Actions rapides",
+    "stats": {
+      "projects": "Projets actifs",
+      "events": "Événements à venir",
+      "contacts": "Contacts",
+      "budget": "Budget total"
+    },
+    "projects": {
+      "title": "Mes projets",
+      "create": "Nouveau projet",
+      "viewAll": "Voir tous les projets",
+      "empty": "Aucun projet pour le moment",
+      "emptySubtitle": "Créez votre premier projet pour commencer"
+    },
+    "events": {
+      "title": "Événements à venir",
+      "viewAll": "Voir tous les événements",
+      "empty": "Aucun événement programmé",
+      "emptySubtitle": "Planifiez votre premier événement"
+    },
+    "contacts": {
+      "title": "Contacts récents",
+      "viewAll": "Voir tous les contacts",
+      "empty": "Aucun contact",
+      "emptySubtitle": "Ajoutez vos premiers contacts"
+    }
+  },
+  "errors": {
+    "404": {
+      "title": "Page non trouvée",
+      "subtitle": "La page que vous recherchez n'existe pas",
+      "back": "Retour à l'accueil"
+    },
+    "500": {
+      "title": "Erreur serveur",
+      "subtitle": "Une erreur interne s'est produite",
+      "retry": "Réessayer"
+    },
+    "network": {
+      "title": "Erreur de connexion",
+      "subtitle": "Vérifiez votre connexion internet",
+      "retry": "Réessayer"
+    }
+  },
+  "exitIntent": {
+    "title": "Attendez !",
+    "subtitle": "Ne partez pas sans votre bonus !",
+    "offer": "Offre Spéciale",
+    "limitedTime": "Offre limitée dans le temps",
+    "mainOffer": "30 jours GRATUITS au lieu de 14 !",
+    "description": "Profitez de 30 jours d'essai gratuit + configuration personnalisée par nos experts",
+    "benefits": {
+      "trial": "30 jours d'essai gratuit (au lieu de 14)",
+      "setup": "Configuration personnalisée incluse",
+      "support": "Support prioritaire 24/7",
+      "training": "Formation gratuite de 2h"
+    },
+    "cta": {
+      "primary": "🚀 Profiter de l'offre maintenant",
+      "secondary": "Non merci, continuer à naviguer"
+    },
+    "disclaimer": "Aucune carte requise • Annulation possible à tout moment"
+  },
+  "landing": {
+    "hero": {
+      "title": "Gérez vos spectacles",
+      "subtitle": "avec simplicité",
+      "description": "La plateforme complète pour organiser, planifier et gérer tous vos événements culturels.",
+      "cta": "Commencer gratuitement",
+      "demo": "Voir la démo",
+      "trust": {
+        "trial": "Essai gratuit 14 jours",
+        "card": "Aucune carte requise",
+        "support": "Support 24/7"
+      }
+    },
+    "demo": {
+      "title": "Voir Plannitech en action",
+      "subtitle": "Découvrez comment nos clients organisent leurs spectacles avec Plannitech"
+    },
+    "features": {
+      "title": "Tout ce dont vous avez besoin",
+      "subtitle": "Une plateforme complète pour gérer tous les aspects de vos spectacles",
+      "planning": {
+        "title": "Planification",
+        "description": "Organisez vos événements avec des outils intuitifs",
+        "benefits": [
+          "Calendrier interactif",
+          "Gestion des répétitions",
+          "Planning technique"
+        ]
+      },
+      "budget": {
+        "title": "Budget",
+        "description": "Contrôlez vos finances avec précision",
+        "benefits": [
+          "Suivi des dépenses",
+          "Rapports financiers",
+          "Prévisions budgétaires"
+        ]
+      },
+      "contacts": {
+        "title": "Contacts",
+        "description": "Centralisez tous vos contacts professionnels",
+        "benefits": [
+          "Base de données complète",
+          "Historique des échanges",
+          "Segmentation avancée"
+        ]
+      }
+    },
+    "stats": {
+      "title": "Des résultats qui parlent",
+      "professionals": "Professionnels",
+      "events": "Événements",
+      "satisfaction": "Satisfaction",
+      "support": "Support"
+    },
+    "testimonials": {
+      "title": "Ce que disent nos clients",
+      "testimonial1": {
+        "text": "Plannitech a révolutionné notre façon de gérer les spectacles. L'interface est intuitive et les fonctionnalités sont complètes.",
+        "author": "Jean Dupont",
+        "role": "Directeur, Théâtre National"
+      },
+      "testimonial2": {
+        "text": "La gestion budgétaire est exceptionnelle. Nous avons réduit nos coûts de 30% grâce aux outils de suivi de Plannitech.",
+        "author": "Marie Leroy",
+        "role": "Productrice, Festival d'Avignon"
+      },
+      "testimonial3": {
+        "text": "L'équipe support est réactive et les mises à jour régulières nous permettent d'être toujours à la pointe de la technologie.",
+        "author": "Pierre Chen",
+        "role": "Régisseur, Opéra de Paris"
+      }
+    },
+    "cta": {
+      "title": "Prêt à transformer votre gestion de spectacles ?",
+      "subtitle": "Rejoignez des centaines de professionnels qui font confiance à Plannitech",
+      "primary": "Commencer gratuitement",
+      "secondary": "Voir la démo",
+      "disclaimer": "Essai gratuit 14 jours • Aucune carte requise • Support 24/7"
+    }
+  }
+}

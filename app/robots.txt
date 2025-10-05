@@ -1,0 +1,67 @@
+User-agent: *
+Allow: /
+
+# Pages principales
+Allow: /landing
+Allow: /features
+Allow: /pricing
+Allow: /contact
+Allow: /blog
+Allow: /demo
+
+# Articles de blog
+Allow: /blog/optimiser-planning-evenements
+Allow: /blog/gestion-financiere-spectacle
+Allow: /blog/outils-techniques-spectacle
+Allow: /blog/marketing-evenementiel-2025
+Allow: /blog/ia-spectacle-vivant-2025
+Allow: /blog/durabilite-spectacle-vivant
+Allow: /blog/tendances-spectacle-vivant-2025
+
+# Pages d'authentification
+Allow: /auth/signin
+Allow: /auth/signup
+
+# Pages de catégories blog
+Allow: /blog/category/gestion-evenements
+Allow: /blog/category/finance
+Allow: /blog/category/technique
+Allow: /blog/category/marketing
+Allow: /blog/category/innovation
+Allow: /blog/category/developpement-durable
+Allow: /blog/category/tendances
+
+# Ressources statiques
+Allow: /images/
+Allow: /css/
+Allow: /js/
+Allow: /fonts/
+
+# Fichiers de configuration
+Allow: /sitemap.xml
+Allow: /robots.txt
+
+# Interdire l'accès aux pages privées
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /api/
+Disallow: /_next/
+Disallow: /temp_api/
+
+# Interdire l'accès aux fichiers de configuration
+Disallow: /.env
+Disallow: /.env.local
+Disallow: /.env.production
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /tsconfig.json
+Disallow: /next.config.js
+Disallow: /tailwind.config.js
+Disallow: /postcss.config.js
+
+# Sitemap
+Sitemap: https://plannitech.com/sitemap.xml
+
+# Crawl-delay pour éviter la surcharge
+Crawl-delay: 1
+

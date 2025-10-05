@@ -1,0 +1,106 @@
+<svg width="400" height="250" viewBox="0 0 400 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#047857;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#F8FAFC;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="250" fill="url(#bg)"/>
+  
+  <!-- Eco-friendly Event -->
+  <g transform="translate(50, 30)">
+    <!-- Solar Panel -->
+    <rect x="0" y="0" width="80" height="60" fill="url(#card)" rx="8" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="40" y="20" text-anchor="middle" fill="#047857" font-family="Arial, sans-serif" font-size="12" font-weight="bold">Panneaux Solaires</text>
+    
+    <!-- Solar cells -->
+    <rect x="10" y="30" width="12" height="8" fill="#1F2937"/>
+    <rect x="25" y="30" width="12" height="8" fill="#1F2937"/>
+    <rect x="40" y="30" width="12" height="8" fill="#1F2937"/>
+    <rect x="55" y="30" width="12" height="8" fill="#1F2937"/>
+    <rect x="10" y="40" width="12" height="8" fill="#1F2937"/>
+    <rect x="25" y="40" width="12" height="8" fill="#1F2937"/>
+    <rect x="40" y="40" width="12" height="8" fill="#1F2937"/>
+    <rect x="55" y="40" width="12" height="8" fill="#1F2937"/>
+    
+    <!-- Wind Turbine -->
+    <rect x="100" y="0" width="60" height="60" fill="url(#card)" rx="8" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="130" y="20" text-anchor="middle" fill="#047857" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Éolienne</text>
+    
+    <!-- Wind turbine body -->
+    <rect x="125" y="30" width="10" height="25" fill="#6B7280"/>
+    <!-- Wind turbine blades -->
+    <circle cx="130" cy="30" r="15" fill="none" stroke="#10B981" stroke-width="3"/>
+    <path d="M130 15 L130 30 M115 30 L130 30 M130 30 L145 30" stroke="#10B981" stroke-width="2"/>
+    
+    <!-- LED Lights -->
+    <rect x="180" y="0" width="80" height="60" fill="url(#card)" rx="8" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="220" y="20" text-anchor="middle" fill="#047857" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Éclairage LED</text>
+    
+    <!-- LED bulbs -->
+    <circle cx="200" cy="35" r="4" fill="#10B981"/>
+    <circle cx="215" cy="35" r="4" fill="#10B981"/>
+    <circle cx="230" cy="35" r="4" fill="#10B981"/>
+    <circle cx="245" cy="35" r="4" fill="#10B981"/>
+    <circle cx="200" cy="50" r="4" fill="#10B981"/>
+    <circle cx="215" cy="50" r="4" fill="#10B981"/>
+    <circle cx="230" cy="50" r="4" fill="#10B981"/>
+    <circle cx="245" cy="50" r="4" fill="#10B981"/>
+    
+    <!-- Recycling -->
+    <rect x="0" y="80" width="80" height="60" fill="url(#card)" rx="8" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="40" y="100" text-anchor="middle" fill="#047857" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Recyclage</text>
+    
+    <!-- Recycling bins -->
+    <rect x="15" y="110" width="12" height="20" fill="#10B981" rx="2"/>
+    <rect x="30" y="110" width="12" height="20" fill="#3B82F6" rx="2"/>
+    <rect x="45" y="110" width="12" height="20" fill="#F59E0B" rx="2"/>
+    
+    <!-- Green Transport -->
+    <rect x="100" y="80" width="80" height="60" fill="url(#card)" rx="8" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="140" y="100" text-anchor="middle" fill="#047857" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Transport Vert</text>
+    
+    <!-- Electric bus -->
+    <rect x="110" y="110" width="40" height="15" fill="#10B981" rx="3"/>
+    <rect x="115" y="105" width="30" height="10" fill="#1F2937" rx="2"/>
+    <circle cx="120" cy="130" r="3" fill="#1F2937"/>
+    <circle cx="140" cy="130" r="3" fill="#1F2937"/>
+    
+    <!-- Carbon Footprint -->
+    <rect x="200" y="80" width="80" height="60" fill="url(#card)" rx="8" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="240" y="100" text-anchor="middle" fill="#047857" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Empreinte Carbone</text>
+    
+    <!-- Footprint chart -->
+    <rect x="210" y="110" width="60" height="20" fill="#F1F5F9" rx="4"/>
+    <rect x="215" y="115" width="10" height="10" fill="#10B981"/>
+    <rect x="230" y="115" width="10" height="10" fill="#10B981"/>
+    <rect x="245" y="115" width="10" height="10" fill="#10B981"/>
+    <rect x="260" y="115" width="5" height="10" fill="#EF4444"/>
+  </g>
+  
+  <!-- Eco Icons -->
+  <g transform="translate(20, 20)">
+    <!-- Leaf -->
+    <path d="M10 10 Q15 5 20 10 Q15 15 10 10" fill="#10B981" opacity="0.8"/>
+    
+    <!-- Recycle -->
+    <path d="M350 10 L355 5 L360 10 L355 15 Z" fill="white" fill-opacity="0.8"/>
+    <path d="M350 10 L355 5 L360 10 L355 15 Z" stroke="white" stroke-width="1" fill="none"/>
+  </g>
+  
+  <!-- Sustainability Stats -->
+  <g transform="translate(20, 200)">
+    <rect x="0" y="0" width="360" height="40" fill="url(#card)" rx="8" stroke="#E2E8F0" stroke-width="1"/>
+    <text x="20" y="15" fill="#047857" font-family="Arial, sans-serif" font-size="12" font-weight="bold">🌱 -50% d'émissions CO2</text>
+    <text x="20" y="30" fill="#047857" font-family="Arial, sans-serif" font-size="12" font-weight="bold">♻️ 80% de déchets recyclés</text>
+    <text x="200" y="15" fill="#047857" font-family="Arial, sans-serif" font-size="12" font-weight="bold">⚡ 100% énergie verte</text>
+    <text x="200" y="30" fill="#047857" font-family="Arial, sans-serif" font-size="12" font-weight="bold">🚌 Transport durable</text>
+  </g>
+</svg>
+

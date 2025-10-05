@@ -1,0 +1,728 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// MODÈLES D'AUTHENTIFICATION NEXT-AUTH
+// ============================================
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  phone         String?
+  address       String?
+  city          String?
+  postalCode    String?
+  country       String?
+  siret         String?   @unique // SIRET pour les professionnels
+  apeCode       String?   // Code APE
+  isIntermittent Boolean  @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations NextAuth
+  accounts Account[]
+  sessions Session[]
+
+  // Relations métier
+  organizations     OrganizationUser[]
+  subscriptions     Subscription[]
+  projects         Project[]
+  contacts         Contact[]
+  contracts        Contract[]
+  documents        Document[]
+  bookings         Booking[]
+  invoices         Invoice[]
+  payments         Payment[]
+  budgetItems       BudgetItem[]
+  technicalSheets  TechnicalSheet[]
+  planningItems    PlanningItem[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============================================
+// MODÈLES MÉTIER SPECTACLE VIVANT
+// ============================================
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  legalName   String?  // Raison sociale
+  description String?   @db.Text
+  address     String?
+  city        String?
+  postalCode  String?
+  country     String?
+  phone       String?
+  email       String?
+  website     String?
+  logo        String?
+  siret       String?   @unique
+  apeCode     String?   // Code APE
+  vatNumber  String?   // Numéro TVA
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  users           OrganizationUser[]
+  subscriptions   Subscription[]
+  projects        Project[]
+  contacts        Contact[]
+  venues          Venue[]
+  contracts       Contract[]
+  documents       Document[]
+  budgetItems     BudgetItem[]
+  technicalSheets TechnicalSheet[]
+  planningItems   PlanningItem[]
+  bookings        Booking[]
+  invoices        Invoice[]
+  payments        Payment[]
+}
+
+model OrganizationUser {
+  id             String       @id @default(cuid())
+  organizationId String
+  userId         String
+  role           UserRole     @default(MEMBER)
+  permissions    Json?        // Permissions personnalisées
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([organizationId])
+  @@index([userId])
+}
+
+// ============================================
+// ABONNEMENTS SAAS
+// ============================================
+
+model Subscription {
+  id             String           @id @default(cuid())
+  organizationId String
+  userId         String
+  plan           SubscriptionPlan
+  status         SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean      @default(false)
+  canceledAt         DateTime?
+  stripeCustomerId   String?     @unique
+  stripeSubscriptionId String?    @unique
+  metadata           Json?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([status])
+}
+
+// ============================================
+// PROJETS/SPECTACLES
+// ============================================
+
+model Project {
+  id             String        @id @default(cuid())
+  title          String
+  description    String?       @db.Text
+  type           ProjectType
+  status         ProjectStatus @default(DRAFT)
+  startDate      DateTime?
+  endDate        DateTime?
+  budget         Decimal?      @db.Decimal(12, 2)
+  currency       String        @default("EUR")
+  organizationId String
+  createdById    String
+  metadata       Json?         // Données spécifiques au type de projet
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  organization     Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy        User             @relation(fields: [createdById], references: [id])
+  contacts         ProjectContact[]
+  contracts        Contract[]
+  documents        Document[]
+  budgetItems      BudgetItem[]
+  technicalSheets  TechnicalSheet[]
+  planningItems    PlanningItem[]
+  bookings         Booking[]
+  invoices         Invoice[]
+
+  @@index([organizationId])
+  @@index([createdById])
+  @@index([status])
+  @@index([type])
+}
+
+// ============================================
+// CONTACTS (ARTISTES, TECHNICIENS, LIEUX)
+// ============================================
+
+model Contact {
+  id             String      @id @default(cuid())
+  type           ContactType
+  name           String
+  legalName      String?     // Raison sociale pour les entreprises
+  description    String?     @db.Text
+  email          String?
+  phone         String?
+  address       String?
+  city          String?
+  postalCode    String?
+  country       String?
+  website       String?
+  socialMedia   Json?        // Réseaux sociaux
+  siret         String?      @unique
+  apeCode       String?      // Code APE
+  vatNumber     String?      // Numéro TVA
+  isIntermittent Boolean     @default(false)
+  intermittentNumber String? // Numéro d'intermittent
+  organizationId String
+  createdById    String
+  metadata       Json?       // Données spécifiques au type de contact
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  organization     Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy        User             @relation(fields: [createdById], references: [id])
+  projects         ProjectContact[]
+  contracts        Contract[]
+  documents        Document[]
+  technicalSheets  TechnicalSheet[]
+  planningItems    PlanningItem[]
+
+  @@index([organizationId])
+  @@index([createdById])
+  @@index([type])
+  @@index([isIntermittent])
+}
+
+model ProjectContact {
+  id        String  @id @default(cuid())
+  projectId String
+  contactId String
+  role      String? // "artiste", "technicien", "lieu", etc.
+  metadata  Json?   // Données spécifiques au rôle
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, contactId])
+  @@index([projectId])
+  @@index([contactId])
+}
+
+// ============================================
+// LIEUX/SALLES
+// ============================================
+
+model Venue {
+  id             String   @id @default(cuid())
+  name           String
+  description    String?   @db.Text
+  address        String
+  city           String
+  postalCode     String
+  country        String
+  capacity       Int?
+  technicalInfo  String?   @db.Text
+  contactName    String?
+  contactPhone   String?
+  contactEmail   String?
+  website        String?
+  organizationId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  projects    Project[]
+  planningItems PlanningItem[]
+
+  @@index([organizationId])
+}
+
+// ============================================
+// PLANNING ET DISPONIBILITÉS
+// ============================================
+
+model PlanningItem {
+  id             String        @id @default(cuid())
+  title          String
+  description    String?       @db.Text
+  type           PlanningType
+  startDate      DateTime
+  endDate        DateTime
+  status         PlanningStatus @default(SCHEDULED)
+  projectId      String?
+  contactId      String?
+  venueId        String?
+  organizationId String
+  createdById    String
+  metadata       Json?         // Données spécifiques au type
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  project      Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  venue        Venue?       @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy    User         @relation(fields: [createdById], references: [id])
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([contactId])
+  @@index([venueId])
+  @@index([startDate])
+  @@index([endDate])
+  @@index([type])
+}
+
+// ============================================
+// BUDGET ET FINANCES
+// ============================================
+
+model BudgetItem {
+  id             String        @id @default(cuid())
+  title          String
+  description    String?       @db.Text
+  type           BudgetType
+  category       String?       // "artiste", "technique", "communication", etc.
+  amount         Decimal       @db.Decimal(12, 2)
+  currency       String        @default("EUR")
+  quantity       Int           @default(1)
+  unitPrice      Decimal       @db.Decimal(12, 2)
+  taxRate        Decimal       @db.Decimal(5, 2) @default(20.0) // Taux de TVA
+  taxAmount      Decimal       @db.Decimal(12, 2)
+  totalAmount    Decimal       @db.Decimal(12, 2)
+  status         BudgetStatus  @default(PLANNED)
+  projectId      String?
+  contactId      String?
+  organizationId String
+  createdById    String
+  metadata       Json?         // Données spécifiques
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  project      Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy    User         @relation(fields: [createdById], references: [id])
+  invoices     Invoice[]
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([contactId])
+  @@index([type])
+  @@index([status])
+}
+
+// ============================================
+// FICHES TECHNIQUES
+// ============================================
+
+model TechnicalSheet {
+  id             String   @id @default(cuid())
+  title          String
+  description    String?   @db.Text
+  type           TechnicalType
+  content        Json      // Contenu structuré de la fiche technique
+  projectId      String?
+  contactId      String?
+  organizationId String
+  createdById    String
+  metadata       Json?     // Données supplémentaires
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  project      Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy    User         @relation(fields: [createdById], references: [id])
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([contactId])
+  @@index([type])
+}
+
+// ============================================
+// CONTRATS ET CACHETS
+// ============================================
+
+model Contract {
+  id             String        @id @default(cuid())
+  title          String
+  description    String?       @db.Text
+  type           ContractType
+  status         ContractStatus @default(DRAFT)
+  startDate      DateTime?
+  endDate        DateTime?
+  amount         Decimal?      @db.Decimal(12, 2)
+  currency       String        @default("EUR")
+  terms          String?       @db.Text // Conditions du contrat
+  projectId      String?
+  contactId      String?
+  organizationId String
+  createdById    String
+  metadata       Json?         // Données spécifiques au contrat
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  project      Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy    User         @relation(fields: [createdById], references: [id])
+  documents    Document[]
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([contactId])
+  @@index([status])
+  @@index([type])
+}
+
+// ============================================
+// DOCUMENTS ET FICHIERS
+// ============================================
+
+model Document {
+  id             String      @id @default(cuid())
+  title          String
+  description    String?     @db.Text
+  type           DocumentType
+  fileName       String
+  filePath       String
+  fileSize       Int
+  mimeType       String
+  projectId      String?
+  contactId      String?
+  contractId     String?
+  organizationId String
+  createdById    String
+  metadata       Json?       // Métadonnées du fichier
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  project      Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  contract     Contract?    @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy    User         @relation(fields: [createdById], references: [id])
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([contactId])
+  @@index([contractId])
+  @@index([type])
+}
+
+// ============================================
+// RÉSERVATIONS ET BILLETTERIE
+// ============================================
+
+model Booking {
+  id             String       @id @default(cuid())
+  projectId      String
+  userId         String
+  organizationId String
+  status         BookingStatus @default(PENDING)
+  quantity       Int           @default(1)
+  totalPrice     Decimal       @db.Decimal(10, 2)
+  currency       String        @default("EUR")
+  notes          String?       @db.Text
+  metadata       Json?         // Données de réservation
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invoices     Invoice[]
+
+  @@index([projectId])
+  @@index([userId])
+  @@index([organizationId])
+  @@index([status])
+}
+
+// ============================================
+// FACTURES ET PAIEMENTS
+// ============================================
+
+model Invoice {
+  id             String        @id @default(cuid())
+  number         String        @unique
+  projectId      String
+  budgetItemId   String?
+  bookingId      String?
+  userId         String
+  organizationId String
+  status         InvoiceStatus @default(DRAFT)
+  subtotal       Decimal       @db.Decimal(12, 2)
+  tax            Decimal       @db.Decimal(12, 2) @default(0)
+  total          Decimal       @db.Decimal(12, 2)
+  currency       String        @default("EUR")
+  dueDate        DateTime?
+  paidAt         DateTime?
+  metadata       Json?         // Données de facturation
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  budgetItem   BudgetItem?  @relation(fields: [budgetItemId], references: [id], onDelete: Cascade)
+  booking      Booking?     @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  payments     Payment[]
+
+  @@index([projectId])
+  @@index([userId])
+  @@index([organizationId])
+  @@index([status])
+  @@index([number])
+}
+
+model Payment {
+  id             String        @id @default(cuid())
+  invoiceId      String
+  userId         String
+  organizationId String
+  stripePaymentIntentId String? @unique
+  amount         Decimal       @db.Decimal(12, 2)
+  currency       String        @default("EUR")
+  status         PaymentStatus @default(PENDING)
+  method         PaymentMethod
+  metadata       Json?         // Données de paiement
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  invoice      Invoice      @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+  @@index([userId])
+  @@index([organizationId])
+  @@index([status])
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum UserRole {
+  OWNER
+  ADMIN
+  MANAGER
+  COLLABORATOR
+  GUEST
+}
+
+enum SubscriptionPlan {
+  FREE
+  BASIC
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  UNPAID
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+}
+
+enum ProjectType {
+  CONCERT
+  FESTIVAL
+  THEATER
+  DANCE
+  COMEDY
+  OPERA
+  BALLET
+  CIRCUS
+  CONFERENCE
+  WORKSHOP
+  OTHER
+}
+
+enum ProjectStatus {
+  DRAFT
+  PLANNING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  POSTPONED
+}
+
+enum ContactType {
+  ARTIST
+  TECHNICIAN
+  VENUE
+  SUPPLIER
+  PARTNER
+  OTHER
+}
+
+enum PlanningType {
+  REHEARSAL
+  PERFORMANCE
+  MEETING
+  TECHNICAL_CHECK
+  SETUP
+  BREAKDOWN
+  TRAVEL
+  OTHER
+}
+
+enum PlanningStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  POSTPONED
+}
+
+enum BudgetType {
+  INCOME
+  EXPENSE
+}
+
+enum BudgetStatus {
+  PLANNED
+  APPROVED
+  PAID
+  CANCELLED
+}
+
+enum TechnicalType {
+  RIDER
+  STAGE_PLAN
+  LIGHTING_PLAN
+  SOUND_PLAN
+  SAFETY_PLAN
+  EQUIPMENT_LIST
+  OTHER
+}
+
+enum ContractType {
+  ARTIST_CONTRACT
+  TECHNICIAN_CONTRACT
+  VENUE_CONTRACT
+  SUPPLIER_CONTRACT
+  PARTNERSHIP
+  OTHER
+}
+
+enum ContractStatus {
+  DRAFT
+  SENT
+  SIGNED
+  CANCELLED
+  EXPIRED
+}
+
+enum DocumentType {
+  CONTRACT
+  INVOICE
+  TECHNICAL_SHEET
+  RIDER
+  PHOTO
+  VIDEO
+  AUDIO
+  OTHER
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CARD
+  BANK_TRANSFER
+  CASH
+  CHECK
+  PAYPAL
+  STRIPE
+}

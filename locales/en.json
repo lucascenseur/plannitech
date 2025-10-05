@@ -1,0 +1,388 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "open": "Open",
+    "view": "View",
+    "download": "Download",
+    "upload": "Upload",
+    "share": "Share",
+    "copy": "Copy",
+    "print": "Print",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "website": "Website",
+    "date": "Date",
+    "time": "Time",
+    "location": "Location",
+    "description": "Description",
+    "name": "Name",
+    "title": "Title",
+    "status": "Status",
+    "type": "Type",
+    "category": "Category",
+    "tags": "Tags",
+    "author": "Author",
+    "published": "Published",
+    "updated": "Updated",
+    "created": "Created",
+    "language": "Language"
+  },
+  "navigation": {
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "demo": "Demo",
+    "blog": "Blog",
+    "contact": "Contact",
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "planning": "Planning",
+    "contacts": "Contacts",
+    "budget": "Budget",
+    "technical": "Technical",
+    "settings": "Settings",
+    "billing": "Billing",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "profile": "Profile",
+    "account": "Account"
+  },
+  "seo": {
+    "title": "Plannitech - Live Performance Management",
+    "description": "Complete SaaS platform for live performance management. Planning, budget, contacts, technical tools and more.",
+    "keywords": "live performance, event management, planning, budget, contacts, technical tools, SaaS, culture, art",
+    "ogTitle": "Plannitech - The complete solution for live performance",
+    "ogDescription": "Optimize your cultural events management with Plannitech. Smart planning, financial management, contacts and technical tools.",
+    "twitterTitle": "Plannitech - Live Performance Management",
+    "twitterDescription": "The SaaS platform for live performance professionals. Planning, budget, contacts and technical tools."
+  },
+  "home": {
+    "hero": {
+      "title": "The complete solution for live performance management",
+      "subtitle": "Optimize your cultural events with our SaaS platform. Smart planning, financial management, contacts and technical tools.",
+      "cta": "Free trial",
+      "ctaSecondary": "View demo"
+    },
+    "features": {
+      "title": "Powerful features",
+      "subtitle": "Everything you need to manage your cultural events",
+      "planning": {
+        "title": "Smart planning",
+        "description": "Manage your events with an intuitive calendar and advanced planning tools."
+      },
+      "budget": {
+        "title": "Financial management",
+        "description": "Track your budgets, generate quotes and invoices, manage intermittent fees."
+      },
+      "contacts": {
+        "title": "Contact database",
+        "description": "Organize your artist, technician, venue and partner contacts."
+      },
+      "technical": {
+        "title": "Technical tools",
+        "description": "Technical sheets, lighting plans, equipment inventory and checklists."
+      }
+    },
+    "pricing": {
+      "title": "Transparent pricing",
+      "subtitle": "Choose the plan that fits your needs",
+      "freeTrial": "14-day free trial",
+      "noCreditCard": "No credit card required"
+    },
+    "testimonials": {
+      "title": "They trust us",
+      "subtitle": "See what our clients say"
+    },
+    "cta": {
+      "title": "Ready to optimize your events?",
+      "subtitle": "Join hundreds of live performance professionals",
+      "button": "Get started now"
+    }
+  },
+  "blog": {
+    "title": "Plannitech Blog",
+    "subtitle": "News and tips for live performance",
+    "readMore": "Read more",
+    "readTime": "min read",
+    "publishedOn": "Published on",
+    "by": "by",
+    "categories": "Categories",
+    "tags": "Tags",
+    "search": "Search blog",
+    "related": "Related articles",
+    "newsletter": {
+      "title": "Stay informed",
+      "subtitle": "Receive our latest articles and tips directly in your inbox.",
+      "placeholder": "Your email address",
+      "button": "Subscribe",
+      "disclaimer": "No spam, unsubscribe anytime."
+    }
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "We're here to help you",
+    "form": {
+      "name": "Full name",
+      "email": "Email",
+      "company": "Company",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send message",
+      "sending": "Sending...",
+      "success": "Message sent successfully!",
+      "error": "Error sending message."
+    },
+    "info": {
+      "title": "Contact information",
+      "email": "contact@plannitech.com",
+      "phone": "+33 1 23 45 67 89",
+      "address": "123 Culture Street, 75001 Paris, France"
+    }
+  },
+  "pricing": {
+    "title": "Pricing",
+    "subtitle": "Choose the plan that suits you",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save": "Save",
+    "popular": "Popular",
+    "freeTrial": "14-day free trial",
+    "features": {
+      "projects": "Projects",
+      "users": "Users",
+      "storage": "Storage",
+      "support": "Support",
+      "api": "API",
+      "integrations": "Integrations"
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "questions": [
+        {
+          "question": "Can I change plans at any time?",
+          "answer": "Yes, you can upgrade or downgrade your plan at any time from your dashboard."
+        },
+        {
+          "question": "Are there any setup fees?",
+          "answer": "No, there are no setup fees. You only pay your monthly or annual subscription."
+        },
+        {
+          "question": "Can I cancel my subscription?",
+          "answer": "Yes, you can cancel your subscription at any time from your dashboard."
+        }
+      ]
+    }
+  },
+  "auth": {
+    "signin": {
+      "title": "Sign in to your account",
+      "subtitle": "Manage your shows and events with simplicity",
+      "email": "Email address",
+      "password": "Password",
+      "remember": "Remember me",
+      "forgot": "Forgot password?",
+      "signin": "Sign in",
+      "noAccount": "Don't have an account?",
+      "signup": "Create account",
+      "or": "or",
+      "google": "Continue with Google",
+      "github": "Continue with GitHub"
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Join the live performance professionals community",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "company": "Company (optional)",
+      "terms": "I accept the terms of service",
+      "privacy": "and privacy policy",
+      "signup": "Create my account",
+      "hasAccount": "Already have an account?",
+      "signin": "Sign in",
+      "or": "or",
+      "google": "Continue with Google",
+      "github": "Continue with GitHub"
+    },
+    "error": {
+      "title": "Authentication error",
+      "subtitle": "A problem occurred during your connection",
+      "messages": {
+        "Configuration": "There is a problem with the server configuration.",
+        "AccessDenied": "You don't have permission to sign in.",
+        "Verification": "The verification link has expired or has already been used.",
+        "Default": "An unexpected error occurred."
+      },
+      "retry": "Try again",
+      "home": "Back to home"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome",
+    "overview": "Overview",
+    "recentActivity": "Recent activity",
+    "quickActions": "Quick actions",
+    "stats": {
+      "projects": "Active projects",
+      "events": "Upcoming events",
+      "contacts": "Contacts",
+      "budget": "Total budget"
+    },
+    "projects": {
+      "title": "My projects",
+      "create": "New project",
+      "viewAll": "View all projects",
+      "empty": "No projects yet",
+      "emptySubtitle": "Create your first project to get started"
+    },
+    "events": {
+      "title": "Upcoming events",
+      "viewAll": "View all events",
+      "empty": "No events scheduled",
+      "emptySubtitle": "Plan your first event"
+    },
+    "contacts": {
+      "title": "Recent contacts",
+      "viewAll": "View all contacts",
+      "empty": "No contacts",
+      "emptySubtitle": "Add your first contacts"
+    }
+  },
+  "errors": {
+    "404": {
+      "title": "Page not found",
+      "subtitle": "The page you are looking for does not exist",
+      "back": "Back to home"
+    },
+    "500": {
+      "title": "Server error",
+      "subtitle": "An internal error occurred",
+      "retry": "Try again"
+    },
+    "network": {
+      "title": "Connection error",
+      "subtitle": "Check your internet connection",
+      "retry": "Try again"
+    }
+  },
+  "exitIntent": {
+    "title": "Wait!",
+    "subtitle": "Don't leave without your bonus!",
+    "offer": "Special Offer",
+    "limitedTime": "Limited time offer",
+    "mainOffer": "30 days FREE instead of 14!",
+    "description": "Get 30 days free trial + personalized setup by our experts",
+    "benefits": {
+      "trial": "30 days free trial (instead of 14)",
+      "setup": "Personalized setup included",
+      "support": "Priority 24/7 support",
+      "training": "Free 2h training session"
+    },
+    "cta": {
+      "primary": "🚀 Claim offer now",
+      "secondary": "No thanks, continue browsing"
+    },
+    "disclaimer": "No card required • Cancel anytime"
+  },
+  "landing": {
+    "hero": {
+      "title": "Manage your shows",
+      "subtitle": "with simplicity",
+      "description": "The complete platform to organize, plan and manage all your cultural events.",
+      "cta": "Start for free",
+      "demo": "View demo",
+      "trust": {
+        "trial": "14-day free trial",
+        "card": "No card required",
+        "support": "24/7 support"
+      }
+    },
+    "demo": {
+      "title": "See Plannitech in action",
+      "subtitle": "Discover how our clients organize their shows with Plannitech"
+    },
+    "features": {
+      "title": "Everything you need",
+      "subtitle": "A complete platform to manage all aspects of your shows",
+      "planning": {
+        "title": "Planning",
+        "description": "Organize your events with intuitive tools",
+        "benefits": [
+          "Interactive calendar",
+          "Rehearsal management",
+          "Technical planning"
+        ]
+      },
+      "budget": {
+        "title": "Budget",
+        "description": "Control your finances with precision",
+        "benefits": [
+          "Expense tracking",
+          "Financial reports",
+          "Budget forecasts"
+        ]
+      },
+      "contacts": {
+        "title": "Contacts",
+        "description": "Centralize all your professional contacts",
+        "benefits": [
+          "Complete database",
+          "Exchange history",
+          "Advanced segmentation"
+        ]
+      }
+    },
+    "stats": {
+      "title": "Results that speak",
+      "professionals": "Professionals",
+      "events": "Events",
+      "satisfaction": "Satisfaction",
+      "support": "Support"
+    },
+    "testimonials": {
+      "title": "What our clients say",
+      "testimonial1": {
+        "text": "Plannitech has revolutionized our way of managing shows. The interface is intuitive and the features are complete.",
+        "author": "Jean Dupont",
+        "role": "Director, National Theater"
+      },
+      "testimonial2": {
+        "text": "Budget management is exceptional. We have reduced our costs by 30% thanks to Plannitech's tracking tools.",
+        "author": "Marie Leroy",
+        "role": "Producer, Avignon Festival"
+      },
+      "testimonial3": {
+        "text": "The support team is responsive and regular updates allow us to always be at the forefront of technology.",
+        "author": "Pierre Chen",
+        "role": "Stage Manager, Paris Opera"
+      }
+    },
+    "cta": {
+      "title": "Ready to transform your show management?",
+      "subtitle": "Join hundreds of professionals who trust Plannitech",
+      "primary": "Start for free",
+      "secondary": "View demo",
+      "disclaimer": "14-day free trial • No card required • 24/7 support"
+    }
+  }
+}
