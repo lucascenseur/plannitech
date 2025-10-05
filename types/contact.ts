@@ -100,6 +100,8 @@ export type Contact = z.infer<typeof contactSchema> & {
   documents?: Document[];
   groups?: ContactGroup[];
   tags?: string[];
+  lastCollaboration?: Date;
+  rating?: number;
 };
 
 export type ContactFormData = z.infer<typeof contactSchema>;
