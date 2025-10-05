@@ -149,16 +149,16 @@ export interface BulkAction {
 // Types pour l'import/export
 export interface ProjectCSVRow {
   name: string;
-  description?: string;
+  description?: string | undefined;
   type: string;
   status: string;
   startDate: string;
-  endDate?: string;
-  venue?: string;
-  budget?: string;
-  teamSize?: string;
+  endDate?: string | undefined;
+  venue?: string | undefined;
+  budget?: string | undefined;
+  teamSize?: string | undefined;
   isPublic: string;
-  tags?: string;
+  tags?: string | undefined;
 }
 
 export interface ImportResult {

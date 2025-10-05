@@ -504,50 +504,50 @@ export interface TechnicalSheetFilters {
 }
 
 export interface FirePlanFilters {
-  search?: string;
-  projectId?: string;
-  type?: string;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
+  search?: string | undefined;
+  projectId?: string | undefined;
+  type?: string | undefined;
+  status?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
 }
 
 export interface EquipmentFilters {
-  search?: string;
-  category?: string;
-  type?: string;
-  status?: string;
-  location?: string;
-  brand?: string;
-  startDate?: string;
-  endDate?: string;
+  search?: string | undefined;
+  category?: string | undefined;
+  type?: string | undefined;
+  status?: string | undefined;
+  location?: string | undefined;
+  brand?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
 }
 
 export interface ChecklistFilters {
-  search?: string;
-  projectId?: string;
-  type?: string;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
+  search?: string | undefined;
+  projectId?: string | undefined;
+  type?: string | undefined;
+  status?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
 }
 
 export interface TechnicalConductorFilters {
-  search?: string;
-  projectId?: string;
-  type?: string;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
+  search?: string | undefined;
+  projectId?: string | undefined;
+  type?: string | undefined;
+  status?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
 }
 
 export interface TemplateFilters {
-  search?: string;
-  type?: string;
-  category?: string;
-  isPublic?: boolean;
-  startDate?: string;
-  endDate?: string;
+  search?: string | undefined;
+  type?: string | undefined;
+  category?: string | undefined;
+  isPublic?: boolean | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
 }
 
 // Types pour les diagrammes

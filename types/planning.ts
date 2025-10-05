@@ -173,17 +173,17 @@ export const eventFiltersSchema = z.object({
 
 // Types pour les filtres
 export interface PlanningFilters {
-  search?: string;
-  type?: string;
-  status?: string;
-  priority?: string;
-  projectId?: string;
-  contactId?: string;
-  teamId?: string;
-  startDate?: string;
-  endDate?: string;
-  showConflicts?: boolean;
-  showAvailability?: boolean;
+  search?: string | undefined;
+  type?: string | undefined;
+  status?: string | undefined;
+  priority?: string | undefined;
+  projectId?: string | undefined;
+  contactId?: string | undefined;
+  teamId?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
+  showConflicts?: boolean | undefined;
+  showAvailability?: boolean | undefined;
 }
 
 // Types pour les statistiques

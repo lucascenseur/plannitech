@@ -536,58 +536,58 @@ export interface DashboardData {
 
 // Types pour les filtres
 export interface BudgetFilters {
-  search?: string;
-  projectId?: string;
-  type?: string;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
-  minAmount?: number;
-  maxAmount?: number;
+  search?: string | undefined;
+  projectId?: string | undefined;
+  type?: string | undefined;
+  status?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
+  minAmount?: number | undefined;
+  maxAmount?: number | undefined;
 }
 
 export interface ExpenseFilters {
-  search?: string;
-  budgetId?: string;
-  categoryId?: string;
-  type?: string;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
-  minAmount?: number;
-  maxAmount?: number;
+  search?: string | undefined;
+  budgetId?: string | undefined;
+  categoryId?: string | undefined;
+  type?: string | undefined;
+  status?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
+  minAmount?: number | undefined;
+  maxAmount?: number | undefined;
 }
 
 export interface InvoiceFilters {
-  search?: string;
-  clientId?: string;
-  projectId?: string;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
-  minAmount?: number;
-  maxAmount?: number;
+  search?: string | undefined;
+  clientId?: string | undefined;
+  projectId?: string | undefined;
+  status?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
+  minAmount?: number | undefined;
+  maxAmount?: number | undefined;
 }
 
 export interface QuoteFilters {
-  search?: string;
-  clientId?: string;
-  projectId?: string;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
-  minAmount?: number;
-  maxAmount?: number;
+  search?: string | undefined;
+  clientId?: string | undefined;
+  projectId?: string | undefined;
+  status?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
+  minAmount?: number | undefined;
+  maxAmount?: number | undefined;
 }
 
 export interface IntermittentFilters {
-  search?: string;
-  contactId?: string;
-  projectId?: string;
-  status?: string;
-  startDate?: string;
-  endDate?: string;
-  minAmount?: number;
-  maxAmount?: number;
+  search?: string | undefined;
+  contactId?: string | undefined;
+  projectId?: string | undefined;
+  status?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
+  minAmount?: number | undefined;
+  maxAmount?: number | undefined;
 }
 
