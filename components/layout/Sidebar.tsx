@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useAuth, usePermissions } from "@/hooks/useAuth";
+import { useLocale } from "@/lib/i18n";
 import {
   Calendar,
   Users,
@@ -27,14 +28,42 @@ interface SidebarProps {
   setOpen: (open: boolean) => void;
 }
 
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: Home },
-  { name: "Projets", href: "/projects", icon: Calendar },
-  { name: "Planning", href: "/planning", icon: Calendar },
-  { name: "Contacts", href: "/contacts", icon: Users },
-  { name: "Budget", href: "/budget", icon: DollarSign },
-  { name: "Technique", href: "/technical", icon: Wrench },
-  { name: "Paramètres", href: "/settings", icon: Settings },
+const getNavigation = (locale: string) => [
+  { 
+    name: locale === 'en' ? 'Dashboard' : locale === 'es' ? 'Panel' : 'Dashboard', 
+    href: `/${locale}/dashboard`, 
+    icon: Home 
+  },
+  { 
+    name: locale === 'en' ? 'Projects' : locale === 'es' ? 'Proyectos' : 'Projets', 
+    href: `/${locale}/dashboard/projects`, 
+    icon: Calendar 
+  },
+  { 
+    name: locale === 'en' ? 'Planning' : locale === 'es' ? 'Planificación' : 'Planning', 
+    href: `/${locale}/dashboard/planning`, 
+    icon: Calendar 
+  },
+  { 
+    name: locale === 'en' ? 'Contacts' : locale === 'es' ? 'Contactos' : 'Contacts', 
+    href: `/${locale}/dashboard/contacts`, 
+    icon: Users 
+  },
+  { 
+    name: locale === 'en' ? 'Budget' : locale === 'es' ? 'Presupuesto' : 'Budget', 
+    href: `/${locale}/dashboard/budget`, 
+    icon: DollarSign 
+  },
+  { 
+    name: locale === 'en' ? 'Technical' : locale === 'es' ? 'Técnico' : 'Technique', 
+    href: `/${locale}/dashboard/technical`, 
+    icon: Wrench 
+  },
+  { 
+    name: locale === 'en' ? 'Settings' : locale === 'es' ? 'Configuración' : 'Paramètres', 
+    href: `/${locale}/dashboard/settings`, 
+    icon: Settings 
+  },
 ];
 
 export function Sidebar({ open, setOpen }: SidebarProps) {
@@ -42,23 +71,26 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
   const { user, signOut, getCurrentOrganization } = useAuth();
   const { canManageProjects, canManageUsers, canManageBudget, canManageContracts } = usePermissions();
   const [collapsed, setCollapsed] = useState(false);
+  const { currentLocale } = useLocale();
 
   const currentOrg = getCurrentOrganization();
+  const navigation = getNavigation(currentLocale);
 
   const filteredNavigation = navigation.filter((item) => {
-    switch (item.name) {
-      case "Projets":
-      case "Planning":
-        return canManageProjects;
-      case "Budget":
-        return canManageBudget;
-      case "Technique":
-        return canManageContracts;
-      case "Paramètres":
-        return canManageUsers;
-      default:
-        return true;
+    const href = item.href;
+    if (href.includes('/projects') || href.includes('/planning')) {
+      return canManageProjects;
     }
+    if (href.includes('/budget')) {
+      return canManageBudget;
+    }
+    if (href.includes('/technical')) {
+      return canManageContracts;
+    }
+    if (href.includes('/settings')) {
+      return canManageUsers;
+    }
+    return true;
   });
 
   return (

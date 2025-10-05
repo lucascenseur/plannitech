@@ -37,12 +37,12 @@ export default withAuth(
 
     // Vérifier si l'utilisateur est connecté
     if (!token) {
-      return NextResponse.redirect(new URL("/auth/signin", req.url));
+      return NextResponse.redirect(new URL("/fr/auth/signin", req.url));
     }
 
     // Routes d'authentification - rediriger si déjà connecté
-    if (pathname.startsWith("/auth/")) {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
+    if (pathname.startsWith("/auth/") || pathname.match(/^\/[a-z]{2}\/auth\//)) {
+      return NextResponse.redirect(new URL("/fr/dashboard", req.url));
     }
 
     // En mode test, on ignore la vérification d'onboarding
@@ -57,18 +57,18 @@ export default withAuth(
     // }
 
     // Vérifier les permissions pour les routes admin
-    if (pathname.startsWith("/admin")) {
+    if (pathname.startsWith("/admin") || pathname.match(/^\/[a-z]{2}\/admin/)) {
       const userRole = token.role as UserRole;
       if (!["OWNER", "ADMIN"].includes(userRole)) {
-        return NextResponse.redirect(new URL("/dashboard", req.url));
+        return NextResponse.redirect(new URL("/fr/dashboard", req.url));
       }
     }
 
     // Vérifier les permissions pour les routes de gestion
-    if (pathname.startsWith("/settings")) {
+    if (pathname.startsWith("/settings") || pathname.match(/^\/[a-z]{2}\/settings/)) {
       const userRole = token.role as UserRole;
       if (!["OWNER", "ADMIN", "MANAGER"].includes(userRole)) {
-        return NextResponse.redirect(new URL("/dashboard", req.url));
+        return NextResponse.redirect(new URL("/fr/dashboard", req.url));
       }
     }
 

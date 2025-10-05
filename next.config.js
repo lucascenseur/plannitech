@@ -46,16 +46,16 @@ const nextConfig = {
     NEXTAUTH_SECRET: 'test-secret-key-for-development'
   },
   
-  // Redirection automatique vers la langue par défaut (DÉSACTIVÉE pour éviter les boucles)
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/',
-  //       destination: '/fr',
-  //       permanent: false,
-  //     },
-  //   ];
-  // },
+      // Redirection automatique vers la langue par défaut
+      async redirects() {
+        return [
+          {
+            source: '/',
+            destination: '/fr/landing',
+            permanent: false,
+          },
+        ];
+      },
   
   // Configuration des headers pour le SEO multilingue et la sécurité
   async headers() {

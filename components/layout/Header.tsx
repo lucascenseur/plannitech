@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth, useOrganizations } from "@/hooks/useAuth";
+import { useLocale } from "@/lib/i18n";
 import {
   Menu,
   Search,
@@ -30,6 +31,38 @@ interface HeaderProps {
 export function Header({ onMenuClick }: HeaderProps) {
   const { user, signOut } = useAuth();
   const { organizations, currentOrganization, switchOrganization } = useOrganizations();
+  const { currentLocale } = useLocale();
+
+  const getTranslations = (locale: string) => {
+    switch (locale) {
+      case 'en':
+        return {
+          search: "Search...",
+          organizations: "Organizations",
+          current: "Current",
+          settings: "Settings",
+          logout: "Logout"
+        };
+      case 'es':
+        return {
+          search: "Buscar...",
+          organizations: "Organizaciones",
+          current: "Actual",
+          settings: "Configuración",
+          logout: "Cerrar sesión"
+        };
+      default: // fr
+        return {
+          search: "Rechercher...",
+          organizations: "Organisations",
+          current: "Actuel",
+          settings: "Paramètres",
+          logout: "Déconnexion"
+        };
+    }
+  };
+
+  const t = getTranslations(currentLocale);
 
   return (
     <header className="bg-white shadow-sm border-b">
@@ -50,7 +83,7 @@ export function Header({ onMenuClick }: HeaderProps) {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
-                placeholder="Rechercher..."
+                placeholder={t.search}
                 className="pl-10 w-64"
               />
             </div>
@@ -70,7 +103,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>Organisations</DropdownMenuLabel>
+                <DropdownMenuLabel>{t.organizations}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {organizations.map((org) => (
                   <DropdownMenuItem
@@ -85,7 +118,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                     </div>
                     {org.id === currentOrganization?.id && (
                       <Badge variant="secondary" className="text-xs">
-                        Actuel
+                        {t.current}
                       </Badge>
                     )}
                   </DropdownMenuItem>
@@ -131,12 +164,12 @@ export function Header({ onMenuClick }: HeaderProps) {
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <Settings className="mr-2 h-4 w-4" />
-                <span>Paramètres</span>
+                <span>{t.settings}</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={signOut}>
                 <LogOut className="mr-2 h-4 w-4" />
-                <span>Déconnexion</span>
+                <span>{t.logout}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
