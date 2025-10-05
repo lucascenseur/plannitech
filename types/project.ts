@@ -44,11 +44,11 @@ export type Project = z.infer<typeof projectSchema> & {
     id: string;
     name: string;
   };
-  contacts?: ProjectContact[];
-  planningItems?: PlanningItem[];
-  budgetItems?: BudgetItem[];
-  technicalSheets?: TechnicalSheet[];
-  documents?: Document[];
+  contacts?: ProjectContact[] | undefined;
+  planningItems?: PlanningItem[] | undefined;
+  budgetItems?: BudgetItem[] | undefined;
+  technicalSheets?: TechnicalSheet[] | undefined;
+  documents?: Document[] | undefined;
 };
 
 export type ProjectFormData = z.infer<typeof projectSchema>;
@@ -73,9 +73,9 @@ export interface PlanningItem {
   id: string;
   projectId: string;
   title: string;
-  description?: string;
+  description?: string | undefined;
   startDate: Date;
-  endDate?: Date;
+  endDate?: Date | undefined;
   type: string;
   status: string;
 }
@@ -116,10 +116,10 @@ export interface ProjectListView {
   type: string;
   status: string;
   startDate: Date;
-  endDate?: Date;
-  venue?: string;
-  budget?: number;
-  teamSize?: number;
+  endDate?: Date | undefined;
+  venue?: string | undefined;
+  budget?: number | undefined;
+  teamSize?: number | undefined;
   progress: number;
   createdBy: string;
   createdAt: Date;
@@ -131,9 +131,9 @@ export interface ProjectKanbanView {
   type: string;
   status: string;
   startDate: Date;
-  venue?: string;
-  budget?: number;
-  teamSize?: number;
+  venue?: string | undefined;
+  budget?: number | undefined;
+  teamSize?: number | undefined;
   progress: number;
   priority: "LOW" | "MEDIUM" | "HIGH";
   tags: string[];
@@ -143,7 +143,7 @@ export interface ProjectKanbanView {
 export interface BulkAction {
   type: "DELETE" | "ARCHIVE" | "UPDATE_STATUS" | "UPDATE_TYPE" | "EXPORT";
   projectIds: string[];
-  data?: any;
+  data?: any | undefined;
 }
 
 // Types pour l'import/export
