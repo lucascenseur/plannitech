@@ -181,6 +181,18 @@ export interface ContactListView {
   lastCollaboration?: Date;
   rating?: number;
   createdAt: Date;
+  updatedAt: Date;
+  organizationId: string;
+  createdById: string;
+  createdBy: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  organization: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface ContactCardView {

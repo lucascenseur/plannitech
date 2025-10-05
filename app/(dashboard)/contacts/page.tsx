@@ -78,7 +78,19 @@ export default function ContactsPage() {
           }],
           lastCollaboration: new Date("2024-01-15"),
           rating: 4.8,
-          createdAt: new Date("2024-01-01")
+          createdAt: new Date("2024-01-01"),
+          updatedAt: new Date("2024-01-01"),
+          organizationId: "1",
+          createdById: "1",
+          createdBy: {
+            id: "1",
+            name: "Admin",
+            email: "admin@plannitech.com"
+          },
+          organization: {
+            id: "1",
+            name: "Plannitech"
+          }
         },
         {
           id: "2",
@@ -105,7 +117,19 @@ export default function ContactsPage() {
           }],
           lastCollaboration: new Date("2024-02-10"),
           rating: 4.5,
-          createdAt: new Date("2024-01-15")
+          createdAt: new Date("2024-01-15"),
+          updatedAt: new Date("2024-01-15"),
+          organizationId: "1",
+          createdById: "1",
+          createdBy: {
+            id: "1",
+            name: "Admin",
+            email: "admin@plannitech.com"
+          },
+          organization: {
+            id: "1",
+            name: "Plannitech"
+          }
         },
         {
           id: "3",
@@ -132,7 +156,19 @@ export default function ContactsPage() {
           }],
           lastCollaboration: new Date("2024-01-20"),
           rating: 4.2,
-          createdAt: new Date("2024-01-10")
+          createdAt: new Date("2024-01-10"),
+          updatedAt: new Date("2024-01-10"),
+          organizationId: "1",
+          createdById: "1",
+          createdBy: {
+            id: "1",
+            name: "Admin",
+            email: "admin@plannitech.com"
+          },
+          organization: {
+            id: "1",
+            name: "Plannitech"
+          }
         }
       ];
       
