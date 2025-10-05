@@ -8,12 +8,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 interface AuthErrorPageProps {
-  params: {
+  params: Promise<{
     locale: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     error?: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -25,8 +25,8 @@ export async function generateStaticParams() {
 }
 
 export default async function AuthErrorPage({ params, searchParams }: AuthErrorPageProps) {
-  const { locale } = params;
-  const { error } = searchParams;
+  const { locale } = await params;
+  const { error } = await searchParams;
 
   // Vérifier que la locale est supportée
   const supportedLocales = ['fr', 'en', 'es'];
