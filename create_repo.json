@@ -1,0 +1,6 @@
+{
+  "name": "plannitech",
+  "description": "SaaS de gestion pour le spectacle vivant - Planning, régie technique, et organisation d'événements",
+  "private": true,
+  "auto_init": false
+}

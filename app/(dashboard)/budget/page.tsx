@@ -41,13 +41,7 @@ import {
   QuoteListView, 
   IntermittentListView,
   SocialCharges,
-  DashboardData,
-  BudgetFormData,
-  ExpenseFormData,
-  InvoiceFormData,
-  QuoteFormData,
-  IntermittentFormData,
-  SocialChargesFormData
+  DashboardData
 } from "@/types/budget";
 
 export default function BudgetPage() {
