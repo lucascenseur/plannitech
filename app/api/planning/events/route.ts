@@ -14,19 +14,40 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const filters = {
-      search: searchParams.get("search") || undefined,
-      type: searchParams.get("type") || undefined,
-      status: searchParams.get("status") || undefined,
-      priority: searchParams.get("priority") || undefined,
-      projectId: searchParams.get("projectId") || undefined,
-      contactId: searchParams.get("contactId") || undefined,
-      teamId: searchParams.get("teamId") || undefined,
-      startDate: searchParams.get("startDate") || undefined,
-      endDate: searchParams.get("endDate") || undefined,
-      showConflicts: searchParams.get("showConflicts") === "true",
-      showAvailability: searchParams.get("showAvailability") === "true",
-    };
+    const filters: any = {};
+    
+    const search = searchParams.get("search");
+    if (search) filters.search = search;
+    
+    const type = searchParams.get("type");
+    if (type) filters.type = type;
+    
+    const status = searchParams.get("status");
+    if (status) filters.status = status;
+    
+    const priority = searchParams.get("priority");
+    if (priority) filters.priority = priority;
+    
+    const projectId = searchParams.get("projectId");
+    if (projectId) filters.projectId = projectId;
+    
+    const contactId = searchParams.get("contactId");
+    if (contactId) filters.contactId = contactId;
+    
+    const teamId = searchParams.get("teamId");
+    if (teamId) filters.teamId = teamId;
+    
+    const startDate = searchParams.get("startDate");
+    if (startDate) filters.startDate = startDate;
+    
+    const endDate = searchParams.get("endDate");
+    if (endDate) filters.endDate = endDate;
+    
+    const showConflicts = searchParams.get("showConflicts");
+    if (showConflicts === "true") filters.showConflicts = true;
+    
+    const showAvailability = searchParams.get("showAvailability");
+    if (showAvailability === "true") filters.showAvailability = true;
 
     // Validation des filtres
     const validatedFilters = eventFiltersSchema.parse(filters);

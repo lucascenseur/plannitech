@@ -500,7 +500,7 @@ export default function BillingPage() {
       content: (
         <SubscriptionPlans
           plans={plans}
-          currentPlan={currentPlan || undefined}
+          currentPlan={currentPlan}
           onSelectPlan={handleSelectPlan}
           onUpgrade={handleUpgrade}
           onDowngrade={handleDowngrade}

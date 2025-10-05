@@ -14,15 +14,28 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const filters = {
-      search: searchParams.get("search") || undefined,
-      type: searchParams.get("type") || undefined,
-      status: searchParams.get("status") || undefined,
-      startDate: searchParams.get("startDate") || undefined,
-      endDate: searchParams.get("endDate") || undefined,
-      venue: searchParams.get("venue") || undefined,
-      tags: searchParams.get("tags")?.split(",") || undefined,
-    };
+    const filters: any = {};
+    
+    const search = searchParams.get("search");
+    if (search) filters.search = search;
+    
+    const type = searchParams.get("type");
+    if (type) filters.type = type;
+    
+    const status = searchParams.get("status");
+    if (status) filters.status = status;
+    
+    const startDate = searchParams.get("startDate");
+    if (startDate) filters.startDate = startDate;
+    
+    const endDate = searchParams.get("endDate");
+    if (endDate) filters.endDate = endDate;
+    
+    const venue = searchParams.get("venue");
+    if (venue) filters.venue = venue;
+    
+    const tags = searchParams.get("tags");
+    if (tags) filters.tags = tags.split(",");
 
     // Validation des filtres
     const validatedFilters = projectFiltersSchema.parse(filters);

@@ -14,18 +14,37 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const filters = {
-      search: searchParams.get("search") || undefined,
-      type: searchParams.get("type") || undefined,
-      status: searchParams.get("status") || undefined,
-      skills: searchParams.get("skills")?.split(",") || undefined,
-      tags: searchParams.get("tags")?.split(",") || undefined,
-      groups: searchParams.get("groups")?.split(",") || undefined,
-      isIntermittent: searchParams.get("isIntermittent") === "true" ? true : undefined,
-      isFavorite: searchParams.get("isFavorite") === "true" ? true : undefined,
-      availability: searchParams.get("availability") || undefined,
-      rateRange: searchParams.get("rateRange") ? JSON.parse(searchParams.get("rateRange")!) : undefined,
-    };
+    const filters: any = {};
+    
+    const search = searchParams.get("search");
+    if (search) filters.search = search;
+    
+    const type = searchParams.get("type");
+    if (type) filters.type = type;
+    
+    const status = searchParams.get("status");
+    if (status) filters.status = status;
+    
+    const skills = searchParams.get("skills");
+    if (skills) filters.skills = skills.split(",");
+    
+    const tags = searchParams.get("tags");
+    if (tags) filters.tags = tags.split(",");
+    
+    const groups = searchParams.get("groups");
+    if (groups) filters.groups = groups.split(",");
+    
+    const isIntermittent = searchParams.get("isIntermittent");
+    if (isIntermittent === "true") filters.isIntermittent = true;
+    
+    const isFavorite = searchParams.get("isFavorite");
+    if (isFavorite === "true") filters.isFavorite = true;
+    
+    const availability = searchParams.get("availability");
+    if (availability) filters.availability = availability;
+    
+    const rateRange = searchParams.get("rateRange");
+    if (rateRange) filters.rateRange = JSON.parse(rateRange);
 
     // Validation des filtres
     const validatedFilters = contactFiltersSchema.parse(filters);
