@@ -463,7 +463,7 @@ export default function BillingPage() {
                         <div
                           className="bg-purple-500 h-2 rounded-full"
                           style={{ 
-                            width: `${currentPlan?.limits.storage === 0 ? 0 : (usageStats.totalStorage / currentPlan.limits.storage) * 100}%` 
+                            width: `${currentPlan?.limits.storage === 0 ? 0 : (usageStats.totalStorage / (currentPlan?.limits.storage || 1)) * 100}%` 
                           }}
                         />
                       </div>
@@ -481,7 +481,7 @@ export default function BillingPage() {
                         <div
                           className="bg-orange-500 h-2 rounded-full"
                           style={{ 
-                            width: `${currentPlan?.limits.apiCalls === 0 ? 0 : (usageStats.totalApiCalls / currentPlan.limits.apiCalls) * 100}%` 
+                            width: `${currentPlan?.limits.apiCalls === 0 ? 0 : (usageStats.totalApiCalls / (currentPlan?.limits.apiCalls || 1)) * 100}%` 
                           }}
                         />
                       </div>
