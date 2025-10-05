@@ -131,7 +131,7 @@ model OrganizationUser {
   id             String       @id @default(cuid())
   organizationId String
   userId         String
-  role           UserRole     @default(MEMBER)
+  role           UserRole     @default(COLLABORATOR)
   permissions    Json?        // Permissions personnalisées
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
