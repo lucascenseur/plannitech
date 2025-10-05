@@ -483,8 +483,8 @@ main() {
     echo -e "${PURPLE}=====================================${NC}\n"
     
     # Vérification des privilèges
-    if [[ $EUID -eq 0 ]]; then
-        error "Ne pas exécuter ce script en tant que root"
+    if [[ $EUID -ne 0 ]]; then
+        error "Ce script doit être exécuté en tant que root"
     fi
     
     # Installation des dépendances système
