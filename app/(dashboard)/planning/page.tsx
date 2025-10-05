@@ -74,7 +74,11 @@ export default function PlanningPage() {
       isRecurring: false,
       recurrenceRule: null,
       reminders: [],
-      project: event.project,
+      project: event.project ? {
+        id: event.project.id,
+        name: event.project.name,
+        type: "PROJECT" // Valeur par défaut
+      } : undefined,
       contacts: event.contacts,
       team: [],
       conflicts: [],
