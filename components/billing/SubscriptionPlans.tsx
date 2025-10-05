@@ -40,7 +40,7 @@ import { SubscriptionPlanListView, PlanLimits } from "@/types/billing";
 
 interface SubscriptionPlansProps {
   plans: SubscriptionPlanListView[];
-  currentPlan?: SubscriptionPlanListView;
+  currentPlan?: SubscriptionPlanListView | undefined;
   onSelectPlan: (planId: string) => void;
   onUpgrade: (planId: string) => void;
   onDowngrade: (planId: string) => void;
