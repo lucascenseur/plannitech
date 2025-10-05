@@ -37,7 +37,7 @@ interface ContactFavoritesProps {
   onView: (contactId: string) => void;
   onEdit: (contactId: string) => void;
   onToggleFavorite: (contactId: string) => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function ContactFavorites({

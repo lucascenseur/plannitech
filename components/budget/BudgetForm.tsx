@@ -32,7 +32,7 @@ interface BudgetFormProps {
   initialData?: Partial<BudgetFormData>;
   onSubmit: (data: BudgetFormData) => void;
   onCancel: () => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
   title?: string;
   description?: string;
 }

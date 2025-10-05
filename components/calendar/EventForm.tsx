@@ -29,7 +29,7 @@ interface EventFormProps {
   initialData?: Partial<EventFormData>;
   onSubmit: (data: EventFormData) => void;
   onCancel: () => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
   title?: string;
   description?: string;
 }

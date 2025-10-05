@@ -73,7 +73,7 @@ interface FormActionsProps {
   onSave?: () => void;
   saveText?: string;
   cancelText?: string;
-  loading?: boolean;
+  loading?: boolean | undefined;
   className?: string;
 }
 

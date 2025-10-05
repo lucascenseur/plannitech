@@ -28,7 +28,7 @@ interface CalendarViewProps {
   onFiltersChange: (filters: PlanningFilters) => void;
   onExport: () => void;
   onShare: () => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function CalendarView({

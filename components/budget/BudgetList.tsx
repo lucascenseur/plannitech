@@ -36,7 +36,7 @@ interface BudgetListProps {
   onImport: () => void;
   onCreate: () => void;
   onDuplicate: (id: string) => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function BudgetList({

@@ -43,7 +43,7 @@ interface FirePlanEditorProps {
   initialData?: Partial<FirePlan>;
   onSubmit: (data: FirePlan) => void;
   onCancel: () => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
   title?: string;
   description?: string;
 }

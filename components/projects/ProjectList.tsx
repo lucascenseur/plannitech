@@ -33,7 +33,7 @@ interface ProjectListProps {
   onArchive: (ids: string[]) => void;
   onExport: (ids: string[]) => void;
   onCreate: () => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function ProjectList({

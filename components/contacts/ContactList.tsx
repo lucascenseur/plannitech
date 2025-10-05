@@ -38,7 +38,7 @@ interface ContactListProps {
   onExport: (ids: string[]) => void;
   onImport: () => void;
   onCreate: () => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function ContactList({

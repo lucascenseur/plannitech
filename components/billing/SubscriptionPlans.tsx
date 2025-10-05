@@ -47,7 +47,7 @@ interface SubscriptionPlansProps {
   onCancel: (planId: string) => void;
   onResume: (planId: string) => void;
   onBillingPortal: () => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function SubscriptionPlans({

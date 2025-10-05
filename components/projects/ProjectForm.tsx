@@ -18,7 +18,7 @@ interface ProjectFormProps {
   initialData?: Partial<ProjectFormData>;
   onSubmit: (data: ProjectFormData) => void;
   onCancel: () => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
   title?: string;
   description?: string;
 }

@@ -52,7 +52,7 @@ interface ChecklistManagerProps {
   onPause: (id: string) => void;
   onComplete: (id: string) => void;
   onReset: (id: string) => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function ChecklistManager({

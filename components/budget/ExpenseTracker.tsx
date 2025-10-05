@@ -44,7 +44,7 @@ interface ExpenseTrackerProps {
   onCreate: () => void;
   onApprove: (ids: string[]) => void;
   onReject: (ids: string[]) => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function ExpenseTracker({

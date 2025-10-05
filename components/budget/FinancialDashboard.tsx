@@ -28,7 +28,7 @@ import {
 interface FinancialDashboardProps {
   data: DashboardData;
   onRefresh: () => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function FinancialDashboard({

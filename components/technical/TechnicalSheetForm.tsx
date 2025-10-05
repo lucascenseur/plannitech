@@ -43,7 +43,7 @@ interface TechnicalSheetFormProps {
   initialData?: Partial<TechnicalSheetFormData>;
   onSubmit: (data: TechnicalSheetFormData) => void;
   onCancel: () => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
   title?: string;
   description?: string;
 }

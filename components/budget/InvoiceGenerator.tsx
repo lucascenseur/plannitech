@@ -53,7 +53,7 @@ interface InvoiceGeneratorProps {
   onSend: (ids: string[]) => void;
   onDuplicate: (id: string) => void;
   onConvertQuote: (id: string) => void;
-  loading?: boolean;
+  loading?: boolean | undefined;
 }
 
 export function InvoiceGenerator({
