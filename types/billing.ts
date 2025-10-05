@@ -193,7 +193,7 @@ export type TaxId = z.infer<typeof taxIdSchema>;
 export interface SubscriptionPlanListView {
   id: string;
   name: string;
-  description?: string;
+  description?: string | undefined;
   price: number;
   currency: string;
   interval: string;
@@ -224,10 +224,10 @@ export interface SubscriptionListView {
   status: string;
   currentPeriodStart: Date;
   currentPeriodEnd: Date;
-  trialStart?: Date;
-  trialEnd?: Date;
+  trialStart?: Date | undefined;
+  trialEnd?: Date | undefined;
   cancelAtPeriodEnd: boolean;
-  canceledAt?: Date;
+  canceledAt?: Date | undefined;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -240,10 +240,10 @@ export interface InvoiceListView {
   currency: string;
   tax: number;
   total: number;
-  paidAt?: Date;
-  dueDate?: Date;
-  pdfUrl?: string;
-  hostedInvoiceUrl?: string;
+  paidAt?: Date | undefined;
+  dueDate?: Date | undefined;
+  pdfUrl?: string | undefined;
+  hostedInvoiceUrl?: string | undefined;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -251,10 +251,10 @@ export interface InvoiceListView {
 export interface PaymentMethodListView {
   id: string;
   type: string;
-  brand?: string;
-  last4?: string;
-  expMonth?: number;
-  expYear?: number;
+  brand?: string | undefined;
+  last4?: string | undefined;
+  expMonth?: number | undefined;
+  expYear?: number | undefined;
   isDefault: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -407,7 +407,7 @@ export interface StripeCustomer {
   id: string;
   email: string;
   name?: string;
-  description?: string;
+  description?: string | undefined;
   metadata: Record<string, string>;
   created: number;
   default_source?: string;

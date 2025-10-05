@@ -51,130 +51,17 @@ export default function ContactsPage() {
   const loadContacts = async () => {
     try {
       setLoading(true);
-      // En mode test, on utilise des données simulées
-      const mockContacts: ContactListView[] = [
-        {
-          id: "1",
-          name: "Marie Dubois",
-          email: "marie.dubois@email.com",
-          phone: "+33123456789",
-          type: "ARTIST",
-          status: "ACTIVE",
-          isIntermittent: true,
-          isFavorite: false,
-          skills: ["danse", "chorégraphie", "direction artistique"],
-          tags: ["danse", "contemporain", "professionnel"],
-          groups: [{
-            id: "1",
-            name: "Artistes",
-            description: "Groupe des artistes",
-            color: "#3B82F6",
-            contactCount: 1,
-            createdAt: new Date("2024-01-01"),
-            createdBy: {
-              id: "1",
-              name: "Admin"
-            }
-          }],
-          lastCollaboration: new Date("2024-01-15"),
-          rating: 4.8,
-          createdAt: new Date("2024-01-01"),
-          updatedAt: new Date("2024-01-01"),
-          organizationId: "1",
-          createdById: "1",
-          createdBy: {
-            id: "1",
-            name: "Admin",
-            email: "admin@plannitech.com"
-          },
-          organization: {
-            id: "1",
-            name: "Plannitech"
-          }
-        },
-        {
-          id: "2",
-          name: "Jean Martin",
-          email: "jean.martin@tech.com",
-          phone: "+33987654321",
-          type: "TECHNICIAN",
-          status: "ACTIVE",
-          isIntermittent: false,
-          isFavorite: true,
-          skills: ["son", "éclairage", "vidéo"],
-          tags: ["technique", "son", "événementiel"],
-          groups: [{
-            id: "2",
-            name: "Techniciens",
-            description: "Groupe des techniciens",
-            color: "#10B981",
-            contactCount: 1,
-            createdAt: new Date("2024-01-01"),
-            createdBy: {
-              id: "1",
-              name: "Admin"
-            }
-          }],
-          lastCollaboration: new Date("2024-02-10"),
-          rating: 4.5,
-          createdAt: new Date("2024-01-15"),
-          updatedAt: new Date("2024-01-15"),
-          organizationId: "1",
-          createdById: "1",
-          createdBy: {
-            id: "1",
-            name: "Admin",
-            email: "admin@plannitech.com"
-          },
-          organization: {
-            id: "1",
-            name: "Plannitech"
-          }
-        },
-        {
-          id: "3",
-          name: "Sophie Leroy",
-          email: "sophie.leroy@venue.com",
-          phone: "+33555666777",
-          type: "VENUE",
-          status: "ACTIVE",
-          isIntermittent: false,
-          isFavorite: false,
-          skills: ["gestion", "administration", "programmation"],
-          tags: ["lieu", "théâtre", "culture"],
-          groups: [{
-            id: "3",
-            name: "Lieux",
-            description: "Groupe des lieux",
-            color: "#F59E0B",
-            contactCount: 1,
-            createdAt: new Date("2024-01-01"),
-            createdBy: {
-              id: "1",
-              name: "Admin"
-            }
-          }],
-          lastCollaboration: new Date("2024-01-20"),
-          rating: 4.2,
-          createdAt: new Date("2024-01-10"),
-          updatedAt: new Date("2024-01-10"),
-          organizationId: "1",
-          createdById: "1",
-          createdBy: {
-            id: "1",
-            name: "Admin",
-            email: "admin@plannitech.com"
-          },
-          organization: {
-            id: "1",
-            name: "Plannitech"
-          }
-        }
-      ];
-      
-      setContacts(mockContacts);
+      const response = await fetch("/api/contacts");
+      if (response.ok) {
+        const data = await response.json();
+        setContacts(data);
+      } else {
+        console.error("Erreur lors du chargement des contacts");
+        setContacts([]);
+      }
     } catch (error) {
       console.error("Erreur lors du chargement des contacts:", error);
+      setContacts([]);
     } finally {
       setLoading(false);
     }
@@ -182,69 +69,17 @@ export default function ContactsPage() {
 
   const loadFavorites = async () => {
     try {
-      // En mode test, on utilise des données simulées
-      const mockFavorites: Contact[] = [
-        {
-          id: "1",
-          name: "Marie Dubois",
-          email: "marie.dubois@email.com",
-          phone: "+33123456789",
-          type: "ARTIST",
-          status: "ACTIVE",
-          isIntermittent: true,
-          isFavorite: true,
-          skills: ["danse", "chorégraphie", "direction artistique"],
-          tags: ["danse", "contemporain", "professionnel"],
-          groups: [{
-            id: "1",
-            name: "Artistes",
-            description: "Groupe des artistes",
-            color: "#3B82F6",
-            contactCount: 1,
-            createdAt: new Date("2024-01-01"),
-            createdBy: {
-              id: "1",
-              name: "Admin"
-            }
-          }],
-          lastCollaboration: new Date("2024-01-15"),
-          rating: 4.8,
-          createdAt: new Date("2024-01-01"),
-          updatedAt: new Date("2024-01-01"),
-          organizationId: "1",
-          createdById: "1",
-          description: "Artiste expérimentée avec 10 ans d'expérience",
-          website: "https://mariedubois.com",
-          address: {
-            street: "123 Rue de la Danse",
-            city: "Paris",
-            postalCode: "75001",
-            country: "France"
-          },
-          socialMedia: {
-            facebook: "marie.dubois.danse",
-            instagram: "marie_dubois_art"
-          },
-          intermittentNumber: "123456789",
-          siret: "12345678901234",
-          apeCode: "9001Z",
-          vatNumber: "FR12345678901",
-          metadata: {},
-          createdBy: {
-            id: "1",
-            name: "Admin",
-            email: "admin@plannitech.com"
-          },
-          organization: {
-            id: "1",
-            name: "Plannitech"
-          }
-        }
-      ];
-      
-      setFavorites(mockFavorites);
+      const response = await fetch("/api/contacts?favorites=true");
+      if (response.ok) {
+        const data = await response.json();
+        setFavorites(data);
+      } else {
+        console.error("Erreur lors du chargement des favoris");
+        setFavorites([]);
+      }
     } catch (error) {
       console.error("Erreur lors du chargement des favoris:", error);
+      setFavorites([]);
     }
   };
 

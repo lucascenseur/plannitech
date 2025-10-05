@@ -35,65 +35,20 @@ export default function ProjectsPage() {
   const loadProjects = async () => {
     try {
       setLoading(true);
-      // En mode test, on utilise des données simulées
-      const mockProjects: ProjectListView[] = [
-        {
-          id: "1",
-          name: "Concert Jazz au Théâtre",
-          description: "Concert de jazz avec l'orchestre local",
-          type: "CONCERT",
-          status: "DEVELOPMENT",
-          startDate: new Date("2024-02-15"),
-          endDate: new Date("2024-02-15"),
-          venue: "Théâtre Municipal",
-          budget: 15000,
-          teamSize: 8,
-          isPublic: true,
-          tags: ["jazz", "concert", "théâtre"],
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          organizationId: "1"
-        },
-        {
-          id: "2",
-          name: "Festival d'Été",
-          description: "Festival de musique d'été en plein air",
-          type: "FESTIVAL",
-          status: "PRODUCTION",
-          startDate: new Date("2024-07-20"),
-          endDate: new Date("2024-07-22"),
-          venue: "Parc Central",
-          budget: 50000,
-          teamSize: 25,
-          isPublic: true,
-          tags: ["festival", "été", "musique"],
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          organizationId: "1"
-        },
-        {
-          id: "3",
-          name: "Spectacle de Danse",
-          description: "Spectacle de danse contemporaine",
-          type: "SHOW",
-          status: "TOURING",
-          startDate: new Date("2024-03-10"),
-          endDate: new Date("2024-03-10"),
-          venue: "Centre Culturel",
-          budget: 25000,
-          teamSize: 12,
-          isPublic: false,
-          tags: ["danse", "contemporain", "spectacle"],
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          organizationId: "1"
-        }
-      ];
-      
-      setProjects(mockProjects);
-      setKanbanProjects(mockProjects);
+      const response = await fetch("/api/projects");
+      if (response.ok) {
+        const data = await response.json();
+        setProjects(data);
+        setKanbanProjects(data);
+      } else {
+        console.error("Erreur lors du chargement des projets");
+        setProjects([]);
+        setKanbanProjects([]);
+      }
     } catch (error) {
       console.error("Erreur lors du chargement des projets:", error);
+      setProjects([]);
+      setKanbanProjects([]);
     } finally {
       setLoading(false);
     }

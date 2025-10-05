@@ -65,19 +65,19 @@ export type Event = z.infer<typeof eventSchema> & {
     id: string;
     name: string;
     type: string;
-  };
+  } | undefined;
   contacts?: Array<{
     id: string;
     name: string;
     email: string;
     role: string;
-  }>;
+  }> | undefined;
   team?: Array<{
     id: string;
     name: string;
     role: string;
-  }>;
-  conflicts?: Conflict[];
+  }> | undefined;
+  conflicts?: Conflict[] | undefined;
 };
 
 export type EventFormData = z.infer<typeof eventSchema>;
@@ -105,11 +105,11 @@ export interface CalendarEvent {
   project?: {
     id: string;
     name: string;
-  };
+  } | undefined;
   contacts?: Array<{
     id: string;
     name: string;
-  }>;
+  }> | undefined;
 }
 
 export interface TeamPlanningView {
@@ -117,7 +117,7 @@ export interface TeamPlanningView {
     id: string;
     name: string;
     role: string;
-    avatar?: string;
+    avatar?: string | undefined;
   };
   events: CalendarEvent[];
   availability: {
@@ -132,10 +132,10 @@ export interface TeamPlanningView {
 export interface RecurrenceRule {
   frequency: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
   interval: number;
-  endDate?: Date;
-  count?: number;
-  daysOfWeek?: number[];
-  dayOfMonth?: number;
+  endDate?: Date | undefined;
+  count?: number | undefined;
+  daysOfWeek?: number[] | undefined;
+  dayOfMonth?: number | undefined;
 }
 
 // Types pour les notifications

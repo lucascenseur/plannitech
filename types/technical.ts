@@ -203,8 +203,8 @@ export type TechnicalSheet = z.infer<typeof technicalSheetSchema> & {
     name: string;
     type: string;
   };
-  versions?: DocumentVersion[];
-  equipment?: Equipment[];
+  versions?: DocumentVersion[] | undefined;
+  equipment?: Equipment[] | undefined;
 };
 
 export type FirePlan = z.infer<typeof firePlanSchema> & {
@@ -223,7 +223,7 @@ export type FirePlan = z.infer<typeof firePlanSchema> & {
     name: string;
     type: string;
   };
-  versions?: DocumentVersion[];
+  versions?: DocumentVersion[] | undefined;
 };
 
 export type Equipment = z.infer<typeof equipmentSchema> & {
@@ -237,8 +237,8 @@ export type Equipment = z.infer<typeof equipmentSchema> & {
     name: string;
     email: string;
   };
-  availability?: EquipmentAvailability[];
-  maintenance?: EquipmentMaintenance[];
+  availability?: EquipmentAvailability[] | undefined;
+  maintenance?: EquipmentMaintenance[] | undefined;
 };
 
 export type Checklist = z.infer<typeof checklistSchema> & {
@@ -257,10 +257,10 @@ export type Checklist = z.infer<typeof checklistSchema> & {
     name: string;
     type: string;
   };
-  versions?: DocumentVersion[];
-  progress?: number;
-  completedItems?: number;
-  totalItems?: number;
+  versions?: DocumentVersion[] | undefined;
+  progress?: number | undefined;
+  completedItems?: number | undefined;
+  totalItems?: number | undefined;
 };
 
 export type TechnicalConductor = z.infer<typeof technicalConductorSchema> & {
@@ -279,7 +279,7 @@ export type TechnicalConductor = z.infer<typeof technicalConductorSchema> & {
     name: string;
     type: string;
   };
-  versions?: DocumentVersion[];
+  versions?: DocumentVersion[] | undefined;
 };
 
 export type Template = z.infer<typeof templateSchema> & {
@@ -293,7 +293,7 @@ export type Template = z.infer<typeof templateSchema> & {
     name: string;
     email: string;
   };
-  usageCount?: number;
+  usageCount?: number | undefined;
 };
 
 export type DocumentVersion = z.infer<typeof documentVersionSchema> & {
@@ -315,12 +315,12 @@ export interface EquipmentAvailability {
   startDate: Date;
   endDate: Date;
   status: "AVAILABLE" | "RESERVED" | "IN_USE" | "MAINTENANCE";
-  projectId?: string;
+  projectId?: string | undefined;
   project?: {
     id: string;
     name: string;
-  };
-  notes?: string;
+  } | undefined;
+  notes?: string | undefined;
 }
 
 export interface EquipmentMaintenance {
@@ -330,10 +330,10 @@ export interface EquipmentMaintenance {
   date: Date;
   description: string;
   completed: boolean;
-  completedAt?: Date;
-  completedBy?: string;
-  cost?: number;
-  notes?: string;
+  completedAt?: Date | undefined;
+  completedBy?: string | undefined;
+  cost?: number | undefined;
+  notes?: string | undefined;
 }
 
 // Types pour les vues
@@ -370,7 +370,7 @@ export interface EquipmentListView {
   name: string;
   category: string;
   type: string;
-  brand?: string;
+  brand?: string | undefined;
   model?: string;
   status: string;
   location?: string;

@@ -96,12 +96,12 @@ export type Contact = z.infer<typeof contactSchema> & {
     id: string;
     name: string;
   };
-  collaborations?: Collaboration[];
-  documents?: Document[];
-  groups?: ContactGroup[];
-  tags?: string[];
-  lastCollaboration?: Date;
-  rating?: number;
+  collaborations?: Collaboration[] | undefined;
+  documents?: Document[] | undefined;
+  groups?: ContactGroup[] | undefined;
+  tags?: string[] | undefined;
+  lastCollaboration?: Date | undefined;
+  rating?: number | undefined;
 };
 
 export type ContactFormData = z.infer<typeof contactSchema>;
@@ -115,10 +115,10 @@ export interface Collaboration {
   projectId: string;
   role: string;
   startDate: Date;
-  endDate?: Date;
+  endDate?: Date | undefined;
   status: "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
-  rating?: number;
-  feedback?: string;
+  rating?: number | undefined;
+  feedback?: string | undefined;
   project: {
     id: string;
     name: string;
@@ -143,7 +143,7 @@ export interface Document {
 export interface ContactGroup {
   id: string;
   name: string;
-  description?: string;
+  description?: string | undefined;
   color: string;
   contactCount: number;
   createdAt: Date;
@@ -169,8 +169,8 @@ export interface ContactTag {
 export interface ContactListView {
   id: string;
   name: string;
-  email?: string;
-  phone?: string;
+  email?: string | undefined;
+  phone?: string | undefined;
   type: string;
   status: string;
   isIntermittent: boolean;
@@ -178,8 +178,8 @@ export interface ContactListView {
   skills: string[];
   tags: string[];
   groups: ContactGroup[];
-  lastCollaboration?: Date;
-  rating?: number;
+  lastCollaboration?: Date | undefined;
+  rating?: number | undefined;
   createdAt: Date;
   updatedAt: Date;
   organizationId: string;
@@ -200,21 +200,21 @@ export interface ContactCardView {
   name: string;
   type: string;
   status: string;
-  avatar?: string;
+  avatar?: string | undefined;
   skills: string[];
   tags: string[];
   isFavorite: boolean;
-  rating?: number;
+  rating?: number | undefined;
   lastActivity: Date;
 }
 
 // Types pour l'import/export
 export interface ContactCSVRow {
   name: string;
-  email?: string;
-  phone?: string;
+  email?: string | undefined;
+  phone?: string | undefined;
   type: string;
-  description?: string;
+  description?: string | undefined;
   website?: string;
   street?: string;
   city?: string;
