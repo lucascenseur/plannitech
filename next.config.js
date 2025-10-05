@@ -25,8 +25,8 @@ const nextConfig = {
     ],
     // Nouvelles fonctionnalités Next.js 16
     // serverComponentsExternalPackages déplacé vers serverExternalPackages
-    // Optimisation des images
-    optimizeCss: true,
+    // Optimisation des images (désactivée pour éviter les erreurs critters)
+    // optimizeCss: true,
     // Support des Web Workers
     webVitalsAttribution: ['CLS', 'LCP'],
   },
