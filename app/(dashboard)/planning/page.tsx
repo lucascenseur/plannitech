@@ -58,7 +58,37 @@ export default function PlanningPage() {
   };
 
   const handleEventClick = (event: CalendarEvent) => {
-    setSelectedEvent(event as Event);
+    // Convertir CalendarEvent en Event
+    const eventData: Event = {
+      id: event.id,
+      title: event.title,
+      description: "",
+      startDate: event.start.toISOString(),
+      endDate: event.end.toISOString(),
+      isAllDay: event.allDay,
+      type: event.type as "REHEARSAL" | "PERFORMANCE" | "MEETING" | "SETUP" | "BREAKDOWN" | "OTHER",
+      status: event.status as "CONFIRMED" | "TENTATIVE" | "CANCELLED",
+      priority: event.priority as "LOW" | "MEDIUM" | "HIGH" | "URGENT",
+      location: "",
+      notes: "",
+      isRecurring: false,
+      recurrenceRule: null,
+      reminders: [],
+      project: event.project,
+      contacts: event.contacts,
+      team: [],
+      conflicts: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      organizationId: "",
+      createdById: "",
+      createdBy: {
+        id: "",
+        name: "",
+        email: ""
+      }
+    };
+    setSelectedEvent(eventData);
     setShowEventForm(true);
   };
 
