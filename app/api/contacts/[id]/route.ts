@@ -8,7 +8,7 @@ import { z } from "zod";
 // GET /api/contacts/[id] - Récupérer un contact par ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -16,9 +16,10 @@ export async function GET(
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const { id } = await params;
     const contact = await prisma.contact.findFirst({
       where: {
-        id: params.id,
+        id: id,
         organizationId: session.user.organizations[0]?.organizationId,
       },
       include: {
@@ -106,7 +107,7 @@ export async function GET(
 // PUT /api/contacts/[id] - Mettre à jour un contact
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -114,13 +115,14 @@ export async function PUT(
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const validatedData = contactUpdateSchema.parse(body);
 
     // Vérifier que le contact existe et appartient à l'organisation
     const existingContact = await prisma.contact.findFirst({
       where: {
-        id: params.id,
+        id: id,
         organizationId: session.user.organizations[0]?.organizationId,
       },
     });
@@ -220,7 +222,7 @@ export async function PUT(
 // DELETE /api/contacts/[id] - Supprimer un contact
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -228,10 +230,11 @@ export async function DELETE(
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const { id } = await params;
     // Vérifier que le contact existe et appartient à l'organisation
     const existingContact = await prisma.contact.findFirst({
       where: {
-        id: params.id,
+        id: id,
         organizationId: session.user.organizations[0]?.organizationId,
       },
     });

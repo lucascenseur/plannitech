@@ -8,7 +8,7 @@ import { z } from "zod";
 // GET /api/projects/[id] - Récupérer un projet par ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -16,9 +16,10 @@ export async function GET(
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const { id } = await params;
     const project = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id: id,
         organizationId: session.user.organizations[0]?.organizationId,
       },
       include: {
@@ -71,7 +72,7 @@ export async function GET(
 // PUT /api/projects/[id] - Mettre à jour un projet
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -79,13 +80,14 @@ export async function PUT(
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const validatedData = projectUpdateSchema.parse(body);
 
     // Vérifier que le projet existe et appartient à l'organisation
     const existingProject = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id: id,
         organizationId: session.user.organizations[0]?.organizationId,
       },
     });
@@ -150,7 +152,7 @@ export async function PUT(
 // DELETE /api/projects/[id] - Supprimer un projet
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -158,10 +160,11 @@ export async function DELETE(
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const { id } = await params;
     // Vérifier que le projet existe et appartient à l'organisation
     const existingProject = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id: id,
         organizationId: session.user.organizations[0]?.organizationId,
       },
     });

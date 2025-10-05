@@ -8,7 +8,7 @@ import { z } from "zod";
 // GET /api/planning/events/[id] - Récupérer un événement par ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -16,9 +16,10 @@ export async function GET(
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const { id } = await params;
     const event = await prisma.event.findFirst({
       where: {
-        id: params.id,
+        id: id,
         organizationId: session.user.organizations[0]?.organizationId,
       },
       include: {
@@ -87,7 +88,7 @@ export async function GET(
 // PUT /api/planning/events/[id] - Mettre à jour un événement
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -95,13 +96,14 @@ export async function PUT(
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const validatedData = eventUpdateSchema.parse(body);
 
     // Vérifier que l'événement existe et appartient à l'organisation
     const existingEvent = await prisma.event.findFirst({
       where: {
-        id: params.id,
+        id: id,
         organizationId: session.user.organizations[0]?.organizationId,
       },
     });
@@ -198,7 +200,7 @@ export async function PUT(
 // DELETE /api/planning/events/[id] - Supprimer un événement
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -206,10 +208,11 @@ export async function DELETE(
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const { id } = await params;
     // Vérifier que l'événement existe et appartient à l'organisation
     const existingEvent = await prisma.event.findFirst({
       where: {
-        id: params.id,
+        id: id,
         organizationId: session.user.organizations[0]?.organizationId,
       },
     });

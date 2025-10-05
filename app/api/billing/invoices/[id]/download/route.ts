@@ -5,7 +5,7 @@ import { stripe } from '@/lib/stripe';
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
   if (!session) {
@@ -13,7 +13,7 @@ export async function GET(
   }
 
   try {
-    const invoiceId = params.id;
+    const { id: invoiceId } = await params;
 
     // Récupérer la facture
     const invoice = await prisma.invoice.findFirst({

@@ -5,7 +5,7 @@ import { stripe } from '@/lib/stripe';
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
   if (!session) {
@@ -13,7 +13,7 @@ export async function POST(
   }
 
   try {
-    const subscriptionId = params.id;
+    const { id: subscriptionId } = await params;
 
     // Récupérer l'abonnement
     const subscription = await prisma.subscription.findFirst({
