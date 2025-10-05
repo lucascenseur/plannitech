@@ -193,7 +193,16 @@ export default function ContactsPage() {
           siret: "12345678901234",
           apeCode: "9001Z",
           vatNumber: "FR12345678901",
-          metadata: {}
+          metadata: {},
+          createdBy: {
+            id: "1",
+            name: "Admin",
+            email: "admin@plannitech.com"
+          },
+          organization: {
+            id: "1",
+            name: "Plannitech"
+          }
         }
       ];
       
