@@ -114,7 +114,7 @@ export default function ContactsPage() {
   const loadFavorites = async () => {
     try {
       // En mode test, on utilise des données simulées
-      const mockFavorites: ContactListView[] = [
+      const mockFavorites: Contact[] = [
         {
           id: "1",
           name: "Marie Dubois",
@@ -129,7 +129,27 @@ export default function ContactsPage() {
           groups: ["artistes"],
           lastCollaboration: new Date("2024-01-15"),
           rating: 4.8,
-          createdAt: new Date("2024-01-01")
+          createdAt: new Date("2024-01-01"),
+          updatedAt: new Date("2024-01-01"),
+          organizationId: "1",
+          createdById: "1",
+          description: "Artiste expérimentée avec 10 ans d'expérience",
+          website: "https://mariedubois.com",
+          address: {
+            street: "123 Rue de la Danse",
+            city: "Paris",
+            postalCode: "75001",
+            country: "France"
+          },
+          socialMedia: {
+            facebook: "marie.dubois.danse",
+            instagram: "marie_dubois_art"
+          },
+          intermittentNumber: "123456789",
+          siret: "12345678901234",
+          apeCode: "9001Z",
+          vatNumber: "FR12345678901",
+          metadata: {}
         }
       ];
       
