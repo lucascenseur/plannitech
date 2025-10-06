@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { syncProjectToEvent } from "@/app/api/events/route";
 
 // Stockage temporaire en mémoire (en production, utiliser une vraie base de données)
 let projects: any[] = [];
@@ -47,6 +48,11 @@ export async function POST(request: NextRequest) {
     };
 
     projects.push(newProject);
+
+    // Synchroniser avec les événements si le projet a une date
+    if (newProject.startDate) {
+      syncProjectToEvent(newProject);
+    }
 
     return NextResponse.json({ 
       message: 'Projet créé avec succès',

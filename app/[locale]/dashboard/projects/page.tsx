@@ -97,7 +97,7 @@ export default function ProjectsPage({ params }: ProjectsPageProps) {
               {locale === 'en' ? 'Create Project' : locale === 'es' ? 'Crear Proyecto' : 'Créer un projet'}
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {locale === 'en' ? 'Create Project' : locale === 'es' ? 'Crear Proyecto' : 'Créer un projet'}

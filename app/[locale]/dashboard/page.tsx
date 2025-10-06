@@ -1,4 +1,6 @@
-import { getTranslations } from "@/lib/translations";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +19,6 @@ import {
   FileText
 } from "lucide-react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 
 interface DashboardPageProps {
   params: Promise<{
@@ -25,25 +26,51 @@ interface DashboardPageProps {
   }>;
 }
 
-export async function generateStaticParams() {
-  return [
-    { locale: 'fr' },
-    { locale: 'en' },
-    { locale: 'es' }
-  ];
-}
+export default function DashboardPage({ params }: DashboardPageProps) {
+  const [locale, setLocale] = useState('fr');
+  const [projects, setProjects] = useState([]);
+  const [contacts, setContacts] = useState([]);
+  const [budgets, setBudgets] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function DashboardPage({ params }: DashboardPageProps) {
-  const { locale } = await params;
+  // Initialiser la locale
+  useEffect(() => {
+    params.then(({ locale }) => setLocale(locale));
+  }, [params]);
 
-  // Vérifier que la locale est supportée
-  const supportedLocales = ['fr', 'en', 'es'];
-  if (!supportedLocales.includes(locale)) {
-    notFound();
-  }
+  // Charger les données du dashboard
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const [projectsRes, contactsRes, budgetsRes] = await Promise.all([
+          fetch('/api/projects'),
+          fetch('/api/contacts'),
+          fetch('/api/budgets')
+        ]);
 
-  // Charger les traductions
-  const t = await getTranslations(locale as any, 'dashboard');
+        if (projectsRes.ok) {
+          const projectsData = await projectsRes.json();
+          setProjects(projectsData.projects || []);
+        }
+
+        if (contactsRes.ok) {
+          const contactsData = await contactsRes.json();
+          setContacts(contactsData.contacts || []);
+        }
+
+        if (budgetsRes.ok) {
+          const budgetsData = await budgetsRes.json();
+          setBudgets(budgetsData.budgets || []);
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement des données du dashboard:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -51,10 +78,10 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
-            {t.title || 'Tableau de bord'}
+            {locale === 'en' ? 'Dashboard' : locale === 'es' ? 'Panel' : 'Tableau de bord'}
           </h1>
           <p className="text-gray-600 mt-1">
-            {t.welcome || 'Bienvenue'} sur votre espace de travail Plannitech
+            {locale === 'en' ? 'Welcome to your Plannitech workspace' : locale === 'es' ? 'Bienvenido a tu espacio de trabajo Plannitech' : 'Bienvenue sur votre espace de travail Plannitech'}
           </p>
         </div>
         <Button asChild>
@@ -70,14 +97,14 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-600">
-              Projets actifs
+              {locale === 'en' ? 'Active Projects' : locale === 'es' ? 'Proyectos Activos' : 'Projets actifs'}
             </CardTitle>
             <FolderOpen className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3</div>
+            <div className="text-2xl font-bold">{loading ? '...' : projects.length}</div>
             <p className="text-xs text-muted-foreground">
-              +2 ce mois-ci
+              {locale === 'en' ? 'Total projects' : locale === 'es' ? 'Total proyectos' : 'Total projets'}
             </p>
           </CardContent>
         </Card>
@@ -85,14 +112,14 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-600">
-              Événements à venir
+              {locale === 'en' ? 'Contacts' : locale === 'es' ? 'Contactos' : 'Contacts'}
             </CardTitle>
-            <Calendar className="h-4 w-4 text-green-600" />
+            <Users className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
+            <div className="text-2xl font-bold">{loading ? '...' : contacts.length}</div>
             <p className="text-xs text-muted-foreground">
-              +4 cette semaine
+              {locale === 'en' ? 'Total contacts' : locale === 'es' ? 'Total contactos' : 'Total contacts'}
             </p>
           </CardContent>
         </Card>

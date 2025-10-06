@@ -87,7 +87,7 @@ export default function ContactsPage({ params }: ContactsPageProps) {
               {locale === 'en' ? 'Create Contact' : locale === 'es' ? 'Crear Contacto' : 'Créer un contact'}
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {locale === 'en' ? 'Create Contact' : locale === 'es' ? 'Crear Contacto' : 'Créer un contact'}
