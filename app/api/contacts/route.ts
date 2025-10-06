@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { PrismaClient } from '@prisma/client';
 
-// Stockage temporaire en mémoire
-let contacts: any[] = [];
+const prisma = new PrismaClient();
 
 export async function GET() {
   try {
@@ -13,11 +13,31 @@ export async function GET() {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    // Filtrer les contacts par organisation de l'utilisateur
-    const userOrgId = session.user?.organizations?.[0]?.organizationId || '1';
-    const userContacts = contacts.filter(contact => contact.organizationId === userOrgId);
+    // Récupérer l'organisation de l'utilisateur
+    const userOrgId = session.user?.organizations?.[0]?.organizationId;
+    if (!userOrgId) {
+      return NextResponse.json({ message: 'Organisation non trouvée' }, { status: 400 });
+    }
 
-    return NextResponse.json({ contacts: userContacts });
+    // Récupérer les contacts depuis la base de données
+    const contacts = await prisma.contact.findMany({
+      where: { organizationId: userOrgId },
+      include: {
+        createdBy: {
+          select: { id: true, name: true, email: true }
+        },
+        _count: {
+          select: {
+            projects: true,
+            contracts: true,
+            budgetItems: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return NextResponse.json({ contacts });
   } catch (error) {
     console.error('Erreur lors de la récupération des contacts:', error);
     return NextResponse.json(
@@ -36,25 +56,40 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+    const { name, email, phone, type, description, website, isIntermittent } = body;
     
-    const newContact = {
-      id: (contacts.length + 1).toString(),
-      name: body.name,
-      email: body.email || '',
-      phone: body.phone || '',
-      type: body.type || 'ARTIST',
-      status: body.status || 'ACTIVE',
-      description: body.description || '',
-      website: body.website || '',
-      isIntermittent: body.isIntermittent || false,
-      isFavorite: body.isFavorite || false,
-      organizationId: session.user?.organizations?.[0]?.organizationId || '1',
-      createdById: session.user?.id,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    // Récupérer l'organisation de l'utilisateur
+    const userOrgId = session.user?.organizations?.[0]?.organizationId;
+    if (!userOrgId) {
+      return NextResponse.json({ message: 'Organisation non trouvée' }, { status: 400 });
+    }
 
-    contacts.push(newContact);
+    // Créer le contact dans la base de données
+    const newContact = await prisma.contact.create({
+      data: {
+        name,
+        email: email || '',
+        phone: phone || '',
+        type: type || 'ARTIST',
+        description: description || '',
+        website: website || '',
+        isIntermittent: isIntermittent || false,
+        organizationId: userOrgId,
+        createdById: session.user?.id,
+      },
+      include: {
+        createdBy: {
+          select: { id: true, name: true, email: true }
+        },
+        _count: {
+          select: {
+            projects: true,
+            contracts: true,
+            budgetItems: true
+          }
+        }
+      }
+    });
 
     return NextResponse.json({ 
       message: 'Contact créé avec succès',

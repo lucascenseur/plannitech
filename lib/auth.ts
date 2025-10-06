@@ -17,7 +17,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Vérifier les identifiants via la fonction de vérification
-        const user = verifyCredentials(credentials.email, credentials.password);
+        const user = await verifyCredentials(credentials.email, credentials.password);
         return user;
       },
     }),

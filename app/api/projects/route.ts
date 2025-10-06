@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { syncProjectToEvent } from "@/app/api/events/route";
+import { PrismaClient } from '@prisma/client';
 
-// Stockage temporaire en mémoire (isolé par organisation)
-let projects: any[] = [];
+const prisma = new PrismaClient();
 
 export async function GET() {
   try {
@@ -14,11 +13,38 @@ export async function GET() {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    // Filtrer les projets par organisation de l'utilisateur
-    const userOrgId = session.user?.organizations?.[0]?.organizationId || '1';
-    const userProjects = projects.filter(project => project.organizationId === userOrgId);
+    // Récupérer l'organisation de l'utilisateur
+    const userOrgId = session.user?.organizations?.[0]?.organizationId;
+    if (!userOrgId) {
+      return NextResponse.json({ message: 'Organisation non trouvée' }, { status: 400 });
+    }
 
-    return NextResponse.json({ projects: userProjects });
+    // Récupérer les projets depuis la base de données
+    const projects = await prisma.project.findMany({
+      where: { organizationId: userOrgId },
+      include: {
+        createdBy: {
+          select: { id: true, name: true, email: true }
+        },
+        contacts: {
+          include: {
+            contact: {
+              select: { id: true, name: true, email: true, type: true }
+            }
+          }
+        },
+        _count: {
+          select: {
+            contacts: true,
+            budgetItems: true,
+            planningItems: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return NextResponse.json({ projects });
   } catch (error) {
     console.error('Erreur lors de la récupération des projets:', error);
     return NextResponse.json(
@@ -37,27 +63,56 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+    const { name, description, type, status, startDate, endDate, budget } = body;
     
-    const newProject = {
-      id: (projects.length + 1).toString(),
-      name: body.name,
-      description: body.description || '',
-      type: body.type || 'AUTRE',
-      status: body.status || 'PLANNING',
-      startDate: body.startDate || null,
-      endDate: body.endDate || null,
-      budget: body.budget || 0,
-      organizationId: session.user?.organizations?.[0]?.organizationId || '1',
-      createdById: session.user?.id,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    // Récupérer l'organisation de l'utilisateur
+    const userOrgId = session.user?.organizations?.[0]?.organizationId;
+    if (!userOrgId) {
+      return NextResponse.json({ message: 'Organisation non trouvée' }, { status: 400 });
+    }
 
-    projects.push(newProject);
+    // Créer le projet dans la base de données
+    const newProject = await prisma.project.create({
+      data: {
+        title: name,
+        description: description || '',
+        type: type || 'OTHER',
+        status: status || 'PLANNING',
+        startDate: startDate ? new Date(startDate) : null,
+        endDate: endDate ? new Date(endDate) : null,
+        budget: budget ? parseFloat(budget) : null,
+        organizationId: userOrgId,
+        createdById: session.user?.id,
+      },
+      include: {
+        createdBy: {
+          select: { id: true, name: true, email: true }
+        },
+        _count: {
+          select: {
+            contacts: true,
+            budgetItems: true,
+            planningItems: true
+          }
+        }
+      }
+    });
 
-    // Synchroniser avec les événements si le projet a une date
+    // Créer un événement de planning si le projet a une date de début
     if (newProject.startDate) {
-      syncProjectToEvent(newProject);
+      await prisma.planningItem.create({
+        data: {
+          title: `Événement - ${newProject.title}`,
+          description: `Événement lié au projet ${newProject.title}`,
+          type: 'PERFORMANCE',
+          startDate: newProject.startDate,
+          endDate: newProject.endDate || newProject.startDate,
+          status: 'SCHEDULED',
+          projectId: newProject.id,
+          organizationId: userOrgId,
+          createdById: session.user?.id,
+        }
+      });
     }
 
     return NextResponse.json({ 

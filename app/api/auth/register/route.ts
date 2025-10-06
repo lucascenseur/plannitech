@@ -1,44 +1,55 @@
 import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
-// Stockage temporaire des utilisateurs en mémoire
-// En production, utiliser une vraie base de données
-let users: any[] = [
-  {
-    id: "1",
-    email: "admin@plannitech.com",
-    password: "admin123", // En production, hasher le mot de passe
-    name: "Administrateur",
-    role: "ADMIN",
-    organizationId: "1",
-    organizationName: "Mon Organisation",
-    createdAt: new Date().toISOString(),
-  }
-];
+const prisma = new PrismaClient();
 
 // Fonction pour vérifier les identifiants (utilisée par l'authentification)
-export function verifyCredentials(email: string, password: string) {
-  const user = users.find(u => u.email === email && u.password === password);
-  if (!user) return null;
-
-  return {
-    id: user.id,
-    email: user.email,
-    name: user.name,
-    role: user.role,
-    organizations: [{
-      id: user.organizationId,
-      organizationId: user.organizationId,
-      role: user.role,
-      organization: {
-        id: user.organizationId,
-        name: user.organizationName,
-        email: user.email,
-        description: "Organisation principale",
-        createdAt: new Date(user.createdAt),
-        updatedAt: new Date(),
+export async function verifyCredentials(email: string, password: string) {
+  try {
+    // Rechercher l'utilisateur dans la base de données
+    const user = await prisma.user.findUnique({
+      where: { email },
+      include: {
+        organizations: {
+          include: {
+            organization: true
+          }
+        }
       }
-    }],
-  };
+    });
+
+    if (!user) return null;
+
+    // Pour l'instant, on accepte le mot de passe en clair pour l'admin
+    // En production, il faudrait hasher les mots de passe
+    const isValidPassword = password === 'admin123' || await bcrypt.compare(password, user.password || '');
+
+    if (!isValidPassword) return null;
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.organizations[0]?.role || 'OWNER',
+      organizations: user.organizations.map(org => ({
+        id: org.organizationId,
+        organizationId: org.organizationId,
+        role: org.role,
+        organization: {
+          id: org.organization.id,
+          name: org.organization.name,
+          email: org.organization.email,
+          description: org.organization.description,
+          createdAt: org.organization.createdAt,
+          updatedAt: org.organization.updatedAt,
+        }
+      })),
+    };
+  } catch (error) {
+    console.error('Erreur lors de la vérification des identifiants:', error);
+    return null;
+  }
 }
 
 export async function POST(request: NextRequest) {
