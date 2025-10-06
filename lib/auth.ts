@@ -131,3 +131,6 @@ export const authOptions: NextAuthOptions = {
     error: "/fr/auth/error",
   },
 };
+
+// Export pour compatibilité avec les API routes
+export { authOptions as auth };
