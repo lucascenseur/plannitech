@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth, useOrganizations } from "@/hooks/useAuth";
 import { useLocale } from "@/lib/i18n";
+import { OrganizationSwitcher } from "./OrganizationSwitcher";
 import {
   Menu,
   Search,
@@ -93,39 +94,11 @@ export function Header({ onMenuClick }: HeaderProps) {
         {/* Right side */}
         <div className="flex items-center space-x-4">
           {/* Organization switcher */}
-          {organizations.length > 1 && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="hidden sm:flex">
-                  <Building2 className="h-4 w-4 mr-2" />
-                  {currentOrganization?.name || "Organisation"}
-                  <ChevronDown className="h-4 w-4 ml-2" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>{t.organizations}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {organizations.map((org) => (
-                  <DropdownMenuItem
-                    key={org.id}
-                    onClick={() => switchOrganization(org.id)}
-                    className="flex items-center space-x-2"
-                  >
-                    <Building2 className="h-4 w-4" />
-                    <div className="flex-1">
-                      <p className="font-medium">{org.name}</p>
-                      <p className="text-xs text-gray-500">{org.role}</p>
-                    </div>
-                    {org.id === currentOrganization?.id && (
-                      <Badge variant="secondary" className="text-xs">
-                        {t.current}
-                      </Badge>
-                    )}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          <OrganizationSwitcher
+            currentOrganizationId={currentOrganization?.id || organizations[0]?.id || ''}
+            onOrganizationChange={switchOrganization}
+            locale={currentLocale}
+          />
 
           {/* Notifications */}
           <Button variant="ghost" size="sm" className="relative">

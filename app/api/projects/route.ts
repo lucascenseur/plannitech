@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { syncProjectToEvent } from "@/app/api/events/route";
 
-// Stockage temporaire en mémoire (en production, utiliser une vraie base de données)
+// Stockage temporaire en mémoire (isolé par organisation)
 let projects: any[] = [];
 
 export async function GET() {
@@ -14,7 +14,11 @@ export async function GET() {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    return NextResponse.json({ projects });
+    // Filtrer les projets par organisation de l'utilisateur
+    const userOrgId = session.user?.organizations?.[0]?.organizationId || '1';
+    const userProjects = projects.filter(project => project.organizationId === userOrgId);
+
+    return NextResponse.json({ projects: userProjects });
   } catch (error) {
     console.error('Erreur lors de la récupération des projets:', error);
     return NextResponse.json(
@@ -43,6 +47,8 @@ export async function POST(request: NextRequest) {
       startDate: body.startDate || null,
       endDate: body.endDate || null,
       budget: body.budget || 0,
+      organizationId: session.user?.organizations?.[0]?.organizationId || '1',
+      createdById: session.user?.id,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
