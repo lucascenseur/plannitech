@@ -7,7 +7,7 @@ import { ProjectForm } from "@/components/projects/ProjectForm";
 import { ProjectTasks } from "@/components/projects/ProjectTasks";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabsRoot as Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Eye, Edit, Trash2 } from "lucide-react";
 
 interface ProjectsPageProps {
