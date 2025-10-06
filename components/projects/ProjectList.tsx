@@ -24,6 +24,7 @@ import {
   Filter,
   MoreHorizontal
 } from "lucide-react";
+import { ProjectQuickActions } from "./ProjectQuickActions";
 
 interface ProjectListProps {
   projects: ProjectListView[];
@@ -33,7 +34,9 @@ interface ProjectListProps {
   onArchive: (ids: string[]) => void;
   onExport: (ids: string[]) => void;
   onCreate: () => void;
+  onStatusChange?: (id: string, status: string) => void;
   loading?: boolean | undefined;
+  locale?: string;
 }
 
 export function ProjectList({
@@ -44,7 +47,9 @@ export function ProjectList({
   onArchive,
   onExport,
   onCreate,
+  onStatusChange,
   loading = false,
+  locale = 'fr',
 }: ProjectListProps) {
   const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
   const [filters, setFilters] = useState<ProjectFilters>({});
@@ -204,29 +209,17 @@ export function ProjectList({
     },
     {
       key: "actions" as keyof ProjectListView,
-      label: "Actions",
+      label: locale === 'en' ? 'Actions' : locale === 'es' ? 'Acciones' : 'Actions',
       sortable: false,
       render: (value: any, row: ProjectListView) => (
-        <div className="flex items-center space-x-2">
-          <Button size="sm" variant="outline" onClick={() => onView(row.id)}>
-            <Eye className="h-4 w-4" />
-          </Button>
-          <Button size="sm" variant="outline" onClick={() => onEdit(row.id)}>
-            <Edit className="h-4 w-4" />
-          </Button>
-          <ConfirmDialog
-            trigger={
-              <Button size="sm" variant="outline">
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            }
-            title="Supprimer le projet"
-            description="Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible."
-            confirmText="Supprimer"
-            variant="destructive"
-            onConfirm={() => onDelete([row.id])}
-          />
-        </div>
+        <ProjectQuickActions
+          project={row}
+          onEdit={onEdit}
+          onView={onView}
+          onDelete={(id) => onDelete([id])}
+          onStatusChange={onStatusChange || (() => {})}
+          locale={locale}
+        />
       ),
     },
   ];
