@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Calendar, 
   Users, 
@@ -174,28 +173,59 @@ export default function DashboardPage({ params }: DashboardPageProps) {
       </div>
 
       {/* Navigation par onglets */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">
-            <BarChart3 className="w-4 h-4 mr-2" />
-            {locale === 'en' ? 'Overview' : locale === 'es' ? 'Resumen' : 'Aperçu'}
-          </TabsTrigger>
-          <TabsTrigger value="team">
-            <Users className="w-4 h-4 mr-2" />
-            {locale === 'en' ? 'Team' : locale === 'es' ? 'Equipo' : 'Équipe'}
-          </TabsTrigger>
-          <TabsTrigger value="projects">
-            <FolderOpen className="w-4 h-4 mr-2" />
-            {locale === 'en' ? 'Projects' : locale === 'es' ? 'Proyectos' : 'Projets'}
-          </TabsTrigger>
-          <TabsTrigger value="planning">
-            <Calendar className="w-4 h-4 mr-2" />
-            {locale === 'en' ? 'Planning' : locale === 'es' ? 'Planificación' : 'Planning'}
-          </TabsTrigger>
-        </TabsList>
+      <div className="space-y-6">
+        <div className="border-b border-gray-200">
+          <nav className="flex space-x-8">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'overview'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <BarChart3 className="w-4 h-4" />
+              <span>{locale === 'en' ? 'Overview' : locale === 'es' ? 'Resumen' : 'Aperçu'}</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('team')}
+              className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'team'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <Users className="w-4 h-4" />
+              <span>{locale === 'en' ? 'Team' : locale === 'es' ? 'Equipo' : 'Équipe'}</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('projects')}
+              className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'projects'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <FolderOpen className="w-4 h-4" />
+              <span>{locale === 'en' ? 'Projects' : locale === 'es' ? 'Proyectos' : 'Projets'}</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('planning')}
+              className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'planning'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <Calendar className="w-4 h-4" />
+              <span>{locale === 'en' ? 'Planning' : locale === 'es' ? 'Planificación' : 'Planning'}</span>
+            </button>
+          </nav>
+        </div>
 
         {/* Onglet Aperçu */}
-        <TabsContent value="overview" className="space-y-6">
+        {activeTab === 'overview' && (
+          <div className="space-y-6">
           {/* Statistiques principales */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="border-l-4 border-l-blue-500">
@@ -304,14 +334,14 @@ export default function DashboardPage({ params }: DashboardPageProps) {
                           <div className="flex-1">
                             <div className="flex items-center gap-3">
                               <h4 className="font-semibold text-gray-900">{task.title}</h4>
-                              <Badge variant="secondary" className={
+                              <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                                 task.priority === 'URGENT' ? 'bg-red-100 text-red-800' :
                                 task.priority === 'HIGH' ? 'bg-orange-100 text-orange-800' :
                                 task.priority === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :
                                 'bg-green-100 text-green-800'
-                              }>
+                              }`}>
                                 {task.priority}
-                              </Badge>
+                              </span>
                             </div>
                             <p className="text-sm text-gray-600 mt-1">
                               {task.type} • {task.estimatedHours}h • {task.assignedMembers?.length || 0} {locale === 'en' ? 'members' : locale === 'es' ? 'miembros' : 'membres'}
@@ -423,10 +453,12 @@ export default function DashboardPage({ params }: DashboardPageProps) {
               </Card>
             </div>
           </div>
-        </TabsContent>
+          </div>
+        )}
 
         {/* Onglet Équipe */}
-        <TabsContent value="team" className="space-y-6">
+        {activeTab === 'team' && (
+          <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Membres d'équipe */}
             <Card>
@@ -450,9 +482,11 @@ export default function DashboardPage({ params }: DashboardPageProps) {
                         <p className="font-medium text-sm">{member.name}</p>
                         <p className="text-xs text-gray-500">{member.role}</p>
                       </div>
-                      <Badge variant={member.status === 'ACTIVE' ? 'default' : 'secondary'}>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                        member.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                      }`}>
                         {member.status}
-                      </Badge>
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -530,10 +564,12 @@ export default function DashboardPage({ params }: DashboardPageProps) {
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
+          </div>
+        )}
 
         {/* Onglet Projets */}
-        <TabsContent value="projects" className="space-y-6">
+        {activeTab === 'projects' && (
+          <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
@@ -553,7 +589,9 @@ export default function DashboardPage({ params }: DashboardPageProps) {
                         <h4 className="font-medium">{project.name}</h4>
                         <p className="text-sm text-gray-500">{project.description}</p>
                       </div>
-                      <Badge variant="secondary">{project.status}</Badge>
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        {project.status}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -604,10 +642,12 @@ export default function DashboardPage({ params }: DashboardPageProps) {
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
+          </div>
+        )}
 
         {/* Onglet Planning */}
-        <TabsContent value="planning" className="space-y-6">
+        {activeTab === 'planning' && (
+          <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
@@ -678,8 +718,9 @@ export default function DashboardPage({ params }: DashboardPageProps) {
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
-      </Tabs>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
