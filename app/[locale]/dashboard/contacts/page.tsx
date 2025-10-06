@@ -44,7 +44,15 @@ export default async function ContactsPage({ params }: ContactsPageProps) {
         </p>
       </div>
       
-      <ContactList />
+      <ContactList 
+        contacts={[]}
+        onEdit={() => {}}
+        onView={() => {}}
+        onDelete={() => {}}
+        onExport={() => {}}
+        onCreate={() => {}}
+        loading={false}
+      />
     </div>
   );
 }

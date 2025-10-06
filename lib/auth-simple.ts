@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -10,21 +11,21 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // Pour les tests, acceptons n'importe quel email/mot de passe
-        if (credentials?.email && credentials?.password) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
+        // Authentification simple pour le développement
+        // En production, vous devrez utiliser la vraie base de données
+        if (credentials.email === "admin@plannitech.com" && credentials.password === "admin123") {
           return {
             id: "1",
-            email: credentials.email,
-            name: "Test User",
-            organizations: [
-              {
-                id: "1",
-                name: "Test Organization",
-                role: "OWNER",
-              },
-            ],
+            email: "admin@plannitech.com",
+            name: "Administrateur",
+            role: "ADMIN",
           };
         }
+
         return null;
       },
     }),
@@ -35,22 +36,23 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        token.role = user.role;
         token.id = user.id;
-        token.organizations = (user as any).organizations || [];
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
-        session.user.organizations = token.organizations as any[];
+        session.user.role = token.role as string;
       }
       return session;
     },
   },
   pages: {
-    signIn: "/auth/signin",
-    error: "/auth/error",
+    signIn: "/fr/auth/signin",
+    error: "/fr/auth/error",
   },
 };
 
+export { authOptions as auth };

@@ -44,7 +44,16 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
         </p>
       </div>
       
-      <ProjectList />
+      <ProjectList 
+        projects={[]}
+        onEdit={() => {}}
+        onView={() => {}}
+        onDelete={() => {}}
+        onArchive={() => {}}
+        onExport={() => {}}
+        onCreate={() => {}}
+        loading={false}
+      />
     </div>
   );
 }

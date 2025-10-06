@@ -44,8 +44,20 @@ export default async function TechnicalPage({ params }: TechnicalPageProps) {
         </p>
       </div>
       
-      <TechnicalSheetList />
-      <EquipmentInventory />
+      <TechnicalSheetList 
+        sheets={[]}
+        onEdit={() => {}}
+        onDelete={() => {}}
+        onCreate={() => {}}
+        loading={false}
+      />
+      <EquipmentInventory 
+        equipment={[]}
+        onEdit={() => {}}
+        onDelete={() => {}}
+        onCreate={() => {}}
+        loading={false}
+      />
     </div>
   );
 }

@@ -44,8 +44,18 @@ export default async function BudgetPage({ params }: BudgetPageProps) {
         </p>
       </div>
       
-      <FinancialDashboard />
-      <BudgetList />
+      <FinancialDashboard 
+        budgets={[]}
+        expenses={[]}
+        loading={false}
+      />
+      <BudgetList 
+        budgets={[]}
+        onEdit={() => {}}
+        onDelete={() => {}}
+        onCreate={() => {}}
+        loading={false}
+      />
     </div>
   );
 }
