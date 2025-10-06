@@ -3,12 +3,12 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function HomePage() {
+export default function AuthRedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Rediriger vers la page d'accueil en français par défaut
-    router.replace("/fr");
+    // Rediriger vers la page de connexion en français par défaut
+    router.replace("/fr/auth/signin");
   }, [router]);
 
   return (

@@ -14,7 +14,12 @@ export async function GET() {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    return NextResponse.json({ budgets, expenses });
+    // Filtrer les budgets et dépenses par organisation de l'utilisateur
+    const userOrgId = session.user?.organizations?.[0]?.organizationId || '1';
+    const userBudgets = budgets.filter(budget => budget.organizationId === userOrgId);
+    const userExpenses = expenses.filter(expense => expense.organizationId === userOrgId);
+
+    return NextResponse.json({ budgets: userBudgets, expenses: userExpenses });
   } catch (error) {
     console.error('Erreur lors de la récupération des budgets:', error);
     return NextResponse.json(

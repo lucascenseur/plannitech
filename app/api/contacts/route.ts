@@ -13,7 +13,11 @@ export async function GET() {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    return NextResponse.json({ contacts });
+    // Filtrer les contacts par organisation de l'utilisateur
+    const userOrgId = session.user?.organizations?.[0]?.organizationId || '1';
+    const userContacts = contacts.filter(contact => contact.organizationId === userOrgId);
+
+    return NextResponse.json({ contacts: userContacts });
   } catch (error) {
     console.error('Erreur lors de la récupération des contacts:', error);
     return NextResponse.json(
@@ -44,6 +48,8 @@ export async function POST(request: NextRequest) {
       website: body.website || '',
       isIntermittent: body.isIntermittent || false,
       isFavorite: body.isFavorite || false,
+      organizationId: session.user?.organizations?.[0]?.organizationId || '1',
+      createdById: session.user?.id,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

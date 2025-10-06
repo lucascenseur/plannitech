@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/toaster";
 import { AlternateLinks } from "@/components/seo/AlternateLinks";
+import { RedirectHandler } from "@/components/RedirectHandler";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,7 +34,9 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Providers>
-          {children}
+          <RedirectHandler>
+            {children}
+          </RedirectHandler>
           <Toaster />
         </Providers>
       </body>

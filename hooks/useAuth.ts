@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { AuthUser, AuthError, Permission, ROLE_PERMISSIONS } from "@/types/auth";
 import { UserRole } from "@/types/auth";
+import { useLocale } from "./useLocale";
 
 export function useAuth() {
   const { data: session, status, update } = useSession();
   const router = useRouter();
+  const { currentLocale, getLocalizedUrl } = useLocale();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<AuthError | null>(null);
 
@@ -78,13 +80,16 @@ export function useAuth() {
     try {
       // En mode test, on utilise la déconnexion NextAuth standard
       const { signOut: nextAuthSignOut } = await import("next-auth/react");
-      await nextAuthSignOut({ callbackUrl: "/auth/signin" });
+      
+      // Utiliser la locale actuelle
+      const signInUrl = getLocalizedUrl('auth/signin');
+      await nextAuthSignOut({ callbackUrl: signInUrl });
     } catch (err) {
       setError({ message: "Erreur lors de la déconnexion" });
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [getLocalizedUrl]);
 
   // Fonction pour mettre à jour le profil
   const updateProfile = useCallback(
@@ -133,9 +138,10 @@ export function useAuth() {
   // Redirection automatique si non connecté
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/auth/signin");
+      const signInUrl = getLocalizedUrl('auth/signin');
+      router.push(signInUrl);
     }
-  }, [status, router]);
+  }, [status, router, getLocalizedUrl]);
 
   return {
     user,

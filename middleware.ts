@@ -35,14 +35,17 @@ export default withAuth(
       return NextResponse.next();
     }
 
+    // Extraire la locale de l'URL
+    const locale = pathname.match(/^\/([a-z]{2})\//)?.[1] || 'fr';
+    
     // Vérifier si l'utilisateur est connecté
     if (!token) {
-      return NextResponse.redirect(new URL("/fr/auth/signin", req.url));
+      return NextResponse.redirect(new URL(`/${locale}/auth/signin`, req.url));
     }
 
     // Routes d'authentification - rediriger si déjà connecté
     if (pathname.startsWith("/auth/") || pathname.match(/^\/[a-z]{2}\/auth\//)) {
-      return NextResponse.redirect(new URL("/fr/dashboard", req.url));
+      return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
     }
 
     // En mode test, on ignore la vérification d'onboarding
@@ -60,7 +63,7 @@ export default withAuth(
     if (pathname.startsWith("/admin") || pathname.match(/^\/[a-z]{2}\/admin/)) {
       const userRole = token.role as UserRole;
       if (!["OWNER", "ADMIN"].includes(userRole)) {
-        return NextResponse.redirect(new URL("/fr/dashboard", req.url));
+        return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
       }
     }
 
@@ -68,7 +71,7 @@ export default withAuth(
     if (pathname.startsWith("/settings") || pathname.match(/^\/[a-z]{2}\/settings/)) {
       const userRole = token.role as UserRole;
       if (!["OWNER", "ADMIN", "MANAGER"].includes(userRole)) {
-        return NextResponse.redirect(new URL("/fr/dashboard", req.url));
+        return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
       }
     }
 

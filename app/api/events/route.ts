@@ -13,7 +13,11 @@ export async function GET() {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    return NextResponse.json({ events });
+    // Filtrer les événements par organisation de l'utilisateur
+    const userOrgId = session.user?.organizations?.[0]?.organizationId || '1';
+    const userEvents = events.filter(event => event.organizationId === userOrgId);
+
+    return NextResponse.json({ events: userEvents });
   } catch (error) {
     console.error('Erreur lors de la récupération des événements:', error);
     return NextResponse.json(
