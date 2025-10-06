@@ -47,6 +47,33 @@ export default function ContactsPage({ params }: ContactsPageProps) {
     setShowCreateDialog(true);
   };
 
+  const handleCreateContact = async (contactData: any) => {
+    try {
+      console.log('Données du contact à créer:', contactData);
+      
+      const response = await fetch('/api/contacts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contactData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Contact créé avec succès:', result);
+        setContacts(prev => [...prev, result.contact]);
+        setShowCreateDialog(false);
+        alert(locale === 'en' ? 'Contact created successfully!' : locale === 'es' ? '¡Contacto creado con éxito!' : 'Contact créé avec succès !');
+      } else {
+        const error = await response.json();
+        console.error('Erreur lors de la création:', error);
+        alert(locale === 'en' ? 'Error creating contact' : locale === 'es' ? 'Error al crear contacto' : 'Erreur lors de la création du contact');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la création du contact:', error);
+      alert(locale === 'en' ? 'Error creating contact' : locale === 'es' ? 'Error al crear contacto' : 'Erreur lors de la création du contact');
+    }
+  };
+
   const handleEdit = (id: string) => {
     console.log("Éditer le contact:", id);
   };
@@ -94,29 +121,7 @@ export default function ContactsPage({ params }: ContactsPageProps) {
               </DialogTitle>
             </DialogHeader>
             <ContactForm 
-              onSubmit={async (data) => {
-                try {
-                  const response = await fetch('/api/contacts', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                  });
-
-                  if (response.ok) {
-                    const result = await response.json();
-                    setContacts(prev => [...prev, result.contact]);
-                    setShowCreateDialog(false);
-                    alert('Contact créé avec succès !');
-                  } else {
-                    alert('Erreur lors de la création du contact');
-                  }
-                } catch (error) {
-                  console.error('Erreur:', error);
-                  alert('Erreur lors de la création du contact');
-                }
-              }}
+              onSubmit={handleCreateContact}
               onCancel={() => setShowCreateDialog(false)}
             />
           </DialogContent>

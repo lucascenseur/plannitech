@@ -8,7 +8,7 @@ export const contactSchema = z.object({
   type: z.enum(["ARTIST", "TECHNICIAN", "VENUE", "SUPPLIER", "OTHER"]),
   status: z.enum(["ACTIVE", "INACTIVE", "BLOCKED"]).default("ACTIVE"),
   description: z.string().optional(),
-  website: z.string().url("URL invalide").optional(),
+  website: z.string().optional(),
   address: z.object({
     street: z.string().optional(),
     city: z.string().optional(),

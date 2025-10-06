@@ -36,11 +36,14 @@ export async function POST(request: NextRequest) {
     const newContact = {
       id: (contacts.length + 1).toString(),
       name: body.name,
-      email: body.email,
+      email: body.email || '',
       phone: body.phone || '',
-      company: body.company || '',
-      role: body.role || '',
-      type: body.type || 'CONTACT',
+      type: body.type || 'ARTIST',
+      status: body.status || 'ACTIVE',
+      description: body.description || '',
+      website: body.website || '',
+      isIntermittent: body.isIntermittent || false,
+      isFavorite: body.isFavorite || false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
