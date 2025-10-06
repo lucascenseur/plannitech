@@ -1,85 +1,125 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs";
-import { UserRole } from "@prisma/client";
+
+// Stockage temporaire des utilisateurs en mémoire
+// En production, utiliser une vraie base de données
+let users: any[] = [
+  {
+    id: "1",
+    email: "admin@plannitech.com",
+    password: "admin123", // En production, hasher le mot de passe
+    name: "Administrateur",
+    role: "ADMIN",
+    organizationId: "1",
+    organizationName: "Mon Organisation",
+    createdAt: new Date().toISOString(),
+  }
+];
+
+// Fonction pour vérifier les identifiants (utilisée par l'authentification)
+export function verifyCredentials(email: string, password: string) {
+  const user = users.find(u => u.email === email && u.password === password);
+  if (!user) return null;
+
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    role: user.role,
+    organizations: [{
+      id: user.organizationId,
+      organizationId: user.organizationId,
+      role: user.role,
+      organization: {
+        id: user.organizationId,
+        name: user.organizationName,
+        email: user.email,
+        description: "Organisation principale",
+        createdAt: new Date(user.createdAt),
+        updatedAt: new Date(),
+      }
+    }],
+  };
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, name, organizationName } = await request.json();
+    const body = await request.json();
+    const { email, password, name, organizationName } = body;
 
     // Validation des données
     if (!email || !password || !name) {
       return NextResponse.json(
-        { error: "Email, mot de passe et nom sont requis" },
+        { message: 'Email, mot de passe et nom sont requis' },
         { status: 400 }
       );
     }
 
     // Vérifier si l'utilisateur existe déjà
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
+    const existingUser = users.find(user => user.email === email);
     if (existingUser) {
       return NextResponse.json(
-        { error: "Un utilisateur avec cet email existe déjà" },
-        { status: 400 }
+        { message: 'Un utilisateur avec cet email existe déjà' },
+        { status: 409 }
       );
     }
 
-    // Hacher le mot de passe
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // Créer le nouvel utilisateur
+    const newUser = {
+      id: (users.length + 1).toString(),
+      email,
+      password, // En production, hasher le mot de passe
+      name,
+      role: "OWNER",
+      organizationId: (users.length + 1).toString(),
+      organizationName: organizationName || `${name}'s Organization`,
+      createdAt: new Date().toISOString(),
+    };
 
-    // Créer l'utilisateur et l'organisation en une transaction
-    const result = await prisma.$transaction(async (tx) => {
-      // Créer l'utilisateur
-      const user = await tx.user.create({
-        data: {
-          email,
-          name,
-          // Note: On ne stocke pas le mot de passe dans le modèle User
-          // car NextAuth gère cela via les sessions
-        },
-      });
-
-      // Créer l'organisation
-      const organization = await tx.organization.create({
-        data: {
-          name: organizationName || `${name}'s Organization`,
-          email: email,
-          description: "Organisation créée lors de l'inscription",
-        },
-      });
-
-      // Lier l'utilisateur à l'organisation en tant que propriétaire
-      await tx.organizationUser.create({
-        data: {
-          organizationId: organization.id,
-          userId: user.id,
-          role: UserRole.OWNER,
-        },
-      });
-
-      return { user, organization };
-    });
+    users.push(newUser);
 
     return NextResponse.json({
-      message: "Utilisateur créé avec succès",
+      message: 'Utilisateur créé avec succès',
       user: {
-        id: result.user.id,
-        email: result.user.email,
-        name: result.user.name,
-      },
-      organization: {
-        id: result.organization.id,
-        name: result.organization.name,
-      },
-    });
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name,
+        role: newUser.role,
+        organizationId: newUser.organizationId,
+        organizationName: newUser.organizationName,
+      }
+    }, { status: 201 });
+
   } catch (error) {
-    console.error("Erreur lors de l'inscription:", error);
+    console.error('Erreur lors de la création de l\'utilisateur:', error);
     return NextResponse.json(
-      { error: "Erreur interne du serveur" },
+      { message: 'Erreur interne du serveur' },
       { status: 500 }
     );
   }
+}
+
+// Fonction pour vérifier les identifiants (utilisée par l'authentification)
+export function verifyCredentials(email: string, password: string) {
+  const user = users.find(u => u.email === email && u.password === password);
+  if (!user) return null;
+
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    role: user.role,
+    organizations: [{
+      id: user.organizationId,
+      organizationId: user.organizationId,
+      role: user.role,
+      organization: {
+        id: user.organizationId,
+        name: user.organizationName,
+        email: user.email,
+        description: "Organisation principale",
+        createdAt: new Date(user.createdAt),
+        updatedAt: new Date(),
+      }
+    }],
+  };
 }

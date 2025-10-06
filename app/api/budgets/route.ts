@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-// Stockage temporaire en mémoire (en production, utiliser une vraie base de données)
-let projects: any[] = [];
+// Stockage temporaire en mémoire
+let budgets: any[] = [];
+let expenses: any[] = [];
 
 export async function GET() {
   try {
@@ -13,9 +14,9 @@ export async function GET() {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    return NextResponse.json({ projects });
+    return NextResponse.json({ budgets, expenses });
   } catch (error) {
-    console.error('Erreur lors de la récupération des projets:', error);
+    console.error('Erreur lors de la récupération des budgets:', error);
     return NextResponse.json(
       { message: 'Erreur interne du serveur' },
       { status: 500 }
@@ -33,27 +34,26 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     
-    const newProject = {
-      id: (projects.length + 1).toString(),
+    const newBudget = {
+      id: (budgets.length + 1).toString(),
       name: body.name,
-      description: body.description || '',
-      type: body.type || 'AUTRE',
-      status: 'PLANNING',
-      startDate: body.startDate || null,
-      endDate: body.endDate || null,
-      budget: body.budget || 0,
+      projectId: body.projectId || null,
+      totalAmount: body.totalAmount || 0,
+      spentAmount: 0,
+      remainingAmount: body.totalAmount || 0,
+      status: "ACTIVE",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
-    projects.push(newProject);
+    budgets.push(newBudget);
 
     return NextResponse.json({ 
-      message: 'Projet créé avec succès',
-      project: newProject 
+      message: 'Budget créé avec succès',
+      budget: newBudget 
     }, { status: 201 });
   } catch (error) {
-    console.error('Erreur lors de la création du projet:', error);
+    console.error('Erreur lors de la création du budget:', error);
     return NextResponse.json(
       { message: 'Erreur interne du serveur' },
       { status: 500 }

@@ -1,5 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { verifyCredentials } from "@/app/api/auth/register/route";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -15,31 +16,9 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Authentification simple pour le développement
-        // En production, vous devrez utiliser la vraie base de données
-        if (credentials.email === "admin@plannitech.com" && credentials.password === "admin123") {
-          return {
-            id: "1",
-            email: "admin@plannitech.com",
-            name: "Administrateur",
-            role: "ADMIN",
-            organizations: [{
-              id: "1",
-              organizationId: "1",
-              role: "ADMIN",
-              organization: {
-                id: "1",
-                name: "Plannitech",
-                email: "admin@plannitech.com",
-                description: "Organisation par défaut",
-                createdAt: new Date(),
-                updatedAt: new Date(),
-              }
-            }],
-          };
-        }
-
-        return null;
+        // Vérifier les identifiants via la fonction de vérification
+        const user = verifyCredentials(credentials.email, credentials.password);
+        return user;
       },
     }),
   ],

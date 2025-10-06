@@ -18,11 +18,31 @@ export default function ProjectsPage({ params }: ProjectsPageProps) {
   const [locale, setLocale] = useState('fr');
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Initialiser la locale
   React.useEffect(() => {
     params.then(({ locale }) => setLocale(locale));
   }, [params]);
+
+  // Charger les projets
+  React.useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('/api/projects');
+        if (response.ok) {
+          const data = await response.json();
+          setProjects(data.projects || []);
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement des projets:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   const handleCreate = () => {
     setShowCreateDialog(true);
@@ -84,10 +104,28 @@ export default function ProjectsPage({ params }: ProjectsPageProps) {
               </DialogTitle>
             </DialogHeader>
             <ProjectForm 
-              onSubmit={(data) => {
-                console.log("Nouveau projet:", data);
-                setShowCreateDialog(false);
-                // TODO: Implémenter la création
+              onSubmit={async (data) => {
+                try {
+                  const response = await fetch('/api/projects', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                  });
+
+                  if (response.ok) {
+                    const result = await response.json();
+                    setProjects(prev => [...prev, result.project]);
+                    setShowCreateDialog(false);
+                    alert('Projet créé avec succès !');
+                  } else {
+                    alert('Erreur lors de la création du projet');
+                  }
+                } catch (error) {
+                  console.error('Erreur:', error);
+                  alert('Erreur lors de la création du projet');
+                }
               }}
               onCancel={() => setShowCreateDialog(false)}
             />
@@ -103,7 +141,7 @@ export default function ProjectsPage({ params }: ProjectsPageProps) {
         onArchive={handleArchive}
         onExport={handleExport}
         onCreate={handleCreate}
-        loading={false}
+        loading={loading}
       />
     </div>
   );
