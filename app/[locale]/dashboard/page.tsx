@@ -31,6 +31,7 @@ export default function DashboardPage({ params }: DashboardPageProps) {
   const [projects, setProjects] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [budgets, setBudgets] = useState([]);
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Initialiser la locale
@@ -42,10 +43,11 @@ export default function DashboardPage({ params }: DashboardPageProps) {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [projectsRes, contactsRes, budgetsRes] = await Promise.all([
+        const [projectsRes, contactsRes, budgetsRes, eventsRes] = await Promise.all([
           fetch('/api/projects'),
           fetch('/api/contacts'),
-          fetch('/api/budgets')
+          fetch('/api/budgets'),
+          fetch('/api/events')
         ]);
 
         if (projectsRes.ok) {
@@ -62,6 +64,11 @@ export default function DashboardPage({ params }: DashboardPageProps) {
           const budgetsData = await budgetsRes.json();
           setBudgets(budgetsData.budgets || []);
         }
+
+        if (eventsRes.ok) {
+          const eventsData = await eventsRes.json();
+          setEvents(eventsData.events || []);
+        }
       } catch (error) {
         console.error('Erreur lors du chargement des données du dashboard:', error);
       } finally {
@@ -71,6 +78,9 @@ export default function DashboardPage({ params }: DashboardPageProps) {
 
     fetchDashboardData();
   }, []);
+
+  const totalBudget = budgets.reduce((sum, budget) => sum + (budget.totalAmount || 0), 0);
+  const projectsWithDates = projects.filter(p => p.startDate);
 
   return (
     <div className="space-y-8">
@@ -87,7 +97,7 @@ export default function DashboardPage({ params }: DashboardPageProps) {
         <Button asChild>
           <Link href={`/${locale}/dashboard/projects`}>
             <Plus className="w-4 h-4 mr-2" />
-            Nouveau projet
+            {locale === 'en' ? 'New Project' : locale === 'es' ? 'Nuevo Proyecto' : 'Nouveau projet'}
           </Link>
         </Button>
       </div>
@@ -127,14 +137,16 @@ export default function DashboardPage({ params }: DashboardPageProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-600">
-              Contacts
+              {locale === 'en' ? 'Total Budget' : locale === 'es' ? 'Presupuesto Total' : 'Budget total'}
             </CardTitle>
-            <Users className="h-4 w-4 text-purple-600" />
+            <DollarSign className="h-4 w-4 text-orange-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">156</div>
+            <div className="text-2xl font-bold">
+              {loading ? '...' : `€${totalBudget.toLocaleString()}`}
+            </div>
             <p className="text-xs text-muted-foreground">
-              +12 nouveaux
+              {locale === 'en' ? 'Total allocated' : locale === 'es' ? 'Total asignado' : 'Total alloué'}
             </p>
           </CardContent>
         </Card>
@@ -142,14 +154,14 @@ export default function DashboardPage({ params }: DashboardPageProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-600">
-              Budget total
+              {locale === 'en' ? 'Events' : locale === 'es' ? 'Eventos' : 'Événements'}
             </CardTitle>
-            <DollarSign className="h-4 w-4 text-orange-600" />
+            <Calendar className="h-4 w-4 text-purple-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">€45,231</div>
+            <div className="text-2xl font-bold">{loading ? '...' : events.length}</div>
             <p className="text-xs text-muted-foreground">
-              +20.1% vs mois dernier
+              {locale === 'en' ? 'Total events' : locale === 'es' ? 'Total eventos' : 'Total événements'}
             </p>
           </CardContent>
         </Card>
@@ -162,95 +174,76 @@ export default function DashboardPage({ params }: DashboardPageProps) {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Mes projets</CardTitle>
+                <CardTitle>
+                  {locale === 'en' ? 'My Projects' : locale === 'es' ? 'Mis Proyectos' : 'Mes projets'}
+                </CardTitle>
                 <CardDescription>
-                  Vos projets de spectacle en cours
+                  {locale === 'en' ? 'Your current show projects' : locale === 'es' ? 'Tus proyectos de espectáculo actuales' : 'Vos projets de spectacle en cours'}
                 </CardDescription>
               </div>
               <Button variant="outline" size="sm" asChild>
                 <Link href={`/${locale}/dashboard/projects`}>
-                  Voir tout
+                  {locale === 'en' ? 'View all' : locale === 'es' ? 'Ver todo' : 'Voir tout'}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3">
-                      <h4 className="font-semibold text-gray-900">Festival d'été 2024</h4>
-                      <Badge variant="secondary" className="bg-green-100 text-green-800">
-                        Actif
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-gray-600 mt-1">3 événements programmés • Budget: €25,000</p>
-                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        15 Jan - 20 Fév
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Users className="w-3 h-3" />
-                        12 participants
-                      </span>
-                    </div>
-                  </div>
-                  <Button variant="ghost" size="sm">
-                    <ArrowRight className="w-4 h-4" />
+              {loading ? (
+                <div className="text-center py-8 text-gray-500">
+                  {locale === 'en' ? 'Loading projects...' : locale === 'es' ? 'Cargando proyectos...' : 'Chargement des projets...'}
+                </div>
+              ) : projects.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  {locale === 'en' ? 'No projects yet' : locale === 'es' ? 'Aún no hay proyectos' : 'Aucun projet pour le moment'}
+                  <br />
+                  <Button asChild className="mt-2">
+                    <Link href={`/${locale}/dashboard/projects`}>
+                      <Plus className="w-4 h-4 mr-2" />
+                      {locale === 'en' ? 'Create your first project' : locale === 'es' ? 'Crear tu primer proyecto' : 'Créer votre premier projet'}
+                    </Link>
                   </Button>
                 </div>
-
-                <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3">
-                      <h4 className="font-semibold text-gray-900">Tournée nationale</h4>
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                        En cours
-                      </Badge>
+              ) : (
+                <div className="space-y-3">
+                  {projects.slice(0, 3).map((project) => (
+                    <div key={project.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3">
+                          <h4 className="font-semibold text-gray-900">{project.name}</h4>
+                          <Badge variant="secondary" className={
+                            project.status === 'ACTIVE' ? 'bg-green-100 text-green-800' :
+                            project.status === 'PLANNING' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-gray-100 text-gray-800'
+                          }>
+                            {project.status === 'ACTIVE' ? (locale === 'en' ? 'Active' : locale === 'es' ? 'Activo' : 'Actif') :
+                             project.status === 'PLANNING' ? (locale === 'en' ? 'Planning' : locale === 'es' ? 'Planificación' : 'Planification') :
+                             project.status}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {project.description || (locale === 'en' ? 'No description' : locale === 'es' ? 'Sin descripción' : 'Aucune description')}
+                          {project.budget > 0 && ` • ${locale === 'en' ? 'Budget' : locale === 'es' ? 'Presupuesto' : 'Budget'}: €${project.budget.toLocaleString()}`}
+                        </p>
+                        {project.startDate && (
+                          <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              {new Date(project.startDate).toLocaleDateString()}
+                              {project.endDate && ` - ${new Date(project.endDate).toLocaleDateString()}`}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <Button variant="ghost" size="sm" asChild>
+                        <Link href={`/${locale}/dashboard/projects`}>
+                          <ArrowRight className="w-4 h-4" />
+                        </Link>
+                      </Button>
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">12 dates confirmées • Budget: €45,000</p>
-                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        1 Mar - 15 Avr
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Users className="w-3 h-3" />
-                        8 participants
-                      </span>
-                    </div>
-                  </div>
-                  <Button variant="ghost" size="sm">
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
+                  ))}
                 </div>
-
-                <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3">
-                      <h4 className="font-semibold text-gray-900">Spectacle de danse</h4>
-                      <Badge variant="secondary" className="bg-orange-100 text-orange-800">
-                        Planification
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-gray-600 mt-1">En cours de planification • Budget: €15,000</p>
-                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        1 Mai - 30 Mai
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Users className="w-3 h-3" />
-                        6 participants
-                      </span>
-                    </div>
-                  </div>
-                  <Button variant="ghost" size="sm">
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -260,33 +253,38 @@ export default function DashboardPage({ params }: DashboardPageProps) {
           {/* Événements à venir */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Événements à venir</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Calendar className="w-5 h-5" />
+                {locale === 'en' ? 'Upcoming Events' : locale === 'es' ? 'Próximos Eventos' : 'Événements à venir'}
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center gap-3 p-3 border rounded-lg">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="font-medium text-sm">Concert Jazz</p>
-                  <p className="text-xs text-gray-600">15 Jan 2024 - 20h00</p>
+            <CardContent>
+              {loading ? (
+                <div className="text-center py-4 text-gray-500">
+                  {locale === 'en' ? 'Loading...' : locale === 'es' ? 'Cargando...' : 'Chargement...'}
                 </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 border rounded-lg">
-                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="font-medium text-sm">Spectacle de danse</p>
-                  <p className="text-xs text-gray-600">22 Jan 2024 - 19h30</p>
+              ) : events.length === 0 ? (
+                <div className="text-center py-4 text-gray-500">
+                  {locale === 'en' ? 'No events' : locale === 'es' ? 'Sin eventos' : 'Aucun événement'}
                 </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 border rounded-lg">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="font-medium text-sm">Répétition générale</p>
-                  <p className="text-xs text-gray-600">25 Jan 2024 - 14h00</p>
+              ) : (
+                <div className="space-y-3">
+                  {events.slice(0, 3).map((event) => (
+                    <div key={event.id} className="flex items-center gap-3 p-3 border rounded-lg">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">{event.title}</p>
+                        <p className="text-xs text-gray-500">
+                          {event.startDate && new Date(event.startDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-              <Button variant="outline" size="sm" className="w-full" asChild>
+              )}
+              <Button variant="outline" size="sm" className="w-full mt-4" asChild>
                 <Link href={`/${locale}/dashboard/planning`}>
-                  Voir le planning
+                  {locale === 'en' ? 'View planning' : locale === 'es' ? 'Ver planificación' : 'Voir le planning'}
                 </Link>
               </Button>
             </CardContent>
@@ -295,63 +293,35 @@ export default function DashboardPage({ params }: DashboardPageProps) {
           {/* Actions rapides */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Actions rapides</CardTitle>
+              <CardTitle>
+                {locale === 'en' ? 'Quick Actions' : locale === 'es' ? 'Acciones Rápidas' : 'Actions rapides'}
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <Button variant="outline" className="w-full justify-start" asChild>
+            <CardContent className="space-y-2">
+              <Button variant="outline" size="sm" className="w-full justify-start" asChild>
                 <Link href={`/${locale}/dashboard/projects`}>
-                  <FolderOpen className="w-4 h-4 mr-2" />
-                  Nouveau projet
+                  <Plus className="w-4 h-4 mr-2" />
+                  {locale === 'en' ? 'New Project' : locale === 'es' ? 'Nuevo Proyecto' : 'Nouveau projet'}
                 </Link>
               </Button>
-              <Button variant="outline" className="w-full justify-start" asChild>
+              <Button variant="outline" size="sm" className="w-full justify-start" asChild>
                 <Link href={`/${locale}/dashboard/planning`}>
                   <Calendar className="w-4 h-4 mr-2" />
-                  Ajouter un événement
+                  {locale === 'en' ? 'Add Event' : locale === 'es' ? 'Agregar Evento' : 'Ajouter un événement'}
                 </Link>
               </Button>
-              <Button variant="outline" className="w-full justify-start" asChild>
+              <Button variant="outline" size="sm" className="w-full justify-start" asChild>
                 <Link href={`/${locale}/dashboard/contacts`}>
                   <Users className="w-4 h-4 mr-2" />
-                  Nouveau contact
+                  {locale === 'en' ? 'New Contact' : locale === 'es' ? 'Nuevo Contacto' : 'Nouveau contact'}
                 </Link>
               </Button>
-              <Button variant="outline" className="w-full justify-start" asChild>
+              <Button variant="outline" size="sm" className="w-full justify-start" asChild>
                 <Link href={`/${locale}/dashboard/budget`}>
                   <DollarSign className="w-4 h-4 mr-2" />
-                  Ajouter une dépense
+                  {locale === 'en' ? 'Add Expense' : locale === 'es' ? 'Agregar Gasto' : 'Ajouter une dépense'}
                 </Link>
               </Button>
-            </CardContent>
-          </Card>
-
-          {/* Notifications */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Notifications</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-start gap-3 p-3 border rounded-lg">
-                <AlertCircle className="w-4 h-4 text-orange-500 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Budget dépassé</p>
-                  <p className="text-xs text-gray-600">Le projet "Festival d'été" a dépassé son budget de 15%</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 p-3 border rounded-lg">
-                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Événement confirmé</p>
-                  <p className="text-xs text-gray-600">Le concert du 15 janvier est confirmé</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 p-3 border rounded-lg">
-                <Wrench className="w-4 h-4 text-blue-500 mt-0.5" />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Régie technique</p>
-                  <p className="text-xs text-gray-600">Plan de feu à finaliser pour le 20 janvier</p>
-                </div>
-              </div>
             </CardContent>
           </Card>
         </div>
@@ -359,4 +329,3 @@ export default function DashboardPage({ params }: DashboardPageProps) {
     </div>
   );
 }
-
