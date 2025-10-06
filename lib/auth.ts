@@ -23,8 +23,19 @@ export const authOptions: NextAuthOptions = {
             email: "admin@plannitech.com",
             name: "Administrateur",
             role: "ADMIN",
-            organizationId: "1",
-            organizationName: "Plannitech",
+            organizations: [{
+              id: "1",
+              organizationId: "1",
+              role: "ADMIN",
+              organization: {
+                id: "1",
+                name: "Plannitech",
+                email: "admin@plannitech.com",
+                description: "Organisation par défaut",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              }
+            }],
           };
         }
 
@@ -40,8 +51,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.role = user.role;
         token.id = user.id;
-        token.organizationId = user.organizationId;
-        token.organizationName = user.organizationName;
+        token.organizations = (user as any).organizations || [];
       }
       return token;
     },
@@ -49,8 +59,7 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
-        session.user.organizationId = token.organizationId as string;
-        session.user.organizationName = token.organizationName as string;
+        session.user.organizations = token.organizations as any[];
       }
       return session;
     },
