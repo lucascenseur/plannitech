@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { PrismaClient } from '@prisma/client';
+import { PlanLimitsManager } from "@/lib/plan-limits";
 
 const prisma = new PrismaClient();
 
@@ -62,6 +63,17 @@ export async function POST(request: NextRequest) {
     const userOrgId = session.user?.organizations?.[0]?.organizationId;
     if (!userOrgId) {
       return NextResponse.json({ message: 'Organisation non trouvée' }, { status: 400 });
+    }
+
+    // Vérifier les limites du plan
+    const limitsManager = new PlanLimitsManager(userOrgId);
+    const canAddContact = await limitsManager.canAddContact();
+    
+    if (!canAddContact.allowed) {
+      return NextResponse.json({ 
+        message: canAddContact.reason,
+        error: 'PLAN_LIMIT_EXCEEDED'
+      }, { status: 403 });
     }
 
     // Créer le contact dans la base de données
