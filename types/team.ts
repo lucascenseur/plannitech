@@ -70,6 +70,25 @@ export const taskSchema = z.object({
   notes: z.string().optional(),
 });
 
+export const taskTemplateSchema = z.object({
+  name: z.string().min(1, "Le nom du template est requis"),
+  description: z.string().optional(),
+  type: z.enum(["SETUP", "PERFORMANCE", "BREAKDOWN", "REHEARSAL", "MEETING", "TRAVEL", "OTHER"]),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).default("MEDIUM"),
+  duration: z.number().min(0, "La durée doit être positive"), // en heures
+  startTime: z.string().optional(), // format HH:MM
+  endTime: z.string().optional(), // format HH:MM
+  defaultVenueId: z.string().optional(),
+  defaultMembers: z.array(z.string()).default([]),
+  defaultProviders: z.array(z.string()).default([]),
+  requirements: z.array(z.string()).default([]),
+  notes: z.string().optional(),
+  category: z.string().optional(), // pour organiser les templates
+  isRecurring: z.boolean().default(false),
+  recurringPattern: z.enum(["DAILY", "WEEKLY", "MONTHLY"]).optional(),
+  tags: z.array(z.string()).default([]),
+});
+
 // Types TypeScript
 export type TeamMember = z.infer<typeof teamMemberSchema> & {
   id: string;
@@ -112,10 +131,21 @@ export type Task = z.infer<typeof taskSchema> & {
   totalHours?: number;
 };
 
+export type TaskTemplate = z.infer<typeof taskTemplateSchema> & {
+  id: string;
+  organizationId: string;
+  createdById: string;
+  createdAt: Date;
+  updatedAt: Date;
+  usageCount?: number; // nombre de fois utilisé
+  lastUsed?: Date;
+};
+
 export type TeamMemberFormData = z.infer<typeof teamMemberSchema>;
 export type VenueFormData = z.infer<typeof venueSchema>;
 export type ProviderFormData = z.infer<typeof providerSchema>;
 export type TaskFormData = z.infer<typeof taskSchema>;
+export type TaskTemplateFormData = z.infer<typeof taskTemplateSchema>;
 
 // Types pour les calculs légaux français
 export interface FrenchLaborLaw {
@@ -203,4 +233,66 @@ export interface TaskListView {
   totalCost: number;
   venue: string;
   project: string;
+}
+
+// Types pour les plannings et export PDF
+export interface PlanningView {
+  id: string;
+  title: string;
+  type: string;
+  priority: string;
+  status: string;
+  startDate: Date;
+  endDate: Date;
+  startTime: string;
+  endTime: string;
+  duration: number;
+  assignedMembers: string[];
+  assignedProviders: string[];
+  venue: string;
+  project: string;
+  requirements: string[];
+  notes: string;
+  totalCost: number;
+}
+
+export interface PlanningPeriod {
+  startDate: Date;
+  endDate: Date;
+  type: 'DAY' | 'WEEK' | 'MONTH' | 'CUSTOM';
+  tasks: PlanningView[];
+}
+
+export interface PlanningExportOptions {
+  period: PlanningPeriod;
+  includeMembers: boolean;
+  includeProviders: boolean;
+  includeCosts: boolean;
+  includeRequirements: boolean;
+  includeNotes: boolean;
+  format: 'PDF' | 'EXCEL' | 'CSV';
+  template: 'DEFAULT' | 'COMPACT' | 'DETAILED';
+  language: 'fr' | 'en' | 'es';
+}
+
+export interface PlanningPDFData {
+  organization: {
+    name: string;
+    address: string;
+    logo?: string;
+  };
+  period: {
+    start: Date;
+    end: Date;
+    type: string;
+  };
+  tasks: PlanningView[];
+  summary: {
+    totalTasks: number;
+    totalHours: number;
+    totalCost: number;
+    members: string[];
+    venues: string[];
+  };
+  generatedAt: Date;
 }
