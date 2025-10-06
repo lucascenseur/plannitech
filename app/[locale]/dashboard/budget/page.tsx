@@ -98,15 +98,40 @@ export default function BudgetPage({ params }: BudgetPageProps) {
       </div>
       
       <FinancialDashboard 
-        budgets={budgets}
-        expenses={expenses}
+        data={{
+          budgets: budgets || [],
+          expenses: expenses || [],
+          totalBudget: budgets.reduce((sum, budget) => sum + (budget.totalAmount || 0), 0),
+          totalSpent: expenses.reduce((sum, expense) => sum + (expense.amount || 0), 0),
+          totalRemaining: budgets.reduce((sum, budget) => sum + (budget.remainingAmount || 0), 0),
+        }}
+        onRefresh={() => {
+          // Recharger les données
+          const fetchBudgets = async () => {
+            try {
+              const response = await fetch('/api/budgets');
+              if (response.ok) {
+                const data = await response.json();
+                setBudgets(data.budgets || []);
+                setExpenses(data.expenses || []);
+              }
+            } catch (error) {
+              console.error('Erreur lors du chargement des budgets:', error);
+            }
+          };
+          fetchBudgets();
+        }}
         loading={loading}
       />
       <BudgetList 
-        budgets={budgets}
+        budgets={budgets || []}
         onEdit={handleEdit}
+        onView={(id) => console.log("Voir le budget:", id)}
         onDelete={handleDelete}
+        onExport={(ids) => console.log("Exporter les budgets:", ids)}
+        onImport={() => console.log("Importer des budgets")}
         onCreate={handleCreate}
+        onDuplicate={(id) => console.log("Dupliquer le budget:", id)}
         loading={loading}
       />
     </div>

@@ -124,11 +124,13 @@ export default function ContactsPage({ params }: ContactsPageProps) {
       </div>
       
       <ContactList 
-        contacts={contacts}
+        contacts={contacts || []}
         onEdit={handleEdit}
         onView={handleView}
         onDelete={handleDelete}
+        onToggleFavorite={(id) => console.log("Toggle favorite:", id)}
         onExport={handleExport}
+        onImport={() => console.log("Importer des contacts")}
         onCreate={handleCreate}
         loading={loading}
       />

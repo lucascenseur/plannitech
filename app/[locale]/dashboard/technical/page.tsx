@@ -95,17 +95,31 @@ export default function TechnicalPage({ params }: TechnicalPageProps) {
       </div>
       
       <TechnicalSheetList 
-        sheets={sheets}
+        sheets={sheets || []}
         onEdit={handleEdit}
+        onView={(id) => console.log("Voir la fiche:", id)}
         onDelete={handleDelete}
+        onExport={(ids) => console.log("Exporter les fiches:", ids)}
+        onImport={() => console.log("Importer des fiches")}
         onCreate={handleCreate}
+        onDuplicate={(id) => console.log("Dupliquer la fiche:", id)}
+        onArchive={(ids) => console.log("Archiver les fiches:", ids)}
+        onVersion={(id) => console.log("Versions de la fiche:", id)}
         loading={loading}
       />
       <EquipmentInventory 
-        equipment={equipment}
+        equipment={equipment || []}
         onEdit={handleEdit}
+        onView={(id) => console.log("Voir l'équipement:", id)}
         onDelete={handleDelete}
+        onExport={(ids) => console.log("Exporter l'équipement:", ids)}
+        onImport={() => console.log("Importer de l'équipement")}
         onCreate={handleCreate}
+        onDuplicate={(id) => console.log("Dupliquer l'équipement:", id)}
+        onArchive={(ids) => console.log("Archiver l'équipement:", ids)}
+        onMaintenance={(id) => console.log("Maintenance de l'équipement:", id)}
+        onLocation={(id) => console.log("Localisation de l'équipement:", id)}
+        onHistory={(id) => console.log("Historique de l'équipement:", id)}
         loading={loading}
       />
     </div>
