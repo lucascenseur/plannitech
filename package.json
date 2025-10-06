@@ -12,7 +12,8 @@
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force",
-    "db:migrate": "prisma migrate dev"
+    "db:migrate": "prisma migrate dev",
+    "test:isolation": "tsx scripts/test-data-isolation.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
