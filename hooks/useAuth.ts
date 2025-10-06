@@ -18,27 +18,27 @@ export function useAuth() {
   // Fonction pour vérifier les permissions
   const hasPermission = useCallback(
     (permission: keyof Permission): boolean => {
-      if (!user?.organizations?.[0]) return false;
+      if (isLoading || !user?.organizations?.[0]) return false;
       
       const role = user.organizations[0].role;
       const permissions = ROLE_PERMISSIONS[role];
       
-      return permissions[permission];
+      return permissions?.[permission] || false;
     },
-    [user]
+    [user, isLoading]
   );
 
   // Fonction pour vérifier le rôle
   const hasRole = useCallback(
     (roles: UserRole | UserRole[]): boolean => {
-      if (!user?.organizations?.[0]) return false;
+      if (isLoading || !user?.organizations?.[0]) return false;
       
       const userRole = user.organizations[0].role;
       const allowedRoles = Array.isArray(roles) ? roles : [roles];
       
       return allowedRoles.includes(userRole);
     },
-    [user]
+    [user, isLoading]
   );
 
   // Fonction pour obtenir l'organisation actuelle
@@ -155,7 +155,24 @@ export function useAuth() {
 
 // Hook pour vérifier les permissions dans les composants
 export function usePermissions() {
-  const { hasPermission, hasRole, user } = useAuth();
+  const { hasPermission, hasRole, user, isLoading } = useAuth();
+  
+  // Retourner des valeurs par défaut pendant le chargement
+  if (isLoading) {
+    return {
+      canManageUsers: true,
+      canManageProjects: true,
+      canManageBudget: true,
+      canManageContracts: true,
+      canManageOrganization: true,
+      canViewAnalytics: true,
+      canManageSubscriptions: true,
+      isOwner: false,
+      isAdmin: false,
+      isManager: false,
+      user: null,
+    };
+  }
   
   return {
     canManageUsers: hasPermission("canManageUsers"),

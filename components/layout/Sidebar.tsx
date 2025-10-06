@@ -68,30 +68,41 @@ const getNavigation = (locale: string) => [
 
 export function Sidebar({ open, setOpen }: SidebarProps) {
   const pathname = usePathname();
-  const { user, signOut, getCurrentOrganization } = useAuth();
+  const { user, signOut, getCurrentOrganization, isLoading } = useAuth();
   const { canManageProjects, canManageUsers, canManageBudget, canManageContracts } = usePermissions();
   const [collapsed, setCollapsed] = useState(false);
   const { currentLocale } = useLocale();
 
   const currentOrg = getCurrentOrganization();
-  const navigation = getNavigation(currentLocale);
+  const navigation = getNavigation(currentLocale || 'fr');
 
   const filteredNavigation = navigation.filter((item) => {
     const href = item.href;
     if (href.includes('/projects') || href.includes('/planning')) {
-      return canManageProjects;
+      return canManageProjects ?? true;
     }
     if (href.includes('/budget')) {
-      return canManageBudget;
+      return canManageBudget ?? true;
     }
     if (href.includes('/technical')) {
-      return canManageContracts;
+      return canManageContracts ?? true;
     }
     if (href.includes('/settings')) {
-      return canManageUsers;
+      return canManageUsers ?? true;
     }
     return true;
   });
+
+  // Afficher un loader pendant le chargement de l'authentification
+  if (isLoading) {
+    return (
+      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200">
+        <div className="flex items-center justify-center h-full">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

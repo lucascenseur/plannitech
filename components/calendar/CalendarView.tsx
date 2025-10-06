@@ -314,7 +314,7 @@ function MonthView({
   };
 
   const getEventsForDate = (date: Date) => {
-    return events.filter(event => {
+    return (events || []).filter(event => {
       const eventDate = new Date(event.start);
       return eventDate.toDateString() === date.toDateString();
     });
@@ -422,7 +422,7 @@ function WeekView({
   };
 
   const getEventsForDate = (date: Date) => {
-    return events.filter(event => {
+    return (events || []).filter(event => {
       const eventDate = new Date(event.start);
       return eventDate.toDateString() === date.toDateString();
     });
@@ -460,7 +460,7 @@ function WeekView({
               </div>
               {weekDays.map((day) => {
                 const dayEvents = getEventsForDate(day);
-                const hourEvents = dayEvents.filter(event => {
+                const hourEvents = (dayEvents || []).filter(event => {
                   const eventHour = new Date(event.start).getHours();
                   return eventHour === hour;
                 });
@@ -514,7 +514,7 @@ function DayView({
   onEventDelete: (eventId: string) => void;
 }) {
   const getEventsForDate = (date: Date) => {
-    return events.filter(event => {
+    return (events || []).filter(event => {
       const eventDate = new Date(event.start);
       return eventDate.toDateString() === date.toDateString();
     });
@@ -552,7 +552,7 @@ function DayView({
                 className="bg-white p-1 min-h-[60px] border-r border-b hover:bg-gray-50 cursor-pointer"
                 onClick={() => onDateClick(new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour))}
               >
-                {dayEvents
+                {(dayEvents || [])
                   .filter(event => {
                     const eventHour = new Date(event.start).getHours();
                     return eventHour === hour;

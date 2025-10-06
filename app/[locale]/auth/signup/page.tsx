@@ -52,7 +52,7 @@ export default async function SignUpPage({ params }: SignUpPageProps) {
             </p>
           </div>
 
-          <RegisterForm translations={t.signup} />
+          <RegisterForm locale={locale} />
         </div>
       </div>
       
