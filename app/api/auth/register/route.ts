@@ -97,29 +97,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-// Fonction pour vérifier les identifiants (utilisée par l'authentification)
-export function verifyCredentials(email: string, password: string) {
-  const user = users.find(u => u.email === email && u.password === password);
-  if (!user) return null;
-
-  return {
-    id: user.id,
-    email: user.email,
-    name: user.name,
-    role: user.role,
-    organizations: [{
-      id: user.organizationId,
-      organizationId: user.organizationId,
-      role: user.role,
-      organization: {
-        id: user.organizationId,
-        name: user.organizationName,
-        email: user.email,
-        description: "Organisation principale",
-        createdAt: new Date(user.createdAt),
-        updatedAt: new Date(),
-      }
-    }],
-  };
-}
