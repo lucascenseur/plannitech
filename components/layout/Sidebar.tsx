@@ -55,26 +55,22 @@ const getNavigation = (locale: string) => [
       { 
         name: locale === 'en' ? 'Dashboard' : locale === 'es' ? 'Panel' : 'Tableau de Bord', 
         href: `/${locale}/dashboard`, 
-        icon: Home,
-        description: locale === 'en' ? 'Overview of all shows' : locale === 'es' ? 'Vista general de espectáculos' : 'Vue d\'ensemble des spectacles'
+        icon: Home
       },
       { 
         name: locale === 'en' ? 'Shows' : locale === 'es' ? 'Espectáculos' : 'Spectacles', 
         href: `/${locale}/dashboard/shows`, 
-        icon: Theater,
-        description: locale === 'en' ? 'Manage all shows and events' : locale === 'es' ? 'Gestiona todos los espectáculos' : 'Gérez tous les spectacles et événements'
+        icon: Theater
       },
       { 
         name: locale === 'en' ? 'Technical Sheets' : locale === 'es' ? 'Fichas Técnicas' : 'Fiches Techniques', 
         href: `/${locale}/dashboard/technical-sheets`, 
-        icon: FileText,
-        description: locale === 'en' ? 'Technical specifications and requirements' : locale === 'es' ? 'Especificaciones técnicas' : 'Spécifications et exigences techniques'
+        icon: FileText
       },
       { 
         name: locale === 'en' ? 'Venues' : locale === 'es' ? 'Lugares' : 'Lieux', 
         href: `/${locale}/dashboard/venues`, 
-        icon: MapPin,
-        description: locale === 'en' ? 'Manage venues and locations' : locale === 'es' ? 'Gestiona lugares y ubicaciones' : 'Gérez les lieux et emplacements'
+        icon: MapPin
       }
     ]
   },
@@ -87,25 +83,21 @@ const getNavigation = (locale: string) => [
         name: locale === 'en' ? 'Master Schedule' : locale === 'es' ? 'Cronograma Principal' : 'Planning Principal', 
         href: `/${locale}/dashboard/planning`, 
         icon: Calendar,
-        description: locale === 'en' ? 'Minute-by-minute planning' : locale === 'es' ? 'Planificación minuto a minuto' : 'Planning minute par minute'
       },
       { 
         name: locale === 'en' ? 'Setup & Breakdown' : locale === 'es' ? 'Montaje y Desmontaje' : 'Montage & Démontage', 
         href: `/${locale}/dashboard/setup-breakdown`, 
         icon: Wrench,
-        description: locale === 'en' ? 'Technical setup and breakdown schedules' : locale === 'es' ? 'Horarios de montaje técnico' : 'Planning montage et démontage technique'
       },
       { 
         name: locale === 'en' ? 'Transportation' : locale === 'es' ? 'Transporte' : 'Transport', 
         href: `/${locale}/dashboard/transportation`, 
         icon: Truck,
-        description: locale === 'en' ? 'Equipment and personnel transport' : locale === 'es' ? 'Transporte de equipos y personal' : 'Transport équipement et personnel'
       },
       { 
         name: locale === 'en' ? 'Catering' : locale === 'es' ? 'Catering' : 'Restauration', 
         href: `/${locale}/dashboard/catering`, 
         icon: Utensils,
-        description: locale === 'en' ? 'Meals and refreshments planning' : locale === 'es' ? 'Planificación de comidas' : 'Planning repas et rafraîchissements'
       }
     ]
   },
@@ -118,25 +110,21 @@ const getNavigation = (locale: string) => [
         name: locale === 'en' ? 'Team Management' : locale === 'es' ? 'Gestión de Equipos' : 'Gestion d\'Équipes', 
         href: `/${locale}/dashboard/team`, 
         icon: Users,
-        description: locale === 'en' ? 'Manage team members and roles' : locale === 'es' ? 'Gestiona miembros y roles' : 'Gérez les membres et rôles d\'équipe'
       },
       { 
         name: locale === 'en' ? 'Artists & Performers' : locale === 'es' ? 'Artistas y Intérpretes' : 'Artistes & Interprètes', 
         href: `/${locale}/dashboard/artists`, 
         icon: Star,
-        description: locale === 'en' ? 'Manage artists and performers' : locale === 'es' ? 'Gestiona artistas e intérpretes' : 'Gérez les artistes et interprètes'
       },
       { 
         name: locale === 'en' ? 'Technical Crew' : locale === 'es' ? 'Equipo Técnico' : 'Équipe Technique', 
         href: `/${locale}/dashboard/technical-crew`, 
         icon: Wrench,
-        description: locale === 'en' ? 'Sound, lighting, video technicians' : locale === 'es' ? 'Técnicos de sonido, iluminación, video' : 'Techniciens son, lumière, vidéo'
       },
       { 
         name: locale === 'en' ? 'Security & Safety' : locale === 'es' ? 'Seguridad' : 'Sécurité & Sûreté', 
         href: `/${locale}/dashboard/security`, 
         icon: Shield,
-        description: locale === 'en' ? 'Security personnel and safety protocols' : locale === 'es' ? 'Personal de seguridad y protocolos' : 'Personnel de sécurité et protocoles'
       }
     ]
   },
@@ -149,25 +137,21 @@ const getNavigation = (locale: string) => [
         name: locale === 'en' ? 'Equipment Inventory' : locale === 'es' ? 'Inventario de Equipos' : 'Inventaire Matériel', 
         href: `/${locale}/dashboard/equipment`, 
         icon: Package,
-        description: locale === 'en' ? 'Manage equipment and inventory' : locale === 'es' ? 'Gestiona equipos e inventario' : 'Gérez le matériel et inventaire'
       },
       { 
         name: locale === 'en' ? 'Suppliers' : locale === 'es' ? 'Proveedores' : 'Fournisseurs', 
         href: `/${locale}/dashboard/suppliers`, 
         icon: Building2,
-        description: locale === 'en' ? 'Manage suppliers and vendors' : locale === 'es' ? 'Gestiona proveedores' : 'Gérez les fournisseurs et prestataires'
       },
       { 
         name: locale === 'en' ? 'Purchase Orders' : locale === 'es' ? 'Órdenes de Compra' : 'Bons de Commande', 
         href: `/${locale}/dashboard/purchase-orders`, 
         icon: ShoppingCart,
-        description: locale === 'en' ? 'Create and track purchase orders' : locale === 'es' ? 'Crea y rastrea órdenes' : 'Créez et suivez les bons de commande'
       },
       { 
         name: locale === 'en' ? 'Accommodation' : locale === 'es' ? 'Alojamiento' : 'Hébergement', 
         href: `/${locale}/dashboard/accommodation`, 
         icon: Hotel,
-        description: locale === 'en' ? 'Hotel and accommodation booking' : locale === 'es' ? 'Reserva de hoteles' : 'Réservation hôtels et hébergements'
       }
     ]
   },
@@ -180,19 +164,16 @@ const getNavigation = (locale: string) => [
         name: locale === 'en' ? 'Budget Management' : locale === 'es' ? 'Gestión de Presupuesto' : 'Gestion Budget', 
         href: `/${locale}/dashboard/budget`, 
         icon: DollarSign,
-        description: locale === 'en' ? 'Track costs and expenses' : locale === 'es' ? 'Rastrea costos y gastos' : 'Suivez les coûts et dépenses'
       },
       { 
         name: locale === 'en' ? 'Financial Reports' : locale === 'es' ? 'Reportes Financieros' : 'Rapports Financiers', 
         href: `/${locale}/dashboard/financial-reports`, 
         icon: BarChart3,
-        description: locale === 'en' ? 'Financial analysis and reports' : locale === 'es' ? 'Análisis y reportes financieros' : 'Analyse et rapports financiers'
       },
       { 
         name: locale === 'en' ? 'Payroll Export' : locale === 'es' ? 'Exportar Nómina' : 'Export Paie', 
         href: `/${locale}/dashboard/payroll-export`, 
         icon: Download,
-        description: locale === 'en' ? 'Export payroll data' : locale === 'es' ? 'Exporta datos de nómina' : 'Exportez les données de paie'
       }
     ]
   },
@@ -205,19 +186,16 @@ const getNavigation = (locale: string) => [
         name: locale === 'en' ? 'Internal Messaging' : locale === 'es' ? 'Mensajería Interna' : 'Messagerie Interne', 
         href: `/${locale}/dashboard/messaging`, 
         icon: MessageSquare,
-        description: locale === 'en' ? 'Team communication and messaging' : locale === 'es' ? 'Comunicación del equipo' : 'Communication et messagerie d\'équipe'
       },
       { 
         name: locale === 'en' ? 'Contacts' : locale === 'es' ? 'Contactos' : 'Contacts', 
         href: `/${locale}/dashboard/contacts`, 
         icon: Users,
-        description: locale === 'en' ? 'Manage contacts and relationships' : locale === 'es' ? 'Gestiona contactos' : 'Gérez les contacts et relations'
       },
       { 
         name: locale === 'en' ? 'Work Groups' : locale === 'es' ? 'Grupos de Trabajo' : 'Groupes de Travail', 
         href: `/${locale}/dashboard/work-groups`, 
         icon: UserCheck,
-        description: locale === 'en' ? 'Collaborative work groups' : locale === 'es' ? 'Grupos de trabajo colaborativo' : 'Groupes de travail collaboratifs'
       }
     ]
   },
@@ -230,19 +208,16 @@ const getNavigation = (locale: string) => [
         name: locale === 'en' ? 'Settings' : locale === 'es' ? 'Configuración' : 'Paramètres', 
         href: `/${locale}/dashboard/settings`, 
         icon: Settings,
-        description: locale === 'en' ? 'Application settings and preferences' : locale === 'es' ? 'Configuración de la aplicación' : 'Paramètres et préférences de l\'application'
       },
       { 
         name: locale === 'en' ? 'Data Import/Export' : locale === 'es' ? 'Importar/Exportar Datos' : 'Import/Export Données', 
         href: `/${locale}/dashboard/data-management`, 
         icon: Database,
-        description: locale === 'en' ? 'Import and export data' : locale === 'es' ? 'Importa y exporta datos' : 'Importez et exportez les données'
       },
       { 
         name: locale === 'en' ? 'Help & Documentation' : locale === 'es' ? 'Ayuda y Documentación' : 'Aide & Documentation', 
         href: `/${locale}/dashboard/help`, 
         icon: BookOpen,
-        description: locale === 'en' ? 'Help center and documentation' : locale === 'es' ? 'Centro de ayuda y documentación' : 'Centre d\'aide et documentation'
       }
     ]
   }
@@ -304,7 +279,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-80 bg-white text-gray-900 shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+          "fixed inset-y-0 left-0 z-50 w-64 bg-white text-gray-900 shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
           open ? "translate-x-0" : "-translate-x-full",
           collapsed && "lg:w-16"
         )}
@@ -409,9 +384,6 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
                               )} />
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium truncate">{item.name}</p>
-                                <p className="text-xs text-gray-500 truncate mt-0.5">
-                                  {item.description}
-                                </p>
                               </div>
                             </Link>
                           );
