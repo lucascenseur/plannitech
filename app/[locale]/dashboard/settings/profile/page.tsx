@@ -46,7 +46,7 @@ export default async function ProfileSettingsPage({ params }: ProfileSettingsPag
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Informations personnelles */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
             <h2 className="text-lg font-medium text-gray-900 mb-6">
               {locale === 'en' ? 'Personal Information' : locale === 'es' ? 'Información Personal' : 'Informations Personnelles'}
             </h2>
@@ -176,7 +176,7 @@ export default async function ProfileSettingsPage({ params }: ProfileSettingsPag
 
         {/* Informations du compte */}
         <div className="space-y-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
               {locale === 'en' ? 'Account Information' : locale === 'es' ? 'Información de Cuenta' : 'Informations du Compte'}
             </h3>
@@ -207,7 +207,7 @@ export default async function ProfileSettingsPage({ params }: ProfileSettingsPag
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
               {locale === 'en' ? 'Profile Picture' : locale === 'es' ? 'Foto de Perfil' : 'Photo de Profil'}
             </h3>
@@ -230,7 +230,7 @@ export default async function ProfileSettingsPage({ params }: ProfileSettingsPag
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">
               {locale === 'en' ? 'Professional Information' : locale === 'es' ? 'Información Profesional' : 'Informations Professionnelles'}
             </h3>

@@ -45,7 +45,7 @@ export default async function PreferencesSettingsPage({ params }: PreferencesSet
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Langue et région */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center space-x-3 mb-6">
             <div className="bg-blue-500 p-2 rounded-lg">
               <Globe className="h-5 w-5 text-white" />
@@ -129,7 +129,7 @@ export default async function PreferencesSettingsPage({ params }: PreferencesSet
         </div>
 
         {/* Thème et apparence */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center space-x-3 mb-6">
             <div className="bg-purple-500 p-2 rounded-lg">
               <Palette className="h-5 w-5 text-white" />

@@ -131,7 +131,7 @@ export default async function NotificationSettingsPage({ params }: NotificationS
         {notificationCategories.map((category) => {
           const IconComponent = category.icon;
           return (
-            <div key={category.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div key={category.id} className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
               <div className="flex items-center space-x-3 mb-6">
                 <div className={`${category.color} p-2 rounded-lg`}>
                   <IconComponent className="h-5 w-5 text-white" />
@@ -173,7 +173,7 @@ export default async function NotificationSettingsPage({ params }: NotificationS
       </div>
 
       {/* Paramètres de fréquence */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 className="text-lg font-medium text-gray-900 mb-6">
           {locale === 'en' ? 'Notification Frequency' : locale === 'es' ? 'Frecuencia de Notificaciones' : 'Fréquence des Notifications'}
         </h2>
@@ -239,7 +239,7 @@ export default async function NotificationSettingsPage({ params }: NotificationS
       </div>
 
       {/* Paramètres spécifiques au spectacle vivant */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 className="text-lg font-medium text-gray-900 mb-6">
           {locale === 'en' ? 'Live Performance Notifications' : locale === 'es' ? 'Notificaciones de Espectáculo en Vivo' : 'Notifications Spectacle Vivant'}
         </h2>

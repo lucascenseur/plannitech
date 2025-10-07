@@ -54,7 +54,26 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-gray-900;
+  }
+  
+  /* Force les cartes à avoir un fond blanc */
+  .card, [class*="card"] {
+    @apply bg-white text-gray-900;
+  }
+  
+  /* Assure un bon contraste pour tous les textes */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-gray-900;
+  }
+  
+  p, span, div {
+    @apply text-gray-700;
+  }
+  
+  /* Force les inputs à avoir un fond blanc */
+  input, textarea, select {
+    @apply bg-white text-gray-900 border-gray-300;
   }
 }
 

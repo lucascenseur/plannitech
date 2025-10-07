@@ -45,7 +45,7 @@ export default async function SecuritySettingsPage({ params }: SecuritySettingsP
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Changement de mot de passe */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center space-x-3 mb-6">
             <div className="bg-blue-500 p-2 rounded-lg">
               <Key className="h-5 w-5 text-white" />
@@ -120,7 +120,7 @@ export default async function SecuritySettingsPage({ params }: SecuritySettingsP
         </div>
 
         {/* Authentification à deux facteurs */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center space-x-3 mb-6">
             <div className="bg-green-500 p-2 rounded-lg">
               <Smartphone className="h-5 w-5 text-white" />
@@ -323,7 +323,7 @@ export default async function SecuritySettingsPage({ params }: SecuritySettingsP
       </div>
 
       {/* Actions dangereuses */}
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+      <div className="bg-red-50 text-red-900 border border-red-200 rounded-lg p-6">
         <div className="flex items-center space-x-3 mb-4">
           <div className="bg-red-500 p-2 rounded-lg">
             <AlertTriangle className="h-5 w-5 text-white" />

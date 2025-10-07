@@ -133,7 +133,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
             <Link
               key={category.id}
               href={category.href}
-              className="group bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200"
+              className="group bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200"
             >
               <div className="flex items-start space-x-4">
                 <div className={`${category.color} p-3 rounded-lg`}>
@@ -154,7 +154,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
       </div>
 
       {/* Section des paramètres rapides */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 className="text-lg font-medium text-gray-900 mb-4">
           {locale === 'en' ? 'Quick Settings' : locale === 'es' ? 'Configuración Rápida' : 'Paramètres Rapides'}
         </h2>
@@ -208,7 +208,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
       </div>
 
       {/* Section d'aide */}
-      <div className="bg-blue-50 rounded-lg p-6">
+      <div className="bg-blue-50 text-blue-900 rounded-lg p-6">
         <div className="flex items-start space-x-3">
           <FileText className="h-6 w-6 text-blue-600 mt-0.5" />
           <div>
