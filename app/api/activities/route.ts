@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Récupérer les activités depuis la table des logs d'activité
-    // Pour l'instant, on simule avec les données récentes des autres tables
+    // Récupérer les activités récentes depuis les tables principales
     const [recentProjects, recentVenues, recentTeamMembers, recentEquipment, recentPlanning] = await Promise.all([
       prisma.project.findMany({
         where: { 
