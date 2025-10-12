@@ -172,7 +172,7 @@ export function ContactsList() {
                 <SelectValue placeholder={t('contacts_list.filter_type')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">{t('contacts_list.all_types')}</SelectItem>
+                <SelectItem value="all">{t('contacts_list.all_types')}</SelectItem>
                 <SelectItem value="individual">{t('contacts_list.type_individual')}</SelectItem>
                 <SelectItem value="company">{t('contacts_list.type_company')}</SelectItem>
                 <SelectItem value="artist">{t('contacts_list.type_artist')}</SelectItem>

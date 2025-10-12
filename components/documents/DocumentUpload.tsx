@@ -100,27 +100,19 @@ export function DocumentUpload({
     setUploading(true);
     
     try {
-      // Simuler l'upload du fichier
-      const mockFileUrl = `https://example.com/files/${file.name}`;
+      // Créer FormData pour l'upload
+      const formDataToUpload = new FormData();
+      formDataToUpload.append('file', file);
+      formDataToUpload.append('name', formData.name || file.name);
+      formDataToUpload.append('type', formData.type);
+      formDataToUpload.append('description', formData.description);
+      formDataToUpload.append('showId', showId || '');
+      formDataToUpload.append('venueId', venueId || '');
+      formDataToUpload.append('tags', JSON.stringify(formData.tags));
       
-      const documentData = {
-        name: formData.name || file.name,
-        type: formData.type,
-        description: formData.description,
-        fileUrl: mockFileUrl,
-        fileSize: file.size,
-        mimeType: file.type,
-        showId,
-        venueId,
-        tags: formData.tags
-      };
-
-      const response = await fetch('/api/documents', {
+      const response = await fetch('/api/documents/upload', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(documentData),
+        body: formDataToUpload,
       });
 
       if (!response.ok) {

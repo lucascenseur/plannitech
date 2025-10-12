@@ -168,7 +168,7 @@ export function TeamMembersList() {
                 <SelectValue placeholder={t('team_members_list.filter_availability')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">{t('team_members_list.all_availability')}</SelectItem>
+                <SelectItem value="all">{t('team_members_list.all_availability')}</SelectItem>
                 <SelectItem value="available">{t('team_members_list.availability_available')}</SelectItem>
                 <SelectItem value="busy">{t('team_members_list.availability_busy')}</SelectItem>
                 <SelectItem value="unavailable">{t('team_members_list.availability_unavailable')}</SelectItem>

@@ -206,7 +206,7 @@ export function TechnicalSheetsList({ locale }: TechnicalSheetsListProps) {
             <SelectValue placeholder={locale === 'en' ? 'Type' : locale === 'es' ? 'Tipo' : 'Type'} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">{locale === 'en' ? 'All Types' : locale === 'es' ? 'Todos los Tipos' : 'Tous les Types'}</SelectItem>
+            <SelectItem value="all">{locale === 'en' ? 'All Types' : locale === 'es' ? 'Todos los Tipos' : 'Tous les Types'}</SelectItem>
             <SelectItem value="concert">{getTypeText('concert')}</SelectItem>
             <SelectItem value="theater">{getTypeText('theater')}</SelectItem>
             <SelectItem value="dance">{getTypeText('dance')}</SelectItem>
@@ -218,7 +218,7 @@ export function TechnicalSheetsList({ locale }: TechnicalSheetsListProps) {
             <SelectValue placeholder={locale === 'en' ? 'Status' : locale === 'es' ? 'Estado' : 'Statut'} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">{locale === 'en' ? 'All Status' : locale === 'es' ? 'Todos los Estados' : 'Tous les Statuts'}</SelectItem>
+            <SelectItem value="all">{locale === 'en' ? 'All Status' : locale === 'es' ? 'Todos los Estados' : 'Tous les Statuts'}</SelectItem>
             <SelectItem value="approved">{getStatusText('approved')}</SelectItem>
             <SelectItem value="review">{getStatusText('review')}</SelectItem>
             <SelectItem value="draft">{getStatusText('draft')}</SelectItem>

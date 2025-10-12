@@ -85,90 +85,13 @@ export function ShowReport({ showId, onClose }: ShowReportProps) {
 
   const fetchReportData = async () => {
     try {
-      // Simuler la récupération des données du rapport
-      const mockData: ShowReportData = {
-        show: {
-          id: showId,
-          title: 'Concert Jazz au Théâtre Municipal',
-          type: 'Concert',
-          date: '2024-02-15',
-          time: '20:00',
-          venue: 'Théâtre Municipal',
-          status: 'confirmed',
-          budget: 15000,
-          team: 8,
-          artists: ['John Doe', 'Jane Smith'],
-          description: 'Concert de jazz avec orchestre complet'
-        },
-        planning: {
-          totalItems: 12,
-          completedItems: 8,
-          pendingItems: 4,
-          items: [
-            {
-              title: 'Setup scène',
-              type: 'setup',
-              startTime: '2024-02-15T14:00:00Z',
-              endTime: '2024-02-15T16:00:00Z',
-              status: 'completed',
-              assignedTo: ['Marie Dubois', 'Jean Martin']
-            },
-            {
-              title: 'Répétition générale',
-              type: 'rehearsal',
-              startTime: '2024-02-15T16:30:00Z',
-              endTime: '2024-02-15T18:00:00Z',
-              status: 'completed',
-              assignedTo: ['Toute l\'équipe']
-            },
-            {
-              title: 'Spectacle',
-              type: 'performance',
-              startTime: '2024-02-15T20:00:00Z',
-              endTime: '2024-02-15T22:00:00Z',
-              status: 'pending',
-              assignedTo: ['Toute l\'équipe']
-            },
-            {
-              title: 'Démontage',
-              type: 'breakdown',
-              startTime: '2024-02-15T22:30:00Z',
-              endTime: '2024-02-15T23:30:00Z',
-              status: 'pending',
-              assignedTo: ['Marie Dubois', 'Jean Martin']
-            }
-          ]
-        },
-        budget: {
-          planned: 15000,
-          actual: 14250,
-          variance: -750,
-          categories: [
-            { name: 'Personnel', planned: 8000, actual: 7800, variance: -200 },
-            { name: 'Équipement', planned: 3000, actual: 2850, variance: -150 },
-            { name: 'Lieu', planned: 2000, actual: 2000, variance: 0 },
-            { name: 'Transport', planned: 1500, actual: 1200, variance: -300 },
-            { name: 'Autres', planned: 500, actual: 400, variance: -100 }
-          ]
-        },
-        team: {
-          total: 8,
-          assigned: 6,
-          available: 2,
-          members: [
-            { name: 'Marie Dubois', role: 'Régisseur', status: 'assigned' },
-            { name: 'Jean Martin', role: 'Technicien son', status: 'assigned' },
-            { name: 'Sarah Johnson', role: 'Éclairagiste', status: 'assigned' },
-            { name: 'Pierre Durand', role: 'Technicien', status: 'assigned' },
-            { name: 'Lisa Chen', role: 'Assistante', status: 'assigned' },
-            { name: 'Marc Weber', role: 'Sécurité', status: 'assigned' },
-            { name: 'Anna Rossi', role: 'Coordinatrice', status: 'available' },
-            { name: 'Tom Wilson', role: 'Technicien', status: 'available' }
-          ]
-        }
-      };
-
-      setReportData(mockData);
+      // Récupérer les données du rapport depuis l'API
+      const response = await fetch(`/api/reports/shows/${showId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch report data');
+      }
+      const data = await response.json();
+      setReportData(data);
     } catch (error) {
       console.error('Error fetching report data:', error);
     } finally {

@@ -184,7 +184,7 @@ export function ShowsList({ locale }: ShowsListProps) {
                 <SelectValue placeholder={locale === 'en' ? 'All Types' : locale === 'es' ? 'Todos los Tipos' : 'Tous les Types'} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">{locale === 'en' ? 'All Types' : locale === 'es' ? 'Todos los Tipos' : 'Tous les Types'}</SelectItem>
+                <SelectItem value="all">{locale === 'en' ? 'All Types' : locale === 'es' ? 'Todos los Tipos' : 'Tous les Types'}</SelectItem>
                 <SelectItem value="concert">{locale === 'en' ? 'Concert' : locale === 'es' ? 'Concierto' : 'Concert'}</SelectItem>
                 <SelectItem value="theater">{locale === 'en' ? 'Theater' : locale === 'es' ? 'Teatro' : 'Théâtre'}</SelectItem>
                 <SelectItem value="dance">{locale === 'en' ? 'Dance' : locale === 'es' ? 'Danza' : 'Danse'}</SelectItem>
@@ -195,7 +195,7 @@ export function ShowsList({ locale }: ShowsListProps) {
                 <SelectValue placeholder={locale === 'en' ? 'All Status' : locale === 'es' ? 'Todos los Estados' : 'Tous les Statuts'} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">{locale === 'en' ? 'All Status' : locale === 'es' ? 'Todos los Estados' : 'Tous les Statuts'}</SelectItem>
+                <SelectItem value="all">{locale === 'en' ? 'All Status' : locale === 'es' ? 'Todos los Estados' : 'Tous les Statuts'}</SelectItem>
                 <SelectItem value="confirmed">{locale === 'en' ? 'Confirmed' : locale === 'es' ? 'Confirmado' : 'Confirmé'}</SelectItem>
                 <SelectItem value="planning">{locale === 'en' ? 'Planning' : locale === 'es' ? 'Planificando' : 'En Planification'}</SelectItem>
                 <SelectItem value="draft">{locale === 'en' ? 'Draft' : locale === 'es' ? 'Borrador' : 'Brouillon'}</SelectItem>

@@ -86,44 +86,13 @@ export function Header({ onMenuClick }: HeaderProps) {
     }
 
     try {
-      // Simuler une recherche globale
-      const mockResults = [
-        {
-          id: '1',
-          type: 'show',
-          title: 'Concert Jazz au Théâtre',
-          description: 'Spectacle de jazz prévu le 15 mars',
-          href: `/${currentLocale}/dashboard/shows/1`,
-          icon: Theater
-        },
-        {
-          id: '2',
-          type: 'contact',
-          title: 'Marie Dubois',
-          description: 'Régisseur technique',
-          href: `/${currentLocale}/dashboard/team/contacts/2`,
-          icon: Users
-        },
-        {
-          id: '3',
-          type: 'venue',
-          title: 'Théâtre Municipal',
-          description: 'Salle de 500 places',
-          href: `/${currentLocale}/dashboard/shows?tab=venues`,
-          icon: Building2
-        },
-        {
-          id: '4',
-          type: 'planning',
-          title: 'Planning Mars 2024',
-          description: 'Planning détaillé du mois de mars',
-          href: `/${currentLocale}/dashboard/planning`,
-          icon: Calendar
-        }
-      ].filter(item => 
-        item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.description.toLowerCase().includes(query.toLowerCase())
-      );
+      // Rechercher dans l'API
+      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+      if (!response.ok) {
+        throw new Error('Search failed');
+      }
+      const data = await response.json();
+      const mockResults = data.results || [];
 
       setSearchResults(mockResults);
       setShowSearchResults(true);

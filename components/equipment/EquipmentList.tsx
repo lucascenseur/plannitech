@@ -177,7 +177,7 @@ export function EquipmentList() {
                 <SelectValue placeholder={t('equipment_list.filter_category')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">{t('equipment_list.all_categories')}</SelectItem>
+                <SelectItem value="all">{t('equipment_list.all_categories')}</SelectItem>
                 <SelectItem value="Audio">{t('equipment_list.category_audio')}</SelectItem>
                 <SelectItem value="Lumières">{t('equipment_list.category_lights')}</SelectItem>
                 <SelectItem value="Scène">{t('equipment_list.category_stage')}</SelectItem>
@@ -190,7 +190,7 @@ export function EquipmentList() {
                 <SelectValue placeholder={t('equipment_list.filter_status')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">{t('equipment_list.all_statuses')}</SelectItem>
+                <SelectItem value="all">{t('equipment_list.all_statuses')}</SelectItem>
                 <SelectItem value="available">{t('equipment_list.status_available')}</SelectItem>
                 <SelectItem value="in_use">{t('equipment_list.status_in_use')}</SelectItem>
                 <SelectItem value="maintenance">{t('equipment_list.status_maintenance')}</SelectItem>

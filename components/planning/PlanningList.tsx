@@ -179,7 +179,7 @@ export function PlanningList() {
                 <SelectValue placeholder={t('planning_list.filter_type')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">{t('planning_list.all_types')}</SelectItem>
+                <SelectItem value="all">{t('planning_list.all_types')}</SelectItem>
                 <SelectItem value="setup">{t('planning_list.type_setup')}</SelectItem>
                 <SelectItem value="rehearsal">{t('planning_list.type_rehearsal')}</SelectItem>
                 <SelectItem value="performance">{t('planning_list.type_performance')}</SelectItem>

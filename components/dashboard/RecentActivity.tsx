@@ -48,61 +48,13 @@ export function RecentActivity() {
 
   const fetchActivities = async () => {
     try {
-      // Simulate fetching activities from multiple sources
-      const mockActivities: ActivityItem[] = [
-        {
-          id: '1',
-          type: 'show',
-          action: 'created',
-          title: 'Nouveau spectacle créé',
-          description: 'Concert Jazz au Théâtre Municipal',
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          user: { name: 'Marie Dubois' },
-          metadata: { showTitle: 'Concert Jazz au Théâtre Municipal' }
-        },
-        {
-          id: '2',
-          type: 'venue',
-          action: 'updated',
-          title: 'Lieu mis à jour',
-          description: 'Théâtre Municipal - Informations de contact mises à jour',
-          timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          user: { name: 'Jean-Pierre Martin' },
-          metadata: { venueName: 'Théâtre Municipal' }
-        },
-        {
-          id: '3',
-          type: 'team',
-          action: 'assigned',
-          title: 'Membre d\'équipe assigné',
-          description: 'Sarah Johnson assignée au spectacle "Concert Jazz"',
-          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-          user: { name: 'Marie Dubois' },
-          metadata: { teamMemberName: 'Sarah Johnson' }
-        },
-        {
-          id: '4',
-          type: 'planning',
-          action: 'created',
-          title: 'Élément de planning créé',
-          description: 'Setup scène - 14h00-16h00',
-          timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
-          user: { name: 'Jean-Pierre Martin' },
-          metadata: {}
-        },
-        {
-          id: '5',
-          type: 'equipment',
-          action: 'updated',
-          title: 'Équipement mis à jour',
-          description: 'Système son - Statut changé en "En maintenance"',
-          timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
-          user: { name: 'Marie Dubois' },
-          metadata: { equipmentName: 'Système son' }
-        }
-      ];
-
-      setActivities(mockActivities);
+      // Récupérer les activités depuis l'API
+      const response = await fetch('/api/activities');
+      if (!response.ok) {
+        throw new Error('Failed to fetch activities');
+      }
+      const data = await response.json();
+      setActivities(data.activities || []);
     } catch (error) {
       console.error('Error fetching activities:', error);
     } finally {

@@ -198,7 +198,7 @@ export function VenuesList({ locale }: VenuesListProps) {
             <SelectValue placeholder={locale === 'en' ? 'Type' : locale === 'es' ? 'Tipo' : 'Type'} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">{locale === 'en' ? 'All Types' : locale === 'es' ? 'Todos los Tipos' : 'Tous les Types'}</SelectItem>
+            <SelectItem value="all">{locale === 'en' ? 'All Types' : locale === 'es' ? 'Todos los Tipos' : 'Tous les Types'}</SelectItem>
             <SelectItem value="theater">{getTypeText('theater')}</SelectItem>
             <SelectItem value="concert_hall">{getTypeText('concert_hall')}</SelectItem>
             <SelectItem value="outdoor">{getTypeText('outdoor')}</SelectItem>
@@ -210,7 +210,7 @@ export function VenuesList({ locale }: VenuesListProps) {
             <SelectValue placeholder={locale === 'en' ? 'Status' : locale === 'es' ? 'Estado' : 'Statut'} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">{locale === 'en' ? 'All Status' : locale === 'es' ? 'Todos los Estados' : 'Tous les Statuts'}</SelectItem>
+            <SelectItem value="all">{locale === 'en' ? 'All Status' : locale === 'es' ? 'Todos los Estados' : 'Tous les Statuts'}</SelectItem>
             <SelectItem value="active">{getStatusText('active')}</SelectItem>
             <SelectItem value="inactive">{getStatusText('inactive')}</SelectItem>
             <SelectItem value="maintenance">{getStatusText('maintenance')}</SelectItem>
