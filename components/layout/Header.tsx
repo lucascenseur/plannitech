@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -23,7 +24,15 @@ import {
   LogOut,
   Building2,
   ChevronDown,
+  X,
+  Clock,
+  FileText,
+  Users,
+  Calendar,
+  Package,
+  DollarSign
 } from "lucide-react";
+import Link from "next/link";
 
 interface HeaderProps {
   onMenuClick: () => void;

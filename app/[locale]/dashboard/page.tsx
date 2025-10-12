@@ -28,7 +28,8 @@ import {
   Settings,
   Database,
   BookOpen,
-  Hotel
+  Hotel,
+  Wrench
 } from "lucide-react";
 import Link from "next/link";
 
