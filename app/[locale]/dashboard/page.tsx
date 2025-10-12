@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ContextCard } from "@/components/dashboard/context-card";
-import { QuickActions } from "@/components/ui/quick-actions";
+import { Button } from "@/components/ui/button";
 import { 
   Calendar, 
   Users, 
@@ -22,7 +21,14 @@ import {
   FileText,
   BarChart3,
   Star,
-  Building2
+  Building2,
+  Zap,
+  Plus,
+  ArrowRight,
+  Settings,
+  Database,
+  BookOpen,
+  Hotel
 } from "lucide-react";
 import Link from "next/link";
 
@@ -49,75 +55,110 @@ export default function DashboardPage({ params }: DashboardPageProps) {
     params.then(({ locale }) => setLocale(locale));
   }, [params]);
 
-  // Charger les données du dashboard
+  // Placeholder pour récupérer les données dynamiques
   useEffect(() => {
     const fetchDashboardData = async () => {
-      try {
-        const [showsRes, venuesRes, contactsRes, planningRes, budgetRes] = await Promise.all([
-          fetch('/api/shows'),
-          fetch('/api/venues'),
-          fetch('/api/contacts'),
-          fetch('/api/planning'),
-          fetch('/api/budgets')
-        ]);
-
-        const shows = showsRes.ok ? await showsRes.json() : { shows: [] };
-        const venues = venuesRes.ok ? await venuesRes.json() : { venues: [] };
-        const contacts = contactsRes.ok ? await contactsRes.json() : { contacts: [] };
-        const planning = planningRes.ok ? await planningRes.json() : { items: [] };
-        const budgets = budgetRes.ok ? await budgetRes.json() : { budgets: [] };
-
-        setStats({
-          shows: shows.shows?.length || 0,
-          venues: venues.venues?.length || 0,
-          contacts: contacts.contacts?.length || 0,
-          upcomingShows: shows.shows?.filter((s: any) => new Date(s.date) > new Date()).length || 0,
-          totalBudget: budgets.budgets?.reduce((sum: number, b: any) => sum + (b.totalAmount || 0), 0) || 0,
-          activeTasks: planning.items?.filter((p: any) => p.status === 'in_progress').length || 0
-        });
-      } catch (error) {
-        console.error('Erreur lors du chargement des données:', error);
-      } finally {
-        setLoading(false);
-      }
+      setLoading(true);
+      // Simuler des appels API
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Données de démonstration
+      setStats({
+        shows: 12,
+        venues: 8,
+        contacts: 45,
+        upcomingShows: 3,
+        totalBudget: 125000,
+        activeTasks: 7
+      });
+      
+      setLoading(false);
     };
-
     fetchDashboardData();
   }, []);
 
-  return (
-    <div className="space-y-8">
-      {/* Header avec actions rapides */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            {locale === 'en' ? 'Dashboard' : locale === 'es' ? 'Panel' : 'Tableau de Bord'}
-          </h1>
-          <p className="text-gray-600 mt-2">
-            {locale === 'en' 
-              ? 'Your central hub for managing shows, planning, and teams' 
-              : locale === 'es' 
-              ? 'Tu centro de control para gestionar espectáculos, planificación y equipos'
-              : 'Votre centre de contrôle pour gérer spectacles, planning et équipes'
-            }
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">
+            {locale === 'en' ? 'Loading dashboard...' : locale === 'es' ? 'Cargando panel...' : 'Chargement du tableau de bord...'}
           </p>
         </div>
-        
-        <QuickActions locale={locale} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {locale === 'en' ? 'Dashboard' : locale === 'es' ? 'Panel' : 'Tableau de bord'}
+          </h1>
+          <p className="text-gray-600 mt-1">
+            {locale === 'en' ? 'Your complete event management workspace' : locale === 'es' ? 'Tu espacio de trabajo completo de gestión de eventos' : 'Votre espace de travail complet de gestion d\'événements'}
+          </p>
+        </div>
       </div>
 
-      {/* Statistiques rapides */}
+      {/* Actions rapides */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-6 shadow-lg">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold">
+            {locale === 'en' ? 'Quick Actions' : locale === 'es' ? 'Acciones Rápidas' : 'Actions Rapides'}
+          </h2>
+          <Link href={`/${locale}/dashboard/shows/new`}>
+            <Button variant="secondary" className="bg-white text-blue-600 hover:bg-blue-50">
+              <Plus className="h-4 w-4 mr-2" />
+              {locale === 'en' ? 'New Show' : locale === 'es' ? 'Nuevo Espectáculo' : 'Nouveau Spectacle'}
+            </Button>
+          </Link>
+        </div>
+        <p className="text-blue-100 mb-6">
+          {locale === 'en'
+            ? 'Quickly create new items or jump to key sections of your workspace.'
+            : locale === 'es'
+            ? 'Crea rápidamente nuevos elementos o salta a secciones clave de tu espacio de trabajo.'
+            : 'Créez rapidement de nouveaux éléments ou accédez aux sections clés de votre espace de travail.'
+          }
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <Link href={`/${locale}/dashboard/shows/new`}>
+            <Button className="bg-white text-blue-600 hover:bg-blue-50">
+              <Theater className="h-4 w-4 mr-2" />
+              {locale === 'en' ? 'New Show' : locale === 'es' ? 'Nuevo Espectáculo' : 'Nouveau Spectacle'}
+            </Button>
+          </Link>
+          <Link href={`/${locale}/dashboard/team/new-contact`}>
+            <Button className="bg-white text-blue-600 hover:bg-blue-50">
+              <Users className="h-4 w-4 mr-2" />
+              {locale === 'en' ? 'New Contact' : locale === 'es' ? 'Nuevo Contacto' : 'Nouveau Contact'}
+            </Button>
+          </Link>
+          <Link href={`/${locale}/dashboard/planning/new`}>
+            <Button className="bg-white text-blue-600 hover:bg-blue-50">
+              <Calendar className="h-4 w-4 mr-2" />
+              {locale === 'en' ? 'New Planning Item' : locale === 'es' ? 'Nuevo Elemento de Planificación' : 'Nouvel Élément de Planning'}
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Statistiques */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="bg-white text-gray-900">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
-              {locale === 'en' ? 'Total Shows' : locale === 'es' ? 'Total Espectáculos' : 'Total Spectacles'}
+            <CardTitle className="text-sm font-medium">
+              {locale === 'en' ? 'Total Shows' : locale === 'es' ? 'Espectáculos Totales' : 'Spectacles Totaux'}
             </CardTitle>
             <Theater className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{loading ? '...' : stats.shows}</div>
-            <p className="text-xs text-gray-500">
+            <div className="text-2xl font-bold">{stats.shows}</div>
+            <p className="text-xs text-gray-600">
               {stats.upcomingShows} {locale === 'en' ? 'upcoming' : locale === 'es' ? 'próximos' : 'à venir'}
             </p>
           </CardContent>
@@ -125,183 +166,321 @@ export default function DashboardPage({ params }: DashboardPageProps) {
 
         <Card className="bg-white text-gray-900">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
-              {locale === 'en' ? 'Active Tasks' : locale === 'es' ? 'Tareas Activas' : 'Tâches Actives'}
+            <CardTitle className="text-sm font-medium">
+              {locale === 'en' ? 'Venues' : locale === 'es' ? 'Lugares' : 'Lieux'}
             </CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <MapPin className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{loading ? '...' : stats.activeTasks}</div>
-            <p className="text-xs text-gray-500">
-              {locale === 'en' ? 'in progress' : locale === 'es' ? 'en progreso' : 'en cours'}
+            <div className="text-2xl font-bold">{stats.venues}</div>
+            <p className="text-xs text-gray-600">
+              {locale === 'en' ? 'registered' : locale === 'es' ? 'registrados' : 'enregistrés'}
             </p>
           </CardContent>
         </Card>
 
         <Card className="bg-white text-gray-900">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
-              {locale === 'en' ? 'Total Budget' : locale === 'es' ? 'Presupuesto Total' : 'Budget Total'}
-            </CardTitle>
-            <DollarSign className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{loading ? '...' : stats.totalBudget.toLocaleString()}€</div>
-            <p className="text-xs text-gray-500">
-              {locale === 'en' ? 'allocated' : locale === 'es' ? 'asignado' : 'alloué'}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-white text-gray-900">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
+            <CardTitle className="text-sm font-medium">
               {locale === 'en' ? 'Contacts' : locale === 'es' ? 'Contactos' : 'Contacts'}
             </CardTitle>
             <Users className="h-4 w-4 text-purple-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{loading ? '...' : stats.contacts}</div>
-            <p className="text-xs text-gray-500">
-              {locale === 'en' ? 'people' : locale === 'es' ? 'personas' : 'personnes'}
+            <div className="text-2xl font-bold">{stats.contacts}</div>
+            <p className="text-xs text-gray-600">
+              {locale === 'en' ? 'in database' : locale === 'es' ? 'en base de datos' : 'en base de données'}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-white text-gray-900">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              {locale === 'en' ? 'Total Budget' : locale === 'es' ? 'Presupuesto Total' : 'Budget Total'}
+            </CardTitle>
+            <DollarSign className="h-4 w-4 text-orange-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">€{stats.totalBudget.toLocaleString()}</div>
+            <p className="text-xs text-gray-600">
+              {locale === 'en' ? 'allocated' : locale === 'es' ? 'asignado' : 'alloué'}
             </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Cartes contextuelles */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        {/* Carte Spectacles */}
-        <ContextCard
-          title={locale === 'en' ? 'Shows & Events' : locale === 'es' ? 'Espectáculos y Eventos' : 'Spectacles & Événements'}
-          description={locale === 'en' ? 'Manage your shows, venues, and technical sheets' : locale === 'es' ? 'Gestiona tus espectáculos, lugares y fichas técnicas' : 'Gérez vos spectacles, lieux et fiches techniques'}
-          icon={Theater}
-          stats={[
-            { value: stats.shows, label: locale === 'en' ? 'Shows' : locale === 'es' ? 'Espectáculos' : 'Spectacles' },
-            { value: stats.venues, label: locale === 'en' ? 'Venues' : locale === 'es' ? 'Lugares' : 'Lieux' }
-          ]}
-          quickLinks={[
-            { label: locale === 'en' ? 'All Shows' : locale === 'es' ? 'Todos los Espectáculos' : 'Tous les Spectacles', href: '/dashboard/shows' },
-            { label: locale === 'en' ? 'Venues' : locale === 'es' ? 'Lugares' : 'Lieux', href: '/dashboard/shows' },
-            { label: locale === 'en' ? 'Technical Sheets' : locale === 'es' ? 'Fichas Técnicas' : 'Fiches Techniques', href: '/dashboard/shows' }
-          ]}
-          mainAction={{
-            label: locale === 'en' ? 'Create New Show' : locale === 'es' ? 'Crear Nuevo Espectáculo' : 'Créer un Nouveau Spectacle',
-            href: '/dashboard/shows/new'
-          }}
-          color="blue"
-          locale={locale}
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <Theater className="h-5 w-5 text-blue-600" />
+              {locale === 'en' ? 'Shows & Events' : locale === 'es' ? 'Espectáculos y Eventos' : 'Spectacles & Événements'}
+            </CardTitle>
+            <Link href={`/${locale}/dashboard/shows`}>
+              <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+                {locale === 'en' ? 'View All' : locale === 'es' ? 'Ver Todo' : 'Voir Tout'} <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-4">
+              {locale === 'en' ? 'Manage all your performances, technical sheets, and venues.' : locale === 'es' ? 'Gestiona todas tus actuaciones, fichas técnicas y lugares.' : 'Gérez toutes vos représentations, fiches techniques et lieux.'}
+            </p>
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-gray-700">
+                {locale === 'en' ? 'Quick Links:' : locale === 'es' ? 'Enlaces Rápidos:' : 'Liens Rapides :'}
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <Link href={`/${locale}/dashboard/shows/new`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Plus className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'New Show' : locale === 'es' ? 'Nuevo Espectáculo' : 'Nouveau Spectacle'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/shows?tab=venues`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <MapPin className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Venues' : locale === 'es' ? 'Lugares' : 'Lieux'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/shows?tab=technical`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <FileText className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Technical Sheets' : locale === 'es' ? 'Fichas Técnicas' : 'Fiches Techniques'}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Carte Planning */}
-        <ContextCard
-          title={locale === 'en' ? 'Planning & Logistics' : locale === 'es' ? 'Planificación y Logística' : 'Planning & Logistique'}
-          description={locale === 'en' ? 'Schedule, setup, transport, and catering management' : locale === 'es' ? 'Gestión de horarios, montaje, transporte y catering' : 'Gestion des horaires, montage, transport et restauration'}
-          icon={Calendar}
-          stats={[
-            { value: stats.activeTasks, label: locale === 'en' ? 'Active Tasks' : locale === 'es' ? 'Tareas Activas' : 'Tâches Actives' },
-            { value: stats.upcomingShows, label: locale === 'en' ? 'Upcoming' : locale === 'es' ? 'Próximos' : 'À Venir' }
-          ]}
-          quickLinks={[
-            { label: locale === 'en' ? 'Calendar View' : locale === 'es' ? 'Vista de Calendario' : 'Vue Calendrier', href: '/dashboard/planning' },
-            { label: locale === 'en' ? 'Setup & Breakdown' : locale === 'es' ? 'Montaje y Desmontaje' : 'Montage & Démontage', href: '/dashboard/planning' },
-            { label: locale === 'en' ? 'Transportation' : locale === 'es' ? 'Transporte' : 'Transport', href: '/dashboard/planning' },
-            { label: locale === 'en' ? 'Catering' : locale === 'es' ? 'Catering' : 'Restauration', href: '/dashboard/planning' }
-          ]}
-          mainAction={{
-            label: locale === 'en' ? 'New Planning Event' : locale === 'es' ? 'Nuevo Evento de Planificación' : 'Nouvel Événement Planning',
-            href: '/dashboard/planning'
-          }}
-          color="green"
-          locale={locale}
-        />
+        <Card className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-blue-600" />
+              {locale === 'en' ? 'Planning & Timing' : locale === 'es' ? 'Planificación y Tiempo' : 'Planning & Timing'}
+            </CardTitle>
+            <Link href={`/${locale}/dashboard/planning`}>
+              <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+                {locale === 'en' ? 'View All' : locale === 'es' ? 'Ver Todo' : 'Voir Tout'} <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-4">
+              {locale === 'en' ? 'Organize your schedule minute by minute: setup, transportation, catering.' : locale === 'es' ? 'Organiza tu horario minuto a minuto: montaje, transporte, catering.' : 'Organisez votre emploi du temps minute par minute : montage, transport, restauration.'}
+            </p>
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-gray-700">
+                {locale === 'en' ? 'Quick Links:' : locale === 'es' ? 'Enlaces Rápidos:' : 'Liens Rapides :'}
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <Link href={`/${locale}/dashboard/planning?tab=calendar`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Clock className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Master Schedule' : locale === 'es' ? 'Cronograma Principal' : 'Planning Principal'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/planning?tab=setup-breakdown`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Wrench className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Setup & Breakdown' : locale === 'es' ? 'Montaje y Desmontaje' : 'Montage & Démontage'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/planning?tab=transportation`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Truck className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Transportation' : locale === 'es' ? 'Transporte' : 'Transport'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/planning?tab=catering`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Utensils className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Catering' : locale === 'es' ? 'Catering' : 'Restauration'}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Carte Équipe & Contacts */}
-        <ContextCard
-          title={locale === 'en' ? 'Team & Contacts' : locale === 'es' ? 'Equipo y Contactos' : 'Équipe & Contacts'}
-          description={locale === 'en' ? 'Manage your team, artists, and external contacts' : locale === 'es' ? 'Gestiona tu equipo, artistas y contactos externos' : 'Gérez votre équipe, artistes et contacts externes'}
-          icon={Users}
-          stats={[
-            { value: stats.contacts, label: locale === 'en' ? 'Contacts' : locale === 'es' ? 'Contactos' : 'Contacts' },
-            { value: Math.floor(stats.contacts * 0.3), label: locale === 'en' ? 'Artists' : locale === 'es' ? 'Artistas' : 'Artistes' }
-          ]}
-          quickLinks={[
-            { label: locale === 'en' ? 'Team Members' : locale === 'es' ? 'Miembros del Equipo' : 'Membres d\'Équipe', href: '/dashboard/team' },
-            { label: locale === 'en' ? 'Artists' : locale === 'es' ? 'Artistas' : 'Artistes', href: '/dashboard/team' },
-            { label: locale === 'en' ? 'Technical Crew' : locale === 'es' ? 'Equipo Técnico' : 'Équipe Technique', href: '/dashboard/team' }
-          ]}
-          mainAction={{
-            label: locale === 'en' ? 'Add New Contact' : locale === 'es' ? 'Agregar Nuevo Contacto' : 'Ajouter un Nouveau Contact',
-            href: '/dashboard/team'
-          }}
-          color="purple"
-          locale={locale}
-        />
+        <Card className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <Users className="h-5 w-5 text-blue-600" />
+              {locale === 'en' ? 'Personnel & Teams' : locale === 'es' ? 'Personal y Equipos' : 'Personnel & Équipes'}
+            </CardTitle>
+            <Link href={`/${locale}/dashboard/team`}>
+              <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+                {locale === 'en' ? 'View All' : locale === 'es' ? 'Ver Todo' : 'Voir Tout'} <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-4">
+              {locale === 'en' ? 'Manage your artists, technical crew, and security teams.' : locale === 'es' ? 'Gestiona tus artistas, equipo técnico y equipos de seguridad.' : 'Gérez vos artistes, équipe technique et équipes de sécurité.'}
+            </p>
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-gray-700">
+                {locale === 'en' ? 'Quick Links:' : locale === 'es' ? 'Enlaces Rápidos:' : 'Liens Rapides :'}
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <Link href={`/${locale}/dashboard/team?tab=members`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Users className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Team Members' : locale === 'es' ? 'Miembros del Equipo' : 'Membres de l\'Équipe'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/team?tab=artists`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Star className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Artists' : locale === 'es' ? 'Artistas' : 'Artistes'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/team?tab=technical`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Wrench className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Technical Crew' : locale === 'es' ? 'Equipo Técnico' : 'Équipe Technique'}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Carte Ressources */}
-        <ContextCard
-          title={locale === 'en' ? 'Resources & Equipment' : locale === 'es' ? 'Recursos y Equipamiento' : 'Ressources & Matériel'}
-          description={locale === 'en' ? 'Manage equipment, suppliers, and accommodation' : locale === 'es' ? 'Gestiona equipamiento, proveedores y alojamiento' : 'Gérez le matériel, fournisseurs et hébergement'}
-          icon={Package}
-          stats={[
-            { value: 12, label: locale === 'en' ? 'Equipment' : locale === 'es' ? 'Equipamiento' : 'Matériel' },
-            { value: 8, label: locale === 'en' ? 'Suppliers' : locale === 'es' ? 'Proveedores' : 'Fournisseurs' }
-          ]}
-          quickLinks={[
-            { label: locale === 'en' ? 'Equipment Inventory' : locale === 'es' ? 'Inventario de Equipos' : 'Inventaire Matériel', href: '/dashboard/planning' },
-            { label: locale === 'en' ? 'Suppliers' : locale === 'es' ? 'Proveedores' : 'Fournisseurs', href: '/dashboard/planning' },
-            { label: locale === 'en' ? 'Purchase Orders' : locale === 'es' ? 'Órdenes de Compra' : 'Bons de Commande', href: '/dashboard/planning' }
-          ]}
-          mainAction={{
-            label: locale === 'en' ? 'Add Equipment' : locale === 'es' ? 'Agregar Equipamiento' : 'Ajouter du Matériel',
-            href: '/dashboard/planning'
-          }}
-          color="orange"
-          locale={locale}
-        />
+        <Card className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <Package className="h-5 w-5 text-blue-600" />
+              {locale === 'en' ? 'Resources & Equipment' : locale === 'es' ? 'Recursos y Equipamiento' : 'Ressources & Matériel'}
+            </CardTitle>
+            <Link href={`/${locale}/dashboard/resources`}>
+              <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+                {locale === 'en' ? 'View All' : locale === 'es' ? 'Ver Todo' : 'Voir Tout'} <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-4">
+              {locale === 'en' ? 'Track equipment, manage suppliers, purchase orders, and accommodation.' : locale === 'es' ? 'Rastrea equipos, gestiona proveedores, órdenes de compra y alojamiento.' : 'Suivez le matériel, gérez les fournisseurs, les bons de commande et l\'hébergement.'}
+            </p>
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-gray-700">
+                {locale === 'en' ? 'Quick Links:' : locale === 'es' ? 'Enlaces Rápidos:' : 'Liens Rapides :'}
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <Link href={`/${locale}/dashboard/resources?tab=equipment`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Package className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Equipment Inventory' : locale === 'es' ? 'Inventario de Equipos' : 'Inventaire Matériel'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/resources?tab=suppliers`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Building2 className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Suppliers' : locale === 'es' ? 'Proveedores' : 'Fournisseurs'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/resources?tab=accommodation`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Hotel className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Accommodation' : locale === 'es' ? 'Alojamiento' : 'Hébergement'}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Carte Finances */}
-        <ContextCard
-          title={locale === 'en' ? 'Finance & Budget' : locale === 'es' ? 'Finanzas y Presupuesto' : 'Finances & Budget'}
-          description={locale === 'en' ? 'Track budgets, expenses, and financial reports' : locale === 'es' ? 'Rastrea presupuestos, gastos y reportes financieros' : 'Suivez les budgets, dépenses et rapports financiers'}
-          icon={DollarSign}
-          stats={[
-            { value: stats.totalBudget.toLocaleString(), label: locale === 'en' ? 'Total Budget' : locale === 'es' ? 'Presupuesto Total' : 'Budget Total' },
-            { value: '85%', label: locale === 'en' ? 'Used' : locale === 'es' ? 'Usado' : 'Utilisé' }
-          ]}
-          quickLinks={[
-            { label: locale === 'en' ? 'Budget Overview' : locale === 'es' ? 'Resumen de Presupuesto' : 'Aperçu Budget', href: '/dashboard/budget' },
-            { label: locale === 'en' ? 'Financial Reports' : locale === 'es' ? 'Reportes Financieros' : 'Rapports Financiers', href: '/dashboard/budget' },
-            { label: locale === 'en' ? 'Payroll Export' : locale === 'es' ? 'Exportar Nómina' : 'Export Paie', href: '/dashboard/budget' }
-          ]}
-          mainAction={{
-            label: locale === 'en' ? 'Create Budget' : locale === 'es' ? 'Crear Presupuesto' : 'Créer un Budget',
-            href: '/dashboard/budget'
-          }}
-          color="green"
-          locale={locale}
-        />
+        <Card className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <DollarSign className="h-5 w-5 text-blue-600" />
+              {locale === 'en' ? 'Finance & Tracking' : locale === 'es' ? 'Finanzas y Seguimiento' : 'Finances & Suivi'}
+            </CardTitle>
+            <Link href={`/${locale}/dashboard/finance`}>
+              <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+                {locale === 'en' ? 'View All' : locale === 'es' ? 'Ver Todo' : 'Voir Tout'} <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-4">
+              {locale === 'en' ? 'Oversee budgets, generate financial reports, and export payroll data.' : locale === 'es' ? 'Supervisa presupuestos, genera informes financieros y exporta datos de nómina.' : 'Supervisez les budgets, générez des rapports financiers et exportez les données de paie.'}
+            </p>
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-gray-700">
+                {locale === 'en' ? 'Quick Links:' : locale === 'es' ? 'Enlaces Rápidos:' : 'Liens Rapides :'}
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <Link href={`/${locale}/dashboard/finance?tab=budget`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <DollarSign className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Budget Management' : locale === 'es' ? 'Gestión de Presupuesto' : 'Gestion Budget'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/finance?tab=reports`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Financial Reports' : locale === 'es' ? 'Reportes Financieros' : 'Rapports Financiers'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/finance?tab=payroll`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Database className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Payroll Export' : locale === 'es' ? 'Exportar Nómina' : 'Export Paie'}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Carte Communication */}
-        <ContextCard
-          title={locale === 'en' ? 'Communication' : locale === 'es' ? 'Comunicación' : 'Communication'}
-          description={locale === 'en' ? 'Internal messaging and work groups' : locale === 'es' ? 'Mensajería interna y grupos de trabajo' : 'Messagerie interne et groupes de travail'}
-          icon={MessageSquare}
-          stats={[
-            { value: 5, label: locale === 'en' ? 'Messages' : locale === 'es' ? 'Mensajes' : 'Messages' },
-            { value: 3, label: locale === 'en' ? 'Groups' : locale === 'es' ? 'Grupos' : 'Groupes' }
-          ]}
-          quickLinks={[
-            { label: locale === 'en' ? 'Internal Messaging' : locale === 'es' ? 'Mensajería Interna' : 'Messagerie Interne', href: '/dashboard/team' },
-            { label: locale === 'en' ? 'Work Groups' : locale === 'es' ? 'Grupos de Trabajo' : 'Groupes de Travail', href: '/dashboard/team' }
-          ]}
-          mainAction={{
-            label: locale === 'en' ? 'Send Message' : locale === 'es' ? 'Enviar Mensaje' : 'Envoyer un Message',
-            href: '/dashboard/team'
-          }}
-          color="blue"
-          locale={locale}
-        />
+        <Card className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <Settings className="h-5 w-5 text-blue-600" />
+              {locale === 'en' ? 'Tools & Settings' : locale === 'es' ? 'Herramientas y Configuración' : 'Outils & Paramètres'}
+            </CardTitle>
+            <Link href={`/${locale}/dashboard/settings`}>
+              <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+                {locale === 'en' ? 'View All' : locale === 'es' ? 'Ver Todo' : 'Voir Tout'} <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-4">
+              {locale === 'en' ? 'Configure application settings, manage data, and access help resources.' : locale === 'es' ? 'Configura los ajustes de la aplicación, gestiona datos y accede a recursos de ayuda.' : 'Configurez les paramètres de l\'application, gérez les données et accédez aux ressources d\'aide.'}
+            </p>
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-gray-700">
+                {locale === 'en' ? 'Quick Links:' : locale === 'es' ? 'Enlaces Rápidos:' : 'Liens Rapides :'}
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <Link href={`/${locale}/dashboard/settings`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Settings className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Settings' : locale === 'es' ? 'Configuración' : 'Paramètres'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/data-management`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <Database className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Data Management' : locale === 'es' ? 'Gestión de Datos' : 'Gestion des Données'}
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/dashboard/help`}>
+                  <Button variant="outline" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                    <BookOpen className="h-4 w-4 mr-2" />
+                    {locale === 'en' ? 'Help & Docs' : locale === 'es' ? 'Ayuda y Documentación' : 'Aide & Docs'}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Actions rapides supplémentaires */}
