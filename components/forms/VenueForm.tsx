@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -42,7 +42,11 @@ interface VenueFormProps {
 
 export function VenueForm({ venue, onSuccess, onCancel }: VenueFormProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [loading, setLoading] = useState(false);
+  
+  // Extraire la locale du pathname
+  const locale = pathname.split('/')[1] || 'fr';
   const [formData, setFormData] = useState({
     name: venue?.name || '',
     type: venue?.type || '',
@@ -169,7 +173,7 @@ export function VenueForm({ venue, onSuccess, onCancel }: VenueFormProps) {
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push('/dashboard/venues');
+        router.push(`/${locale}/dashboard/venues`);
       }
     } catch (error) {
       console.error('Erreur:', error);

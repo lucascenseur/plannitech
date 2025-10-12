@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -31,7 +31,11 @@ interface ShowFormProps {
 
 export function ShowForm({ show, onSuccess, onCancel }: ShowFormProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [loading, setLoading] = useState(false);
+  
+  // Extraire la locale du pathname
+  const locale = pathname.split('/')[1] || 'fr';
   const [formData, setFormData] = useState({
     title: show?.title || '',
     type: show?.type || '',
@@ -117,7 +121,7 @@ export function ShowForm({ show, onSuccess, onCancel }: ShowFormProps) {
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push('/dashboard/shows');
+        router.push(`/${locale}/dashboard/shows`);
       }
     } catch (error) {
       console.error('Erreur:', error);

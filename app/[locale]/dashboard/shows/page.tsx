@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { 
@@ -20,9 +23,11 @@ import {
   Pause,
   CheckCircle,
   AlertTriangle,
-  XCircle
+  XCircle,
+  FileText
 } from "lucide-react";
 import { ShowsList } from "@/components/shows/ShowsList";
+import { TabsNavigation } from "@/components/ui/tabs-navigation";
 
 interface ShowsPageProps {
   params: Promise<{
@@ -47,8 +52,36 @@ export async function generateMetadata({ params }: ShowsPageProps): Promise<Meta
   };
 }
 
-export default async function ShowsPage({ params }: ShowsPageProps) {
-  const { locale } = await params;
+export default function ShowsPage({ params }: ShowsPageProps) {
+  const [locale, setLocale] = useState('fr');
+  const [activeTab, setActiveTab] = useState('shows');
+
+  // Initialiser la locale
+  React.useEffect(() => {
+    params.then(({ locale }) => setLocale(locale));
+  }, [params]);
+
+  // Configuration des onglets
+  const tabs = [
+    {
+      id: 'shows',
+      label: locale === 'en' ? 'Shows' : locale === 'es' ? 'Espectáculos' : 'Spectacles',
+      icon: Theater,
+      count: 0 // Sera mis à jour dynamiquement
+    },
+    {
+      id: 'venues',
+      label: locale === 'en' ? 'Venues' : locale === 'es' ? 'Lugares' : 'Lieux',
+      icon: MapPin,
+      count: 0
+    },
+    {
+      id: 'technical',
+      label: locale === 'en' ? 'Technical Sheets' : locale === 'es' ? 'Fichas Técnicas' : 'Fiches Techniques',
+      icon: FileText,
+      count: 0
+    }
+  ];
 
   return (
     <div className="space-y-6">
@@ -87,8 +120,69 @@ export default async function ShowsPage({ params }: ShowsPageProps) {
         </div>
       </div>
 
-      {/* Liste des spectacles avec données dynamiques */}
-      <ShowsList locale={locale} />
+      {/* Navigation par onglets */}
+      <TabsNavigation
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
+
+      {/* Contenu conditionnel selon l'onglet actif */}
+      {activeTab === 'shows' && (
+        <ShowsList locale={locale} />
+      )}
+
+      {activeTab === 'venues' && (
+        <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="text-center py-12">
+            <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              {locale === 'en' ? 'Venues Management' : locale === 'es' ? 'Gestión de Lugares' : 'Gestion des Lieux'}
+            </h3>
+            <p className="text-gray-600 mb-4">
+              {locale === 'en' 
+                ? 'Manage your performance venues and locations'
+                : locale === 'es'
+                ? 'Gestiona tus lugares de actuación y ubicaciones'
+                : 'Gérez vos lieux de spectacle et emplacements'
+              }
+            </p>
+            <Link
+              href={`/${locale}/dashboard/venues/new`}
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              {locale === 'en' ? 'Add New Venue' : locale === 'es' ? 'Agregar Nuevo Lugar' : 'Ajouter un Nouveau Lieu'}
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'technical' && (
+        <div className="bg-white text-gray-900 rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="text-center py-12">
+            <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              {locale === 'en' ? 'Technical Sheets' : locale === 'es' ? 'Fichas Técnicas' : 'Fiches Techniques'}
+            </h3>
+            <p className="text-gray-600 mb-4">
+              {locale === 'en' 
+                ? 'Manage technical specifications and requirements'
+                : locale === 'es'
+                ? 'Gestiona especificaciones técnicas y requisitos'
+                : 'Gérez les spécifications techniques et exigences'
+              }
+            </p>
+            <Link
+              href={`/${locale}/dashboard/technical-sheets/new`}
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              {locale === 'en' ? 'Create Technical Sheet' : locale === 'es' ? 'Crear Ficha Técnica' : 'Créer une Fiche Technique'}
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Actions rapides */}
       <div className="bg-blue-50 text-blue-900 rounded-lg p-6">
