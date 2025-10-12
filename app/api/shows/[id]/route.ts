@@ -17,14 +17,19 @@ export async function GET(
 
     const { id } = await params;
 
-    const show = await prisma.show.findFirst({
+    const show = await prisma.project.findFirst({
       where: {
         id,
-        organizationId: session.user.organizationId || 'default-org'
+        organizationId: session.user.organizationId || 'default-org',
+        type: 'SPECTACLE'
       },
       include: {
         venue: true,
-        artists: true,
+        contacts: {
+          include: {
+            contact: true
+          }
+        },
         createdBy: {
           select: { name: true, email: true }
         }
@@ -73,10 +78,11 @@ export async function PUT(
     } = body;
 
     // Vérifier que le spectacle existe et appartient à l'organisation
-    const existingShow = await prisma.show.findFirst({
+    const existingShow = await prisma.project.findFirst({
       where: {
         id,
-        organizationId: session.user.organizationId || 'default-org'
+        organizationId: session.user.organizationId || 'default-org',
+        type: 'SPECTACLE'
       }
     });
 
@@ -85,23 +91,29 @@ export async function PUT(
     }
 
     // Mettre à jour le spectacle
-    const updatedShow = await prisma.show.update({
+    const updatedShow = await prisma.project.update({
       where: { id },
       data: {
         title,
-        type,
-        date: date ? new Date(date) : undefined,
-        time,
-        venue,
-        status,
-        artists,
-        team,
-        budget,
-        description
+        startDate: date ? new Date(date) : undefined,
+        endDate: date ? new Date(date) : undefined,
+        status: status === 'confirmed' ? 'ACTIVE' : status === 'planning' ? 'IN_PROGRESS' : 'DRAFT',
+        budget: budget ? parseFloat(budget.toString()) : undefined,
+        description,
+        metadata: {
+          time,
+          venue,
+          artists,
+          team
+        }
       },
       include: {
         venue: true,
-        artists: true,
+        contacts: {
+          include: {
+            contact: true
+          }
+        },
         createdBy: {
           select: { name: true, email: true }
         }
@@ -133,10 +145,11 @@ export async function DELETE(
     const { id } = await params;
 
     // Vérifier que le spectacle existe et appartient à l'organisation
-    const existingShow = await prisma.show.findFirst({
+    const existingShow = await prisma.project.findFirst({
       where: {
         id,
-        organizationId: session.user.organizationId || 'default-org'
+        organizationId: session.user.organizationId || 'default-org',
+        type: 'SPECTACLE'
       }
     });
 
@@ -145,7 +158,7 @@ export async function DELETE(
     }
 
     // Supprimer le spectacle
-    await prisma.show.delete({
+    await prisma.project.delete({
       where: { id }
     });
 

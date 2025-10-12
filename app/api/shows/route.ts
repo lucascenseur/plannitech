@@ -58,8 +58,27 @@ export async function GET(request: NextRequest) {
       ];
     }
 
-    // Pour l'instant, retourner un tableau vide en attendant la configuration de la DB
-    const shows = [];
+    // Récupérer les projets de type SPECTACLE
+    const shows = await prisma.project.findMany({
+      where: {
+        ...where,
+        type: 'SPECTACLE'
+      },
+      include: {
+        venue: true,
+        contacts: {
+          include: {
+            contact: true
+          }
+        },
+        createdBy: {
+          select: { name: true, email: true }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
 
     return NextResponse.json({
       shows,
@@ -105,25 +124,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Créer le nouveau spectacle avec Prisma
-    const newShow = await prisma.show.create({
+    // Créer le nouveau projet de type SPECTACLE avec Prisma
+    const newShow = await prisma.project.create({
       data: {
         title,
-        type,
-        date: new Date(date),
-        time,
-        venue,
-        status,
-        artists,
-        team,
-        budget,
+        type: 'SPECTACLE',
+        startDate: new Date(date),
+        endDate: new Date(date),
+        status: status === 'confirmed' ? 'ACTIVE' : status === 'planning' ? 'IN_PROGRESS' : 'DRAFT',
+        budget: budget ? parseFloat(budget.toString()) : null,
         description,
         organizationId: session.user.organizationId || 'default-org',
-        createdById: session.user.id
+        createdById: session.user.id,
+        metadata: {
+          time,
+          venue,
+          artists,
+          team
+        }
       },
       include: {
         venue: true,
-        artists: true,
+        contacts: {
+          include: {
+            contact: true
+          }
+        },
         createdBy: {
           select: { name: true, email: true }
         }

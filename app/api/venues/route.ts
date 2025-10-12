@@ -70,8 +70,18 @@ export async function GET(request: NextRequest) {
       ];
     }
 
-    // Pour l'instant, retourner un tableau vide en attendant la configuration de la DB
-    const venues = [];
+    // Récupérer les lieux avec Prisma
+    const venues = await prisma.venue.findMany({
+      where,
+      include: {
+        createdBy: {
+          select: { name: true, email: true }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
 
     return NextResponse.json({
       venues,

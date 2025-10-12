@@ -19,15 +19,95 @@ export async function GET(request: NextRequest) {
 
     const organizationId = session.user.organizationId || 'default-org';
 
-    // Pour l'instant, retourner un tableau vide car la détection de conflits
-    // nécessiterait une logique complexe d'analyse des chevauchements
-    // Dans une implémentation complète, on analyserait :
-    // - Chevauchements temporels des éléments de planning
-    // - Surcharge des ressources (équipements, personnel)
-    // - Conflits de lieux
-    // - Assignations multiples du même personnel
-
+    // Détecter les conflits de planning
     const conflicts = [];
+
+    // 1. Conflits de chevauchement temporel
+    if (startDate && endDate) {
+      const overlappingItems = await prisma.planningItem.findMany({
+        where: {
+          organizationId,
+          ...(showId && { projectId: showId }),
+          OR: [
+            {
+              AND: [
+                { startTime: { lte: new Date(endDate) } },
+                { endTime: { gte: new Date(startDate) } }
+              ]
+            }
+          ]
+        },
+        include: {
+          project: true,
+          assignedTo: true
+        }
+      });
+
+      // Grouper par ressource pour détecter les conflits
+      const resourceConflicts = new Map();
+      
+      for (const item of overlappingItems) {
+        const resourceKey = item.assignedToId || item.equipmentId || 'general';
+        if (!resourceConflicts.has(resourceKey)) {
+          resourceConflicts.set(resourceKey, []);
+        }
+        resourceConflicts.get(resourceKey).push(item);
+      }
+
+      // Créer les conflits pour les ressources avec plus d'un élément
+      for (const [resource, items] of resourceConflicts.entries()) {
+        if (items.length > 1) {
+          conflicts.push({
+            id: `conflict-${resource}-${Date.now()}`,
+            type: 'resource_overlap',
+            severity: 'high',
+            title: 'Chevauchement de ressources',
+            description: `${items.length} éléments se chevauchent pour la même ressource`,
+            items: items.map(item => ({
+              id: item.id,
+              title: item.title,
+              startTime: item.startTime,
+              endTime: item.endTime,
+              project: item.project?.title
+            })),
+            createdAt: new Date().toISOString()
+          });
+        }
+      }
+    }
+
+    // 2. Conflits de surcharge d'équipement
+    const equipmentOverload = await prisma.planningItem.groupBy({
+      by: ['equipmentId'],
+      where: {
+        organizationId,
+        equipmentId: { not: null },
+        startTime: { gte: new Date() }
+      },
+      _count: {
+        id: true
+      },
+      having: {
+        id: { _count: { gt: 1 } }
+      }
+    });
+
+    for (const overload of equipmentOverload) {
+      const equipment = await prisma.equipment.findUnique({
+        where: { id: overload.equipmentId! }
+      });
+
+      conflicts.push({
+        id: `equipment-overload-${overload.equipmentId}`,
+        type: 'equipment_overload',
+        severity: 'medium',
+        title: 'Surcharge d\'équipement',
+        description: `L'équipement "${equipment?.name}" est surchargé`,
+        equipment: equipment,
+        count: overload._count.id,
+        createdAt: new Date().toISOString()
+      });
+    }
 
     return NextResponse.json({ 
       conflicts,

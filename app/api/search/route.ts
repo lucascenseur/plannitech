@@ -22,11 +22,12 @@ export async function GET(request: NextRequest) {
     const organizationId = session.user.organizationId || 'default-org';
 
     // Rechercher dans tous les modèles
-    const [shows, venues, teamMembers, equipment, planningItems] = await Promise.all([
-      // Spectacles
-      prisma.show.findMany({
+    const [projects, venues, teamMembers, equipment, planningItems] = await Promise.all([
+      // Projets de type SPECTACLE
+      prisma.project.findMany({
         where: {
           organizationId,
+          type: 'SPECTACLE',
           OR: [
             { title: { contains: query, mode: 'insensitive' } },
             { description: { contains: query, mode: 'insensitive' } }
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
           id: true,
           title: true,
           description: true,
-          date: true,
+          startDate: true,
           type: true
         }
       }),
@@ -120,12 +121,12 @@ export async function GET(request: NextRequest) {
 
     // Formater les résultats
     const results = [
-      ...shows.map(show => ({
-        id: show.id,
+      ...projects.map(project => ({
+        id: project.id,
         type: 'show',
-        title: show.title,
-        description: show.description || `Spectacle ${show.type} - ${new Date(show.date).toLocaleDateString('fr-FR')}`,
-        href: `/dashboard/shows/${show.id}`,
+        title: project.title,
+        description: project.description || `Spectacle ${project.type} - ${new Date(project.startDate).toLocaleDateString('fr-FR')}`,
+        href: `/dashboard/shows/${project.id}`,
         icon: 'Theater'
       })),
       

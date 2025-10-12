@@ -19,8 +19,13 @@ export async function GET(request: NextRequest) {
       ...(type && { type })
     };
 
-    // Pour l'instant, retourner un tableau vide en attendant la configuration de la DB
-    const contacts = [];
+    // Récupérer les contacts avec Prisma
+    const contacts = await prisma.contact.findMany({
+      where,
+      orderBy: {
+        name: 'asc'
+      }
+    });
 
     return NextResponse.json({ contacts });
   } catch (error) {

@@ -29,9 +29,12 @@ export async function GET(request: NextRequest) {
 
     // Récupérer les activités depuis la table des logs d'activité
     // Pour l'instant, on simule avec les données récentes des autres tables
-    const [recentShows, recentVenues, recentTeamMembers, recentEquipment, recentPlanning] = await Promise.all([
-      prisma.show.findMany({
-        where: { organizationId },
+    const [recentProjects, recentVenues, recentTeamMembers, recentEquipment, recentPlanning] = await Promise.all([
+      prisma.project.findMany({
+        where: { 
+          organizationId,
+          type: 'SPECTACLE'
+        },
         orderBy: { createdAt: 'desc' },
         take: 5,
         select: {
@@ -108,15 +111,15 @@ export async function GET(request: NextRequest) {
 
     // Formater les activités
     const activities = [
-      ...recentShows.map(show => ({
-        id: `show-${show.id}`,
+      ...recentProjects.map(project => ({
+        id: `project-${project.id}`,
         type: 'show' as const,
         action: 'created' as const,
         title: 'Nouveau spectacle créé',
-        description: show.title,
-        timestamp: show.createdAt.toISOString(),
-        user: { name: show.createdBy?.name || 'Utilisateur' },
-        metadata: { showTitle: show.title }
+        description: project.title,
+        timestamp: project.createdAt.toISOString(),
+        user: { name: project.createdBy?.name || 'Utilisateur' },
+        metadata: { showTitle: project.title }
       })),
       
       ...recentVenues.map(venue => ({
