@@ -114,24 +114,15 @@ export default function ShowsPage({ params }: ShowsPageProps) {
 
       {/* Contenu conditionnel selon l'onglet actif */}
       {activeTab === 'shows' && (
-        <div className="bg-white rounded-lg border p-6">
-          <h2 className="text-lg font-semibold mb-4">Liste des Spectacles</h2>
-          <p className="text-gray-600">Chargement des spectacles...</p>
-        </div>
+        <ShowsList locale={locale} />
       )}
 
       {activeTab === 'venues' && (
-        <div className="bg-white rounded-lg border p-6">
-          <h2 className="text-lg font-semibold mb-4">Liste des Lieux</h2>
-          <p className="text-gray-600">Chargement des lieux...</p>
-        </div>
+        <VenuesList locale={locale} />
       )}
 
       {activeTab === 'technical' && (
-        <div className="bg-white rounded-lg border p-6">
-          <h2 className="text-lg font-semibold mb-4">Fiches Techniques</h2>
-          <p className="text-gray-600">Chargement des fiches techniques...</p>
-        </div>
+        <TechnicalSheetsList locale={locale} />
       )}
 
       {/* Actions rapides */}
