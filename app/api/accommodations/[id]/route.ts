@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// GET - Récupérer un spectacle spécifique
+// GET - Récupérer un hébergement spécifique
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -17,27 +17,26 @@ export async function GET(
 
     const { id } = await params;
 
-    const show = await prisma.show.findFirst({
+    const accommodation = await prisma.accommodation.findFirst({
       where: {
         id,
         organizationId: session.user.organizationId || 'default-org'
       },
       include: {
-        venue: true,
-        artists: true,
+        show: true,
         createdBy: {
           select: { name: true, email: true }
         }
       }
     });
 
-    if (!show) {
-      return NextResponse.json({ error: 'Spectacle non trouvé' }, { status: 404 });
+    if (!accommodation) {
+      return NextResponse.json({ error: 'Hébergement non trouvé' }, { status: 404 });
     }
 
-    return NextResponse.json({ show });
+    return NextResponse.json({ accommodation });
   } catch (error) {
-    console.error('Erreur lors de la récupération du spectacle:', error);
+    console.error('Erreur lors de la récupération de l\'hébergement:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }
@@ -45,7 +44,7 @@ export async function GET(
   }
 }
 
-// PUT - Mettre à jour un spectacle
+// PUT - Mettre à jour un hébergement
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -60,57 +59,60 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
     const {
-      title,
+      name,
       type,
-      date,
-      time,
-      venue,
-      status,
-      artists,
-      team,
-      budget,
-      description
+      address,
+      contactName,
+      phone,
+      email,
+      capacity,
+      pricePerNight,
+      showId,
+      checkIn,
+      checkOut,
+      status
     } = body;
 
-    // Vérifier que le spectacle existe et appartient à l'organisation
-    const existingShow = await prisma.show.findFirst({
+    // Vérifier que l'hébergement existe et appartient à l'organisation
+    const existingAccommodation = await prisma.accommodation.findFirst({
       where: {
         id,
         organizationId: session.user.organizationId || 'default-org'
       }
     });
 
-    if (!existingShow) {
-      return NextResponse.json({ error: 'Spectacle non trouvé' }, { status: 404 });
+    if (!existingAccommodation) {
+      return NextResponse.json({ error: 'Hébergement non trouvé' }, { status: 404 });
     }
 
-    // Mettre à jour le spectacle
-    const updatedShow = await prisma.show.update({
+    // Mettre à jour l'hébergement
+    const updatedAccommodation = await prisma.accommodation.update({
       where: { id },
       data: {
-        title,
+        name,
         type,
-        date: date ? new Date(date) : undefined,
-        time,
-        venue,
-        status,
-        artists,
-        team,
-        budget,
-        description
+        address,
+        contactName,
+        phone,
+        email,
+        capacity,
+        pricePerNight,
+        showId,
+        checkIn: checkIn ? new Date(checkIn) : null,
+        checkOut: checkOut ? new Date(checkOut) : null,
+        status
       },
       include: {
-        venue: true,
-        artists: true,
+        show: true,
         createdBy: {
           select: { name: true, email: true }
         }
       }
     });
 
-    return NextResponse.json({ show: updatedShow });
+    return NextResponse.json({ accommodation: updatedAccommodation });
   } catch (error) {
-    console.error('Erreur lors de la mise à jour du spectacle:', error);
+    console.error('Erreur lors de la mise à jour de l\'hébergement:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }
@@ -118,7 +120,7 @@ export async function PUT(
   }
 }
 
-// DELETE - Supprimer un spectacle
+// DELETE - Supprimer un hébergement
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -132,26 +134,26 @@ export async function DELETE(
 
     const { id } = await params;
 
-    // Vérifier que le spectacle existe et appartient à l'organisation
-    const existingShow = await prisma.show.findFirst({
+    // Vérifier que l'hébergement existe et appartient à l'organisation
+    const existingAccommodation = await prisma.accommodation.findFirst({
       where: {
         id,
         organizationId: session.user.organizationId || 'default-org'
       }
     });
 
-    if (!existingShow) {
-      return NextResponse.json({ error: 'Spectacle non trouvé' }, { status: 404 });
+    if (!existingAccommodation) {
+      return NextResponse.json({ error: 'Hébergement non trouvé' }, { status: 404 });
     }
 
-    // Supprimer le spectacle
-    await prisma.show.delete({
+    // Supprimer l'hébergement
+    await prisma.accommodation.delete({
       where: { id }
     });
 
-    return NextResponse.json({ message: 'Spectacle supprimé avec succès' });
+    return NextResponse.json({ message: 'Hébergement supprimé avec succès' });
   } catch (error) {
-    console.error('Erreur lors de la suppression du spectacle:', error);
+    console.error('Erreur lors de la suppression de l\'hébergement:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }

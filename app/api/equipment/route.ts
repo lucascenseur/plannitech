@@ -3,39 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// Types pour les lieux
-interface Venue {
-  id: string;
-  name: string;
-  type: string;
-  address: string;
-  capacity: number;
-  status: 'available' | 'maintenance' | 'booked' | 'unavailable';
-  contact: {
-    name: string;
-    phone: string;
-    email: string;
-  };
-  facilities: string[];
-  stage: {
-    width: number;
-    depth: number;
-    height: number;
-  };
-  rates: {
-    day: number;
-    week: number;
-  };
-  rating: number;
-  lastUsed?: string;
-  organizationId: string;
-  createdById: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-
-// GET - Récupérer tous les lieux
+// GET - Récupérer tous les équipements
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -45,8 +13,8 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
+    const category = searchParams.get('category');
     const status = searchParams.get('status');
-    const type = searchParams.get('type');
     const search = searchParams.get('search');
 
     // Construire les filtres Prisma
@@ -54,23 +22,23 @@ export async function GET(request: NextRequest) {
       organizationId: session.user.organizationId || 'default-org'
     };
 
-    if (status) {
-      where.status = status;
+    if (category) {
+      where.category = category;
     }
 
-    if (type) {
-      where.type = type;
+    if (status) {
+      where.status = status;
     }
 
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
-        { address: { contains: search, mode: 'insensitive' } },
-        { contactName: { contains: search, mode: 'insensitive' } }
+        { description: { contains: search, mode: 'insensitive' } },
+        { supplier: { contains: search, mode: 'insensitive' } }
       ];
     }
 
-    const venues = await prisma.venue.findMany({
+    const equipment = await prisma.equipment.findMany({
       where,
       include: {
         createdBy: {
@@ -83,11 +51,11 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json({
-      venues,
-      total: venues.length
+      equipment,
+      total: equipment.length
     });
   } catch (error) {
-    console.error('Erreur lors de la récupération des lieux:', error);
+    console.error('Erreur lors de la récupération des équipements:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }
@@ -95,7 +63,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Créer un nouveau lieu
+// POST - Créer un nouvel équipement
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -107,43 +75,34 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       name,
-      type,
-      address,
-      capacity,
-      status = 'available',
-      contact,
-      facilities = [],
-      stage,
-      rates,
-      rating = 0
+      category,
+      description,
+      quantity,
+      status,
+      supplier,
+      cost,
+      location
     } = body;
 
     // Validation des données requises
-    if (!name || !type || !address || !contact || !stage || !rates) {
+    if (!name || !category) {
       return NextResponse.json(
-        { error: 'Les champs nom, type, adresse, contact, scène et tarifs sont requis' },
+        { error: 'Les champs nom et catégorie sont requis' },
         { status: 400 }
       );
     }
 
-    // Créer le nouveau lieu avec Prisma
-    const newVenue = await prisma.venue.create({
+    // Créer le nouvel équipement
+    const newEquipment = await prisma.equipment.create({
       data: {
         name,
-        type,
-        address,
-        capacity: capacity || 0,
-        status,
-        contactName: contact.name,
-        contactPhone: contact.phone,
-        contactEmail: contact.email,
-        facilities,
-        stageWidth: stage.width,
-        stageDepth: stage.depth,
-        stageHeight: stage.height,
-        rateDay: rates.day,
-        rateWeek: rates.week,
-        rating,
+        category,
+        description,
+        quantity: quantity || 1,
+        status: status || 'available',
+        supplier,
+        cost,
+        location,
         organizationId: session.user.organizationId || 'default-org',
         createdById: session.user.id
       },
@@ -154,9 +113,9 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    return NextResponse.json(newVenue, { status: 201 });
+    return NextResponse.json({ equipment: newEquipment }, { status: 201 });
   } catch (error) {
-    console.error('Erreur lors de la création du lieu:', error);
+    console.error('Erreur lors de la création de l\'équipement:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }

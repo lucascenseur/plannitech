@@ -19,7 +19,8 @@ import {
   ChevronRight,
   Building2,
   LogOut,
-  Theater
+  Theater,
+  Zap
 } from "lucide-react";
 
 interface SidebarProps {
@@ -48,6 +49,11 @@ const getNavigation = (locale: string) => [
     name: locale === 'en' ? 'Team & Contacts' : locale === 'es' ? 'Equipo y Contactos' : 'Équipe & Contacts', 
     href: `/${locale}/dashboard/team`, 
     icon: Users
+  },
+  { 
+    name: locale === 'en' ? 'Advanced' : locale === 'es' ? 'Avanzado' : 'Avancé', 
+    href: `/${locale}/dashboard/advanced`, 
+    icon: Zap
   },
   { 
     name: locale === 'en' ? 'Settings' : locale === 'es' ? 'Configuración' : 'Paramètres', 

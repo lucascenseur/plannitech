@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// GET - Récupérer tous les membres d'équipe
+// GET - Récupérer tous les bons de commande
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -13,7 +13,8 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const role = searchParams.get('role');
+    const status = searchParams.get('status');
+    const supplierId = searchParams.get('supplierId');
     const search = searchParams.get('search');
 
     // Construire les filtres Prisma
@@ -21,22 +22,26 @@ export async function GET(request: NextRequest) {
       organizationId: session.user.organizationId || 'default-org'
     };
 
-    if (role) {
-      where.role = role;
+    if (status) {
+      where.status = status;
+    }
+
+    if (supplierId) {
+      where.supplierId = supplierId;
     }
 
     if (search) {
       where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { email: { contains: search, mode: 'insensitive' } },
-        { phone: { contains: search, mode: 'insensitive' } }
+        { number: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } }
       ];
     }
 
-    const members = await prisma.teamMember.findMany({
+    const purchaseOrders = await prisma.purchaseOrder.findMany({
       where,
       include: {
-        contact: true,
+        supplier: true,
+        show: true,
         createdBy: {
           select: { name: true, email: true }
         }
@@ -47,11 +52,11 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json({
-      members,
-      total: members.length
+      purchaseOrders,
+      total: purchaseOrders.length
     });
   } catch (error) {
-    console.error('Erreur lors de la récupération des membres d\'équipe:', error);
+    console.error('Erreur lors de la récupération des bons de commande:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }
@@ -59,7 +64,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Créer un nouveau membre d'équipe
+// POST - Créer un nouveau bon de commande
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -70,47 +75,50 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const {
-      name,
-      email,
-      phone,
-      role,
-      availability,
-      skills,
-      contactId
+      number,
+      supplierId,
+      showId,
+      description,
+      totalAmount,
+      status = 'draft',
+      dueDate,
+      items
     } = body;
 
     // Validation des données requises
-    if (!name || !email || !role) {
+    if (!number || !supplierId || !totalAmount) {
       return NextResponse.json(
-        { error: 'Les champs nom, email et rôle sont requis' },
+        { error: 'Les champs numéro, fournisseur et montant total sont requis' },
         { status: 400 }
       );
     }
 
-    // Créer le nouveau membre d'équipe
-    const newMember = await prisma.teamMember.create({
+    // Créer le nouveau bon de commande
+    const newPurchaseOrder = await prisma.purchaseOrder.create({
       data: {
-        name,
-        email,
-        phone,
-        role,
-        availability,
-        skills,
-        contactId,
+        number,
+        supplierId,
+        showId,
+        description,
+        totalAmount,
+        status,
+        dueDate: dueDate ? new Date(dueDate) : null,
+        items,
         organizationId: session.user.organizationId || 'default-org',
         createdById: session.user.id
       },
       include: {
-        contact: true,
+        supplier: true,
+        show: true,
         createdBy: {
           select: { name: true, email: true }
         }
       }
     });
 
-    return NextResponse.json({ member: newMember }, { status: 201 });
+    return NextResponse.json({ purchaseOrder: newPurchaseOrder }, { status: 201 });
   } catch (error) {
-    console.error('Erreur lors de la création du membre d\'équipe:', error);
+    console.error('Erreur lors de la création du bon de commande:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }

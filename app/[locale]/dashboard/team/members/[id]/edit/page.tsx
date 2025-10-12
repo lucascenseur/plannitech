@@ -3,36 +3,36 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useLocale } from '@/lib/i18n';
-import { ShowForm } from '@/components/forms/ShowForm';
+import { TeamMemberForm } from '@/components/forms/TeamMemberForm';
 
-export default function EditShowPage() {
+export default function EditTeamMemberPage() {
   const params = useParams();
   const router = useRouter();
   const { t } = useLocale();
   const { locale, id } = params;
   
-  const [show, setShow] = useState<any>(null);
+  const [teamMember, setTeamMember] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchShow = async () => {
+    const fetchTeamMember = async () => {
       try {
-        const response = await fetch(`/api/shows/${id}`);
+        const response = await fetch(`/api/team/members/${id}`);
         if (!response.ok) {
-          throw new Error('Show not found');
+          throw new Error('Team member not found');
         }
         const data = await response.json();
-        setShow(data.show);
+        setTeamMember(data.member);
       } catch (error) {
-        console.error('Error fetching show:', error);
-        router.push(`/${locale}/dashboard/shows`);
+        console.error('Error fetching team member:', error);
+        router.push(`/${locale}/dashboard/team`);
       } finally {
         setLoading(false);
       }
     };
 
     if (id) {
-      fetchShow();
+      fetchTeamMember();
     }
   }, [id, locale, router]);
 
@@ -44,15 +44,15 @@ export default function EditShowPage() {
     );
   }
 
-  if (!show) {
+  if (!teamMember) {
     return (
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
-        <div className="text-lg">{t('edit_show.not_found')}</div>
+        <div className="text-lg">{t('edit_team_member.not_found')}</div>
         <button 
-          onClick={() => router.push(`/${locale}/dashboard/shows`)}
+          onClick={() => router.push(`/${locale}/dashboard/team`)}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
-          {t('edit_show.back_to_shows')}
+          {t('edit_team_member.back_to_team')}
         </button>
       </div>
     );
@@ -61,12 +61,12 @@ export default function EditShowPage() {
   return (
     <div className="flex flex-col space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">{t('edit_show.title')}</h1>
-        <p className="text-gray-600">{t('edit_show.description')}</p>
+        <h1 className="text-3xl font-bold text-gray-900">{t('edit_team_member.title')}</h1>
+        <p className="text-gray-600">{t('edit_team_member.description')}</p>
       </div>
       
-      <ShowForm 
-        show={show} 
+      <TeamMemberForm 
+        teamMember={teamMember} 
         locale={locale as string}
       />
     </div>

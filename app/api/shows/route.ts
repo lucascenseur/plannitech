@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
 
 // Types pour les spectacles
 interface Show {
@@ -21,60 +22,6 @@ interface Show {
   updatedAt: string;
 }
 
-// Données d'exemple (sera remplacé par la base de données)
-let shows: Show[] = [
-  {
-    id: '1',
-    title: 'Concert Jazz au Théâtre Municipal',
-    type: 'Concert',
-    date: '2024-02-15',
-    time: '20:00',
-    venue: 'Théâtre Municipal',
-    status: 'confirmed',
-    artists: ['Quartet Jazz Moderne', 'Sarah Johnson'],
-    team: 8,
-    budget: 15000,
-    description: 'Concert de jazz moderne avec un quartet exceptionnel',
-    organizationId: 'org-1',
-    createdById: 'user-1',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: '2',
-    title: 'Spectacle de Danse Contemporaine',
-    type: 'Danse',
-    date: '2024-02-22',
-    time: '19:30',
-    venue: 'Centre Culturel',
-    status: 'planning',
-    artists: ['Compagnie Danse Libre', 'Marie Dubois'],
-    team: 12,
-    budget: 22000,
-    description: 'Spectacle de danse contemporaine innovant',
-    organizationId: 'org-1',
-    createdById: 'user-1',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: '3',
-    title: 'Pièce de Théâtre - Hamlet',
-    type: 'Théâtre',
-    date: '2024-03-01',
-    time: '20:30',
-    venue: 'Salle des Fêtes',
-    status: 'confirmed',
-    artists: ['Troupe Théâtrale Moderne', 'Jean-Pierre Martin'],
-    team: 15,
-    budget: 18000,
-    description: 'Adaptation moderne de la célèbre pièce de Shakespeare',
-    organizationId: 'org-1',
-    createdById: 'user-1',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }
-];
 
 // GET - Récupérer tous les spectacles
 export async function GET(request: NextRequest) {
@@ -90,31 +37,44 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type');
     const search = searchParams.get('search');
 
-    let filteredShows = shows;
+    // Construire les filtres Prisma
+    const where: any = {
+      organizationId: session.user.organizationId || 'default-org'
+    };
 
-    // Filtrage par statut
     if (status) {
-      filteredShows = filteredShows.filter(show => show.status === status);
+      where.status = status;
     }
 
-    // Filtrage par type
     if (type) {
-      filteredShows = filteredShows.filter(show => show.type.toLowerCase() === type.toLowerCase());
+      where.type = type;
     }
 
-    // Recherche textuelle
     if (search) {
-      const searchLower = search.toLowerCase();
-      filteredShows = filteredShows.filter(show => 
-        show.title.toLowerCase().includes(searchLower) ||
-        show.artists.some(artist => artist.toLowerCase().includes(searchLower)) ||
-        show.venue.toLowerCase().includes(searchLower)
-      );
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { venue: { contains: search, mode: 'insensitive' } },
+        { artists: { has: search } }
+      ];
     }
+
+    const shows = await prisma.show.findMany({
+      where,
+      include: {
+        venue: true,
+        artists: true,
+        createdBy: {
+          select: { name: true, email: true }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
 
     return NextResponse.json({
-      shows: filteredShows,
-      total: filteredShows.length
+      shows,
+      total: shows.length
     });
   } catch (error) {
     console.error('Erreur lors de la récupération des spectacles:', error);
@@ -156,26 +116,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Créer le nouveau spectacle
-    const newShow: Show = {
-      id: Date.now().toString(),
-      title,
-      type,
-      date,
-      time,
-      venue,
-      status,
-      artists,
-      team,
-      budget,
-      description,
-      organizationId: 'org-1', // Sera récupéré depuis la session
-      createdById: session.user.id || 'user-1',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-
-    shows.push(newShow);
+    // Créer le nouveau spectacle avec Prisma
+    const newShow = await prisma.show.create({
+      data: {
+        title,
+        type,
+        date: new Date(date),
+        time,
+        venue,
+        status,
+        artists,
+        team,
+        budget,
+        description,
+        organizationId: session.user.organizationId || 'default-org',
+        createdById: session.user.id
+      },
+      include: {
+        venue: true,
+        artists: true,
+        createdBy: {
+          select: { name: true, email: true }
+        }
+      }
+    });
 
     return NextResponse.json(newShow, { status: 201 });
   } catch (error) {

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// GET - Récupérer un spectacle spécifique
+// GET - Récupérer un document spécifique
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -17,27 +17,31 @@ export async function GET(
 
     const { id } = await params;
 
-    const show = await prisma.show.findFirst({
+    const document = await prisma.document.findFirst({
       where: {
         id,
         organizationId: session.user.organizationId || 'default-org'
       },
       include: {
-        venue: true,
-        artists: true,
-        createdBy: {
+        show: {
+          select: { id: true, title: true }
+        },
+        venue: {
+          select: { id: true, name: true }
+        },
+        uploadedBy: {
           select: { name: true, email: true }
         }
       }
     });
 
-    if (!show) {
-      return NextResponse.json({ error: 'Spectacle non trouvé' }, { status: 404 });
+    if (!document) {
+      return NextResponse.json({ error: 'Document non trouvé' }, { status: 404 });
     }
 
-    return NextResponse.json({ show });
+    return NextResponse.json({ document });
   } catch (error) {
-    console.error('Erreur lors de la récupération du spectacle:', error);
+    console.error('Erreur lors de la récupération du document:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }
@@ -45,7 +49,7 @@ export async function GET(
   }
 }
 
-// PUT - Mettre à jour un spectacle
+// PUT - Mettre à jour un document
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -60,57 +64,49 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
     const {
-      title,
+      name,
       type,
-      date,
-      time,
-      venue,
-      status,
-      artists,
-      team,
-      budget,
-      description
+      description,
+      tags
     } = body;
 
-    // Vérifier que le spectacle existe et appartient à l'organisation
-    const existingShow = await prisma.show.findFirst({
+    // Vérifier que le document existe et appartient à l'organisation
+    const existingDocument = await prisma.document.findFirst({
       where: {
         id,
         organizationId: session.user.organizationId || 'default-org'
       }
     });
 
-    if (!existingShow) {
-      return NextResponse.json({ error: 'Spectacle non trouvé' }, { status: 404 });
+    if (!existingDocument) {
+      return NextResponse.json({ error: 'Document non trouvé' }, { status: 404 });
     }
 
-    // Mettre à jour le spectacle
-    const updatedShow = await prisma.show.update({
+    // Mettre à jour le document
+    const updatedDocument = await prisma.document.update({
       where: { id },
       data: {
-        title,
+        name,
         type,
-        date: date ? new Date(date) : undefined,
-        time,
-        venue,
-        status,
-        artists,
-        team,
-        budget,
-        description
+        description,
+        tags
       },
       include: {
-        venue: true,
-        artists: true,
-        createdBy: {
+        show: {
+          select: { id: true, title: true }
+        },
+        venue: {
+          select: { id: true, name: true }
+        },
+        uploadedBy: {
           select: { name: true, email: true }
         }
       }
     });
 
-    return NextResponse.json({ show: updatedShow });
+    return NextResponse.json({ document: updatedDocument });
   } catch (error) {
-    console.error('Erreur lors de la mise à jour du spectacle:', error);
+    console.error('Erreur lors de la mise à jour du document:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }
@@ -118,7 +114,7 @@ export async function PUT(
   }
 }
 
-// DELETE - Supprimer un spectacle
+// DELETE - Supprimer un document
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -132,26 +128,26 @@ export async function DELETE(
 
     const { id } = await params;
 
-    // Vérifier que le spectacle existe et appartient à l'organisation
-    const existingShow = await prisma.show.findFirst({
+    // Vérifier que le document existe et appartient à l'organisation
+    const existingDocument = await prisma.document.findFirst({
       where: {
         id,
         organizationId: session.user.organizationId || 'default-org'
       }
     });
 
-    if (!existingShow) {
-      return NextResponse.json({ error: 'Spectacle non trouvé' }, { status: 404 });
+    if (!existingDocument) {
+      return NextResponse.json({ error: 'Document non trouvé' }, { status: 404 });
     }
 
-    // Supprimer le spectacle
-    await prisma.show.delete({
+    // Supprimer le document
+    await prisma.document.delete({
       where: { id }
     });
 
-    return NextResponse.json({ message: 'Spectacle supprimé avec succès' });
+    return NextResponse.json({ message: 'Document supprimé avec succès' });
   } catch (error) {
-    console.error('Erreur lors de la suppression du spectacle:', error);
+    console.error('Erreur lors de la suppression du document:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// GET - Récupérer tous les membres d'équipe
+// GET - Récupérer tous les fournisseurs
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const role = searchParams.get('role');
+    const category = searchParams.get('category');
     const search = searchParams.get('search');
 
     // Construire les filtres Prisma
@@ -21,22 +21,21 @@ export async function GET(request: NextRequest) {
       organizationId: session.user.organizationId || 'default-org'
     };
 
-    if (role) {
-      where.role = role;
+    if (category) {
+      where.category = category;
     }
 
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
-        { email: { contains: search, mode: 'insensitive' } },
-        { phone: { contains: search, mode: 'insensitive' } }
+        { contactName: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } }
       ];
     }
 
-    const members = await prisma.teamMember.findMany({
+    const suppliers = await prisma.supplier.findMany({
       where,
       include: {
-        contact: true,
         createdBy: {
           select: { name: true, email: true }
         }
@@ -47,11 +46,11 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json({
-      members,
-      total: members.length
+      suppliers,
+      total: suppliers.length
     });
   } catch (error) {
-    console.error('Erreur lors de la récupération des membres d\'équipe:', error);
+    console.error('Erreur lors de la récupération des fournisseurs:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }
@@ -59,7 +58,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Créer un nouveau membre d'équipe
+// POST - Créer un nouveau fournisseur
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -71,46 +70,47 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       name,
+      category,
+      contactName,
       email,
       phone,
-      role,
-      availability,
-      skills,
-      contactId
+      address,
+      website,
+      rating
     } = body;
 
     // Validation des données requises
-    if (!name || !email || !role) {
+    if (!name || !contactName || !email) {
       return NextResponse.json(
-        { error: 'Les champs nom, email et rôle sont requis' },
+        { error: 'Les champs nom, contact et email sont requis' },
         { status: 400 }
       );
     }
 
-    // Créer le nouveau membre d'équipe
-    const newMember = await prisma.teamMember.create({
+    // Créer le nouveau fournisseur
+    const newSupplier = await prisma.supplier.create({
       data: {
         name,
+        category,
+        contactName,
         email,
         phone,
-        role,
-        availability,
-        skills,
-        contactId,
+        address,
+        website,
+        rating: rating || 0,
         organizationId: session.user.organizationId || 'default-org',
         createdById: session.user.id
       },
       include: {
-        contact: true,
         createdBy: {
           select: { name: true, email: true }
         }
       }
     });
 
-    return NextResponse.json({ member: newMember }, { status: 201 });
+    return NextResponse.json({ supplier: newSupplier }, { status: 201 });
   } catch (error) {
-    console.error('Erreur lors de la création du membre d\'équipe:', error);
+    console.error('Erreur lors de la création du fournisseur:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }

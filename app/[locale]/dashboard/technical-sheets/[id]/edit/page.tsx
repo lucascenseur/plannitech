@@ -3,28 +3,28 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useLocale } from '@/lib/i18n';
-import { ShowForm } from '@/components/forms/ShowForm';
+import { TechnicalSheetForm } from '@/components/forms/TechnicalSheetForm';
 
-export default function EditShowPage() {
+export default function EditTechnicalSheetPage() {
   const params = useParams();
   const router = useRouter();
   const { t } = useLocale();
   const { locale, id } = params;
   
-  const [show, setShow] = useState<any>(null);
+  const [technicalSheet, setTechnicalSheet] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchShow = async () => {
+    const fetchTechnicalSheet = async () => {
       try {
-        const response = await fetch(`/api/shows/${id}`);
+        const response = await fetch(`/api/technical-sheets/${id}`);
         if (!response.ok) {
-          throw new Error('Show not found');
+          throw new Error('Technical sheet not found');
         }
         const data = await response.json();
-        setShow(data.show);
+        setTechnicalSheet(data.technicalSheet);
       } catch (error) {
-        console.error('Error fetching show:', error);
+        console.error('Error fetching technical sheet:', error);
         router.push(`/${locale}/dashboard/shows`);
       } finally {
         setLoading(false);
@@ -32,7 +32,7 @@ export default function EditShowPage() {
     };
 
     if (id) {
-      fetchShow();
+      fetchTechnicalSheet();
     }
   }, [id, locale, router]);
 
@@ -44,15 +44,15 @@ export default function EditShowPage() {
     );
   }
 
-  if (!show) {
+  if (!technicalSheet) {
     return (
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
-        <div className="text-lg">{t('edit_show.not_found')}</div>
+        <div className="text-lg">{t('edit_technical_sheet.not_found')}</div>
         <button 
           onClick={() => router.push(`/${locale}/dashboard/shows`)}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
-          {t('edit_show.back_to_shows')}
+          {t('edit_technical_sheet.back_to_technical_sheets')}
         </button>
       </div>
     );
@@ -61,12 +61,12 @@ export default function EditShowPage() {
   return (
     <div className="flex flex-col space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">{t('edit_show.title')}</h1>
-        <p className="text-gray-600">{t('edit_show.description')}</p>
+        <h1 className="text-3xl font-bold text-gray-900">{t('edit_technical_sheet.title')}</h1>
+        <p className="text-gray-600">{t('edit_technical_sheet.description')}</p>
       </div>
       
-      <ShowForm 
-        show={show} 
+      <TechnicalSheetForm 
+        technicalSheet={technicalSheet} 
         locale={locale as string}
       />
     </div>

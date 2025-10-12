@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// GET - Récupérer un spectacle spécifique
+// GET - Récupérer un équipement spécifique
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -17,27 +17,25 @@ export async function GET(
 
     const { id } = await params;
 
-    const show = await prisma.show.findFirst({
+    const equipment = await prisma.equipment.findFirst({
       where: {
         id,
         organizationId: session.user.organizationId || 'default-org'
       },
       include: {
-        venue: true,
-        artists: true,
         createdBy: {
           select: { name: true, email: true }
         }
       }
     });
 
-    if (!show) {
-      return NextResponse.json({ error: 'Spectacle non trouvé' }, { status: 404 });
+    if (!equipment) {
+      return NextResponse.json({ error: 'Équipement non trouvé' }, { status: 404 });
     }
 
-    return NextResponse.json({ show });
+    return NextResponse.json({ equipment });
   } catch (error) {
-    console.error('Erreur lors de la récupération du spectacle:', error);
+    console.error('Erreur lors de la récupération de l\'équipement:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }
@@ -45,7 +43,7 @@ export async function GET(
   }
 }
 
-// PUT - Mettre à jour un spectacle
+// PUT - Mettre à jour un équipement
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -60,57 +58,51 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
     const {
-      title,
-      type,
-      date,
-      time,
-      venue,
+      name,
+      category,
+      description,
+      quantity,
       status,
-      artists,
-      team,
-      budget,
-      description
+      supplier,
+      cost,
+      location
     } = body;
 
-    // Vérifier que le spectacle existe et appartient à l'organisation
-    const existingShow = await prisma.show.findFirst({
+    // Vérifier que l'équipement existe et appartient à l'organisation
+    const existingEquipment = await prisma.equipment.findFirst({
       where: {
         id,
         organizationId: session.user.organizationId || 'default-org'
       }
     });
 
-    if (!existingShow) {
-      return NextResponse.json({ error: 'Spectacle non trouvé' }, { status: 404 });
+    if (!existingEquipment) {
+      return NextResponse.json({ error: 'Équipement non trouvé' }, { status: 404 });
     }
 
-    // Mettre à jour le spectacle
-    const updatedShow = await prisma.show.update({
+    // Mettre à jour l'équipement
+    const updatedEquipment = await prisma.equipment.update({
       where: { id },
       data: {
-        title,
-        type,
-        date: date ? new Date(date) : undefined,
-        time,
-        venue,
+        name,
+        category,
+        description,
+        quantity,
         status,
-        artists,
-        team,
-        budget,
-        description
+        supplier,
+        cost,
+        location
       },
       include: {
-        venue: true,
-        artists: true,
         createdBy: {
           select: { name: true, email: true }
         }
       }
     });
 
-    return NextResponse.json({ show: updatedShow });
+    return NextResponse.json({ equipment: updatedEquipment });
   } catch (error) {
-    console.error('Erreur lors de la mise à jour du spectacle:', error);
+    console.error('Erreur lors de la mise à jour de l\'équipement:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }
@@ -118,7 +110,7 @@ export async function PUT(
   }
 }
 
-// DELETE - Supprimer un spectacle
+// DELETE - Supprimer un équipement
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -132,26 +124,26 @@ export async function DELETE(
 
     const { id } = await params;
 
-    // Vérifier que le spectacle existe et appartient à l'organisation
-    const existingShow = await prisma.show.findFirst({
+    // Vérifier que l'équipement existe et appartient à l'organisation
+    const existingEquipment = await prisma.equipment.findFirst({
       where: {
         id,
         organizationId: session.user.organizationId || 'default-org'
       }
     });
 
-    if (!existingShow) {
-      return NextResponse.json({ error: 'Spectacle non trouvé' }, { status: 404 });
+    if (!existingEquipment) {
+      return NextResponse.json({ error: 'Équipement non trouvé' }, { status: 404 });
     }
 
-    // Supprimer le spectacle
-    await prisma.show.delete({
+    // Supprimer l'équipement
+    await prisma.equipment.delete({
       where: { id }
     });
 
-    return NextResponse.json({ message: 'Spectacle supprimé avec succès' });
+    return NextResponse.json({ message: 'Équipement supprimé avec succès' });
   } catch (error) {
-    console.error('Erreur lors de la suppression du spectacle:', error);
+    console.error('Erreur lors de la suppression de l\'équipement:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }

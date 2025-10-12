@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// GET - Récupérer tous les membres d'équipe
+// GET - Récupérer tous les documents
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -13,31 +13,45 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const role = searchParams.get('role');
+    const showId = searchParams.get('showId');
+    const venueId = searchParams.get('venueId');
+    const type = searchParams.get('type');
     const search = searchParams.get('search');
 
-    // Construire les filtres Prisma
+    // Construire les filtres
     const where: any = {
       organizationId: session.user.organizationId || 'default-org'
     };
 
-    if (role) {
-      where.role = role;
+    if (showId) {
+      where.showId = showId;
+    }
+
+    if (venueId) {
+      where.venueId = venueId;
+    }
+
+    if (type) {
+      where.type = type;
     }
 
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
-        { email: { contains: search, mode: 'insensitive' } },
-        { phone: { contains: search, mode: 'insensitive' } }
+        { description: { contains: search, mode: 'insensitive' } }
       ];
     }
 
-    const members = await prisma.teamMember.findMany({
+    const documents = await prisma.document.findMany({
       where,
       include: {
-        contact: true,
-        createdBy: {
+        show: {
+          select: { id: true, title: true }
+        },
+        venue: {
+          select: { id: true, name: true }
+        },
+        uploadedBy: {
           select: { name: true, email: true }
         }
       },
@@ -47,11 +61,11 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json({
-      members,
-      total: members.length
+      documents,
+      total: documents.length
     });
   } catch (error) {
-    console.error('Erreur lors de la récupération des membres d\'équipe:', error);
+    console.error('Erreur lors de la récupération des documents:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }
@@ -59,7 +73,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Créer un nouveau membre d'équipe
+// POST - Créer un nouveau document
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -71,46 +85,55 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       name,
-      email,
-      phone,
-      role,
-      availability,
-      skills,
-      contactId
+      type,
+      description,
+      fileUrl,
+      fileSize,
+      mimeType,
+      showId,
+      venueId,
+      tags
     } = body;
 
     // Validation des données requises
-    if (!name || !email || !role) {
+    if (!name || !type || !fileUrl) {
       return NextResponse.json(
-        { error: 'Les champs nom, email et rôle sont requis' },
+        { error: 'Les champs nom, type et URL du fichier sont requis' },
         { status: 400 }
       );
     }
 
-    // Créer le nouveau membre d'équipe
-    const newMember = await prisma.teamMember.create({
+    // Créer le nouveau document
+    const document = await prisma.document.create({
       data: {
         name,
-        email,
-        phone,
-        role,
-        availability,
-        skills,
-        contactId,
+        type,
+        description,
+        fileUrl,
+        fileSize: fileSize || 0,
+        mimeType,
+        showId,
+        venueId,
+        tags: tags || [],
         organizationId: session.user.organizationId || 'default-org',
-        createdById: session.user.id
+        uploadedById: session.user.id
       },
       include: {
-        contact: true,
-        createdBy: {
+        show: {
+          select: { id: true, title: true }
+        },
+        venue: {
+          select: { id: true, name: true }
+        },
+        uploadedBy: {
           select: { name: true, email: true }
         }
       }
     });
 
-    return NextResponse.json({ member: newMember }, { status: 201 });
+    return NextResponse.json({ document }, { status: 201 });
   } catch (error) {
-    console.error('Erreur lors de la création du membre d\'équipe:', error);
+    console.error('Erreur lors de la création du document:', error);
     return NextResponse.json(
       { error: 'Erreur interne du serveur' },
       { status: 500 }
