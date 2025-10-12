@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Metadata } from "next";
 import Link from "next/link";
 import { 
   Calendar, 
@@ -50,22 +49,6 @@ interface PlanningPageProps {
   }>;
 }
 
-export async function generateMetadata({ params }: PlanningPageProps): Promise<Metadata> {
-  const { locale } = await params;
-  
-  return {
-    title: "Planning - Plannitech",
-    description: "Gérez votre planning et logistique de spectacles",
-    alternates: {
-      canonical: `/${locale}/dashboard/planning`,
-      languages: {
-        'fr': '/fr/dashboard/planning',
-        'en': '/en/dashboard/planning',
-        'es': '/es/dashboard/planning',
-      },
-    },
-  };
-}
 
 export default function PlanningPage({ params }: PlanningPageProps) {
   const [locale, setLocale] = useState('fr');
