@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Combobox } from '@/components/ui/combobox';
+import { CreateContactModal } from '@/components/modals/CreateContactModal';
 import { Plus, X, Save, MapPin, Users, Star, Phone, Mail } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
@@ -71,11 +73,29 @@ export function VenueForm({ venue, onSuccess, onCancel }: VenueFormProps) {
     rating: venue?.rating || 0
   });
 
+  // États pour les modals
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [selectedContact, setSelectedContact] = useState('');
+
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
+  };
+
+  // Handler pour le modal de contact
+  const handleContactCreated = (contact: { id: string; name: string; email: string; phone?: string }) => {
+    setSelectedContact(contact.id);
+    setFormData(prev => ({
+      ...prev,
+      contact: {
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone || ''
+      }
+    }));
+    setShowContactModal(false);
   };
 
   const handleContactChange = (field: string, value: string) => {
@@ -188,7 +208,8 @@ export function VenueForm({ venue, onSuccess, onCancel }: VenueFormProps) {
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <>
+      <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <MapPin className="h-5 w-5" />
@@ -269,37 +290,55 @@ export function VenueForm({ venue, onSuccess, onCancel }: VenueFormProps) {
 
           {/* Contact */}
           <div className="space-y-4">
-            <Label className="text-base font-medium">Contact</Label>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="contactName">Nom du contact</Label>
-                <Input
-                  id="contactName"
-                  value={formData.contact.name}
-                  onChange={(e) => handleContactChange('name', e.target.value)}
-                  placeholder="Nom du contact"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="contactPhone">Téléphone</Label>
-                <Input
-                  id="contactPhone"
-                  value={formData.contact.phone}
-                  onChange={(e) => handleContactChange('phone', e.target.value)}
-                  placeholder="+33 1 23 45 67 89"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="contactEmail">Email</Label>
-                <Input
-                  id="contactEmail"
-                  type="email"
-                  value={formData.contact.email}
-                  onChange={(e) => handleContactChange('email', e.target.value)}
-                  placeholder="contact@lieu.fr"
-                />
-              </div>
+            <div className="flex items-center justify-between">
+              <Label className="text-base font-medium">Contact</Label>
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setShowContactModal(true)}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Créer un contact
+              </Button>
             </div>
+            
+            <div className="space-y-2">
+              <Label>Contact du lieu</Label>
+              <Combobox
+                value={selectedContact}
+                onValueChange={(value) => {
+                  setSelectedContact(value);
+                  // Les détails du contact seront mis à jour par l'API
+                }}
+                apiEndpoint="/api/contacts"
+                placeholder="Rechercher un contact..."
+                emptyMessage="Aucun contact trouvé"
+                onCreateNew={() => setShowContactModal(true)}
+                displayField="name"
+                contextField="email"
+                searchFields={['name', 'email', 'phone', 'company']}
+                className="w-full"
+              />
+            </div>
+
+            {/* Affichage des détails du contact sélectionné */}
+            {formData.contact.name && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+                <div className="space-y-1">
+                  <Label className="text-sm font-medium text-gray-600">Nom</Label>
+                  <p className="text-sm">{formData.contact.name}</p>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-sm font-medium text-gray-600">Téléphone</Label>
+                  <p className="text-sm">{formData.contact.phone || 'Non renseigné'}</p>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-sm font-medium text-gray-600">Email</Label>
+                  <p className="text-sm">{formData.contact.email}</p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Équipements */}
@@ -425,5 +464,14 @@ export function VenueForm({ venue, onSuccess, onCancel }: VenueFormProps) {
         </form>
       </CardContent>
     </Card>
+
+    {/* Modal de création de contact */}
+    <CreateContactModal
+      isOpen={showContactModal}
+      onClose={() => setShowContactModal(false)}
+      onSuccess={handleContactCreated}
+      locale={locale}
+    />
+  </>
   );
 }
