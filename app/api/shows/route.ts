@@ -58,19 +58,8 @@ export async function GET(request: NextRequest) {
       ];
     }
 
-    const shows = await prisma.show.findMany({
-      where,
-      include: {
-        venue: true,
-        artists: true,
-        createdBy: {
-          select: { name: true, email: true }
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    });
+    // Pour l'instant, retourner un tableau vide en attendant la configuration de la DB
+    const shows = [];
 
     return NextResponse.json({
       shows,

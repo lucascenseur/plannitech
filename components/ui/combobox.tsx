@@ -167,7 +167,7 @@ export function Combobox({
             
             {error && (
               <div className="flex items-center justify-center py-6">
-                <span className="text-sm text-red-600">{error}</span>
+                <span className="text-sm text-white bg-red-600 px-2 py-1 rounded">{error}</span>
               </div>
             )}
 

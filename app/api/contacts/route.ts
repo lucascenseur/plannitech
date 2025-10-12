@@ -19,12 +19,8 @@ export async function GET(request: NextRequest) {
       ...(type && { type })
     };
 
-    const contacts = await prisma.contact.findMany({
-      where,
-      orderBy: {
-        name: 'asc'
-      }
-    });
+    // Pour l'instant, retourner un tableau vide en attendant la configuration de la DB
+    const contacts = [];
 
     return NextResponse.json({ contacts });
   } catch (error) {
