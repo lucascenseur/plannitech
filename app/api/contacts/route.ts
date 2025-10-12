@@ -1,9 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get('search');
+    const type = searchParams.get('type');
+    
+    const where = {
+      ...(search && {
+        OR: [
+          { name: { contains: search, mode: 'insensitive' } },
+          { email: { contains: search, mode: 'insensitive' } },
+          { company: { contains: search, mode: 'insensitive' } },
+          { role: { contains: search, mode: 'insensitive' } }
+        ]
+      }),
+      ...(type && { type })
+    };
+
     const contacts = await prisma.contact.findMany({
+      where,
       orderBy: {
         name: 'asc'
       }

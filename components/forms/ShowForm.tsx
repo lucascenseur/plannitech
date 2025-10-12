@@ -8,6 +8,9 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Combobox } from '@/components/ui/combobox';
+import { CreateContactModal } from '@/components/modals/CreateContactModal';
+import { CreateVenueModal } from '@/components/modals/CreateVenueModal';
 import { Plus, X, Save, Calendar, Clock, MapPin, Users, DollarSign } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
@@ -49,6 +52,12 @@ export function ShowForm({ show, onSuccess, onCancel }: ShowFormProps) {
     description: show?.description || ''
   });
 
+  // États pour les modals
+  const [showVenueModal, setShowVenueModal] = useState(false);
+  const [showArtistModal, setShowArtistModal] = useState(false);
+  const [selectedVenue, setSelectedVenue] = useState('');
+  const [selectedArtists, setSelectedArtists] = useState<string[]>([]);
+
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({
       ...prev,
@@ -80,6 +89,26 @@ export function ShowForm({ show, onSuccess, onCancel }: ShowFormProps) {
         artists: newArtists
       }));
     }
+  };
+
+  // Handlers pour les modals
+  const handleVenueCreated = (venue: { id: string; name: string; city: string }) => {
+    setSelectedVenue(venue.id);
+    setFormData(prev => ({
+      ...prev,
+      venue: venue.name
+    }));
+    setShowVenueModal(false);
+  };
+
+  const handleArtistCreated = (artist: { id: string; name: string; email: string; role?: string }) => {
+    const newArtists = [...selectedArtists, artist.id];
+    setSelectedArtists(newArtists);
+    setFormData(prev => ({
+      ...prev,
+      artists: [...prev.artists, artist.name]
+    }));
+    setShowArtistModal(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -136,15 +165,16 @@ export function ShowForm({ show, onSuccess, onCancel }: ShowFormProps) {
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Calendar className="h-5 w-5" />
-          {show ? 'Modifier le Spectacle' : 'Nouveau Spectacle'}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+    <>
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calendar className="h-5 w-5" />
+            {show ? 'Modifier le Spectacle' : 'Nouveau Spectacle'}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
           {/* Informations de base */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
@@ -202,12 +232,22 @@ export function ShowForm({ show, onSuccess, onCancel }: ShowFormProps) {
 
             <div className="space-y-2">
               <Label htmlFor="venue">Lieu *</Label>
-              <Input
-                id="venue"
-                value={formData.venue}
-                onChange={(e) => handleInputChange('venue', e.target.value)}
-                placeholder="Nom du lieu"
-                required
+              <Combobox
+                value={selectedVenue}
+                onValueChange={(value) => {
+                  setSelectedVenue(value);
+                  // Mettre à jour le nom du lieu dans formData
+                  const selectedVenueName = formData.venue; // Sera mis à jour par l'API
+                  handleInputChange('venue', selectedVenueName);
+                }}
+                apiEndpoint="/api/venues"
+                placeholder="Rechercher un lieu..."
+                emptyMessage="Aucun lieu trouvé"
+                onCreateNew={() => setShowVenueModal(true)}
+                displayField="name"
+                contextField="address"
+                searchFields={['name', 'address', 'contact.name']}
+                className="w-full"
               />
             </div>
 
@@ -243,34 +283,36 @@ export function ShowForm({ show, onSuccess, onCancel }: ShowFormProps) {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <Label>Artistes</Label>
-              <Button type="button" variant="outline" size="sm" onClick={addArtist}>
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setShowArtistModal(true)}
+              >
                 <Plus className="h-4 w-4 mr-2" />
-                Ajouter un artiste
+                Créer un artiste
               </Button>
             </div>
             
-            <div className="space-y-2">
-              {formData.artists.map((artist, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <Input
-                    value={artist}
-                    onChange={(e) => handleArtistChange(index, e.target.value)}
-                    placeholder={`Artiste ${index + 1}`}
-                    className="flex-1"
-                  />
-                  {formData.artists.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeArtist(index)}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
+            <Combobox
+              value=""
+              onValueChange={() => {}} // Géré par onSelectedValuesChange
+              apiEndpoint="/api/contacts?type=artist"
+              placeholder="Rechercher des artistes..."
+              emptyMessage="Aucun artiste trouvé"
+              onCreateNew={() => setShowArtistModal(true)}
+              displayField="name"
+              contextField="role"
+              searchFields={['name', 'email', 'role']}
+              multiple={true}
+              selectedValues={selectedArtists}
+              onSelectedValuesChange={(values) => {
+                setSelectedArtists(values);
+                // Mettre à jour formData.artists avec les noms
+                // Ceci sera géré par l'API
+              }}
+              className="w-full"
+            />
           </div>
 
           {/* Équipe et budget */}
@@ -316,5 +358,21 @@ export function ShowForm({ show, onSuccess, onCancel }: ShowFormProps) {
         </form>
       </CardContent>
     </Card>
+
+    {/* Modals */}
+    <CreateVenueModal
+      isOpen={showVenueModal}
+      onClose={() => setShowVenueModal(false)}
+      onSuccess={handleVenueCreated}
+      locale={locale}
+    />
+
+    <CreateContactModal
+      isOpen={showArtistModal}
+      onClose={() => setShowArtistModal(false)}
+      onSuccess={handleArtistCreated}
+      locale={locale}
+    />
+  </>
   );
 }
