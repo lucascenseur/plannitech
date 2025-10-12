@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
         where: {
           organizationId,
           OR: [
-            { title: { contains: query, mode: 'insensitive' } } },
+            { title: { contains: query, mode: 'insensitive' } },
             { description: { contains: query, mode: 'insensitive' } }
           ]
         },
